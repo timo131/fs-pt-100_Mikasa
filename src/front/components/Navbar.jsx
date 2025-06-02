@@ -2,7 +2,9 @@
 export const Navbar = () => {
 
 	return (
-		<nav className="navbar navbar-expand-md bg-charcoal px-3 fixed-navbar">
+
+
+		<nav className="navbar navbar-expand-md bg-charcoal px-3">
 			<div className="container-fluid">
 				<div className="d-flex w-100 align-items-center justify-content-between">
 					<a className="navbar-brand d-flex align-items-center" href="#">
@@ -21,12 +23,11 @@ export const Navbar = () => {
 						<span className="fa fa-bars fa-2x ivory"></span>
 					</button>
 
-
 				</div>
 
 				<div className="collapse navbar-collapse flex-column flex-md-row align-items-start align-items-md-center mt-2 mt-md-0" id="navbarNavAltMarkup">
 
-					<div className="d-flex d-md-none w-100 justify-content-center my-2">
+					<div className="d-flex d-md-none w-100 justify-content-end my-2">
 						<img
 							src="src/front/assets/img/avatar-placeholder.jpg"
 							alt="User avatar"
@@ -34,7 +35,7 @@ export const Navbar = () => {
 						/>
 					</div>
 
-					<div className="navbar-nav d-flex flex-column flex-grow-1 flex-md-row ms-md-auto px-md-5 gap-3 gap-md-4 w-100 justify-content-center justify-content-md-end">
+					<div className="navbar-nav d-flex flex-column flex-grow-1 flex-md-row ms-md-auto px-md-5 gap-3 gap-md-4 w-100 align-items-end align-items-md-center justify-content-md-end">
 						<a className="nav-link coral" href="#">Tareas</a>
 						<a className="nav-link ochre" href="#">Finanzas</a>
 						<a className="nav-link aqua" href="#">Ocio</a>
