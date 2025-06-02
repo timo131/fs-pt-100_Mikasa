@@ -104,22 +104,6 @@ def get_hogar(hogar_id):
         return jsonify({"message": "Hogar not found"}), 404
     return jsonify(hogar.serialize()), 200
 
-@api.route("/hogares", methods=["GET"])
-@jwt_required()
-def get_all_hogares():
-    stm = select(Hogar)
-    hogares = db.session.execute(stm).scalars().all()
-    return jsonify([h.serialize() for h in hogares]), 200
-
-@api.route("/hogares/<int:hogar_id>", methods=["GET"])
-@jwt_required()
-def get_hogar(hogar_id):
-    stm = select(Hogar).where(Hogar.id == hogar_id)
-    hogar = db.session.execute(stm).scalar_one_or_none()
-    if not hogar:
-        return jsonify({"message": "Hogar not found"}), 404
-    return jsonify(hogar.serialize()), 200
-
 @api.route("/hogares", methods=["POST"])
 @jwt_required()
 def create_hogar():
