@@ -52,7 +52,7 @@ def create_user():
         db.session.rollback()
         return jsonify({"message": "Error creating user"}), 500
 
-@api.route("/users/<int:user_id>", methods=["PUT"])
+@api.route("/users", methods=["PUT"])
 @jwt_required()
 def update_user(user_id):
     data = request.get_json()
@@ -72,7 +72,7 @@ def update_user(user_id):
         db.session.rollback()
         return jsonify({"message": "Error updating user"}), 500
 
-@api.route("/users/<int:user_id>", methods=["DELETE"])
+@api.route("/users/", methods=["DELETE"])
 @jwt_required()
 def delete_user(user_id):
     stm = select(User).where(User.id == user_id)
