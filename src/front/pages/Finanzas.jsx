@@ -1,3 +1,2 @@
 const Finanzas = () =>{
-    <div></div>
 }
