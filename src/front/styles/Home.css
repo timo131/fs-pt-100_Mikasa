@@ -1,0 +1,37 @@
+body {
+	background-color: rgb(255, 255, 237);
+}
+
+.home-container {
+	margin-top: 5rem;
+	text-align: center;
+}
+
+.home-logo {
+	display:flex;
+	max-width: 200px;
+	margin:30px;
+}
+
+.home-banner {
+	display:flex;
+	max-width: 400px;
+	width: 100%;
+	height: auto;
+	margin: 1rem auto;
+	border-radius: 100px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.home-title {
+	margin-top: 2rem;
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+.home-buttons {
+	margin-top: 1.5rem;
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+}

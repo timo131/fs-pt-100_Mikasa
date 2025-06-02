@@ -1,52 +1,34 @@
-import React, { useEffect } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { useNavigate } from "react-router-dom";
+import mikasaImage from "../assets/mikasa_charcoal_sm.png";
+import "../styles/Home.css";
+import { Login } from "../components/login";
+import { Register } from "../components/register";
+import { Private } from "../components/private";
 
 export const Home = () => {
-
-	const { store, dispatch } = useGlobalReducer()
-
-	const loadMessage = async () => {
-		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
-
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
-
-			const response = await fetch(backendUrl + "/api/hello")
-			const data = await response.json()
-
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
-
-			return data
-
-		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
-		}
-
-	}
-
-	useEffect(() => {
-		loadMessage()
-	}, [])
+	const navigate = useNavigate();
 
 	return (
-		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
+		<div className="home-container">
+			<img src={mikasaImage} alt="Logo" className="home-logo" />
+			<img
+				src="https://imgs.search.brave.com/6P7FROFg7o4SOtJgCqhS3S2ScTckvwZCaoF1W4lmNrY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTM0/OTM5MDUxNS9lcy9m/b3RvL2lkZWEtZGUt/bHVnYXItZGUtdHJh/YmFqby1zaW4tcGFw/ZWwtZmlybWEtZWxl/Y3RyJUMzJUIzbmlj/YS1maXJtYS1lbGVj/dHIlQzMlQjNuaWNh/LWdlc3RpJUMzJUIz/bi1kb2N1bWVudGFs/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz1wb2MtUS02SmNk/YTdzX3FlUzhQbTBy/RU9yU3lFSWdfcTNC/WldjcGYwU21rPQ"
+				alt="Decoración"
+				className="home-banner"
+			/>
+			<p>
+				Organiza tareas, controla tus gastos, guarda tus series favoritas y
+				planifica tus comidas — todo en un solo lugar y fácil de compartir.
 			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
-			</div>
+
+			<Login />
+
+			<p className="register-link">
+				¿Todavía no tienes cuenta?{" "}
+				<span onClick={() => navigate("/register")} className="register-nav">
+					Regístrate aquí
+				</span>
+			</p>
 		</div>
 	);
-}; 
+};
