@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import mikasaImage from "../assets/mikasa_charcoal_sm.png";
+import mikasaImage from "../assets/img/mikasa_charcoal.png";
 import "../styles/Home.css";
 import { Login } from "../components/login";
 import { Register } from "../components/register";
@@ -10,7 +10,7 @@ export const Home = () => {
 
 	return (
 		<div className="home-container">
-			<img src={mikasaImage} alt="Logo" className="home-logo" />
+			<img src={mikasaImage} alt="Logo" className="home-logo mx-auto d-block" />
 			<img
 				src="https://imgs.search.brave.com/6P7FROFg7o4SOtJgCqhS3S2ScTckvwZCaoF1W4lmNrY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTM0/OTM5MDUxNS9lcy9m/b3RvL2lkZWEtZGUt/bHVnYXItZGUtdHJh/YmFqby1zaW4tcGFw/ZWwtZmlybWEtZWxl/Y3RyJUMzJUIzbmlj/YS1maXJtYS1lbGVj/dHIlQzMlQjNuaWNh/LWdlc3RpJUMzJUIz/bi1kb2N1bWVudGFs/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz1wb2MtUS02SmNk/YTdzX3FlUzhQbTBy/RU9yU3lFSWdfcTNC/WldjcGYwU21rPQ"
 				alt="Decoración"
