@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
 
@@ -35,7 +36,7 @@ export const Navbar = () => {
 					</div>
 
 					<div className="navbar-nav d-flex flex-column flex-grow-1 flex-md-row ms-md-auto px-md-5 gap-3 gap-md-4 w-100 justify-content-center justify-content-md-end">
-						<a className="nav-link coral" href="#">Tareas</a>
+						<Link className="nav-link coral" to="/tareas">Tareas</Link>
 						<a className="nav-link ochre" href="#">Finanzas</a>
 						<a className="nav-link aqua" href="#">Ocio</a>
 						<a className="nav-link sage" href="#">Comida</a>
