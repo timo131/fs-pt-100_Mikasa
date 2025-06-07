@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import finanzasService from '../services/finanzasService';
-import Chart from 'chart.js/auto';
 import '../styles/FinanzasPage.css';
 import GastoModal from '../components/GastoModal';
 import ListaPagos from '../components/ListaPagos';
