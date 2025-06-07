@@ -9,7 +9,8 @@ body {
 
 .home-logo {
 	display:flex;
-	max-width: 200px;
+	justify-content: center;
+	max-width: 400px;
 	margin:30px;
 }
 
