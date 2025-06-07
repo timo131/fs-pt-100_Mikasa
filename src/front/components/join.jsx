@@ -1,10 +1,10 @@
 import { useState } from "react";
 import userServices from "../services/userServices";
 import useGlobalReducer from "../hooks/useGlobalReducer";
-import { Link } from "react-router-dom";
 import "../styles/User.css";
+import { Link } from "react-router-dom";
 
-export const Login = () => {
+export const Join = () => {
   const { store, dispatch } = useGlobalReducer();
   const [formData, setFormData] = useState({
     email: "",
@@ -17,17 +17,14 @@ export const Login = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    try {
-      const data = await userServices.login(formData);
-      console.log("Respuesta del acceso:", data);
-    } catch (error) {
-      console.error("Error al acceder:", error);
-    }
+    console.log(formData);
+    const data = await userServices.join(formData);
+    console.log(data);
   };
 
   return (
     <div className="user-container">
-      {/* <h2>Acceder</h2> */}
+      {/* <h2>Registrarse</h2> */}
       <form onSubmit={handleSubmit} className="user-form">
         <input
           placeholder="Correo electrónico"
@@ -45,9 +42,9 @@ export const Login = () => {
           type="password"
           required
         />
-        <button type="submit" className="user-button w-100">Iniciar sesión</button>
+        <button type="submit" className="user-button">Crear cuenta</button>
       </form>
-      <p className="mt-4 mb-0 ivory">Nuevo a Mikasa?<br/><Link to="/register">Crear tu hogar</Link></p>
+      <p className="mt-4 mb-0 ivory">¿Ya tienes cuenta?<br/><Link to="/login">Acceder a tu hogar</Link></p>
     </div>
   );
 };

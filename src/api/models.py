@@ -14,6 +14,8 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(
         String(120), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
+    avatar_url: Mapped[str] = mapped_column(nullable=True)
+    admin: Mapped[bool] = mapped_column(Boolean, nullable=False)
     favorito_recetas: Mapped[dict] = mapped_column(JSON, nullable=True)
     favorito_peliculas: Mapped[dict] = mapped_column(JSON, nullable=True)
 
@@ -21,36 +23,51 @@ class User(db.Model):
     finanzas = relationship("Finanzas", back_populates="user")
     pagos = relationship("Pagos", back_populates="user")
     user_pagos = relationship("User_pagos", back_populates="user")
-    tareas = relationship("Tareas", back_populates="user",
-                          foreign_keys="Tareas.user_id")
+
+    tareas = relationship(
+        "Tareas",
+        back_populates="user",
+       
+                          foreign_keys="Tareas.user_id"
+    )
+
     tareas_done_by = relationship(
-        "Tareas", back_populates="done_by_user", foreign_keys="Tareas.done_by")
-    comidas = relationship("comidas", back_populates="user")
+        
+        "Tareas",
+        back_populates="done_by_user",
+        foreign_keys="Tareas.done_by"
+    )
+
+    comidas = relationship("Comida", back_populates="user")
     favoritos_hogar = relationship("Favoritos_hogar", back_populates="user")
 
     def serialize(self):
         return {
             "id": self.id,
+            "hogar_id": self.hogares[0].id if self.hogares else None,
             "email": self.email,
             "user_name": self.user_name,
+            "avatar_url": self.avatar_url,
+            "admin": self.admin,
             "favorito_receta": self.favorito_recetas,
             "favorito_peliculas": self.favorito_peliculas,
+
         }
 
 
 class Hogar (db.Model):
     __tablename__ = "hogar"
     id: Mapped[int] = mapped_column(primary_key=True)
-    hogar_name: Mapped[str] = mapped_column(
-        String(80), unique=True, nullable=False)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    hogar_name: Mapped[str] = mapped_column(String(80), nullable=False)
+    user_id: Mapped[int]= mapped_column(ForeignKey ("user.id"))
+
 
     user = relationship("User", back_populates="hogares")
     finanzas = relationship("Finanzas", back_populates="hogar")
     pagos = relationship("Pagos", back_populates="hogar")
     user_pagos = relationship("User_pagos", back_populates="hogar")
     tareas = relationship("Tareas", back_populates="hogar")
-    comidas = relationship("comidas", back_populates="hogar")
+    comidas = relationship("Comida", back_populates="hogar")
     favoritos = relationship("Favoritos_hogar", back_populates="hogar")
 
     def serialize(self):
@@ -137,23 +154,31 @@ class User_pagos(db.Model):
 
 class Tareas (db.Model):
     __tablename__ = "tareas"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    hogar_id: Mapped[int] = mapped_column(ForeignKey("hogar.id"))
-    tarea: Mapped[str] = mapped_column(nullable=False)
-    fecha: Mapped[datetime] = mapped_column(default=datetime.now)
-    done: Mapped[bool] = mapped_column(Boolean)
-    done_by: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    id: Mapped[int] = mapped_column(primary_key = True)
+    user_id: Mapped[int]= mapped_column(ForeignKey ("user.id"))
+    done_by: Mapped[int]= mapped_column(ForeignKey("user.id"))
+    hogar_id: Mapped[int]= mapped_column(ForeignKey ("hogar.id"))
+    tarea: Mapped[str]= mapped_column(nullable = False)
+    fecha:Mapped[datetime] = mapped_column( default=datetime.now)
+    done: Mapped[bool]= mapped_column(Boolean)
 
-    user = relationship("User", back_populates="tareas")
+    user = relationship(
+        "User",
+        back_populates="tareas",
+        foreign_keys=[user_id]
+    )
+    done_by_user = relationship(
+        "User",
+        back_populates="tareas_done_by",
+        foreign_keys=[done_by]
+    )
     hogar = relationship("Hogar", back_populates="tareas")
-    done_by_user = relationship("User", back_populates="tareas_done_by")
 
     def serialize(self):
         return {
             "id": self.id,
-            "user_id": self.userId,
-            "hogar_id": self.hogarId,
+            "user_id": self.user_id,
+            "hogar_id": self.hogar_id,
             "tarea": self.tarea,
             "fecha": self.fecha.isoformat(),
             "done": self.done,
