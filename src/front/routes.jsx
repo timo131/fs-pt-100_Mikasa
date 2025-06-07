@@ -15,6 +15,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { PrivatePage } from "./pages/PrivatePage";
 
 
+import Finanzas from "./pages/Finanzas"
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -35,6 +36,7 @@ export const router = createBrowserRouter(
         <Route path="join" element={<JoinPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="private" element={<PrivatePage />} />
+        <Route path="/finanzas" element={<Finanzas />} />
       </Route>
     ),
     {
