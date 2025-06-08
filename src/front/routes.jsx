@@ -41,7 +41,9 @@ export const router = createBrowserRouter(
         <Route path="/private" element={<PrivatePage />} />
         <Route path="/tareas" element={<Tareas />} />
         <Route path="/card" element={<Card />} />
-        <Route path="/finanzas" element={<Finanzas />} />
+        <Route path="finanzas" element={<Finanzas />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="hogar" element={<HogarPage />} />
         <Route path="/join" element={<JoinPage />} />
       </Route>
     ),

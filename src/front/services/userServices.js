@@ -90,4 +90,42 @@ userServices.getUserInfo = async () => {
     console.log(error);
   }
 }
+
+userServices.getUser = async (userId) => {
+      try {
+    const resp = await fetch(`${backendUrl}/api/users/${userId}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+    });
+    if (!resp.ok) throw Error("Could not fetch user");
+    const data = await resp.json();
+    console.log(data)
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+userServices.getHogar = async (hogarId) => {
+     try {
+    const resp = await fetch(`${backendUrl}/api/hogares/${hogarId}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+    });
+    if (!resp.ok) throw Error("Could not fetch hogar");
+    const data = await resp.json();
+    console.log(data)
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 export default userServices;
