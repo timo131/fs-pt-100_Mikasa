@@ -2,7 +2,6 @@ import { useState } from "react";
 import userServices from "../services/userServices";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode }      from "jwt-decode";
 import "../styles/User.css";
 
 export const Login = () => {
@@ -21,9 +20,7 @@ export const Login = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const { token } = await userServices.login(formData);
-      const { user_id } = jwtDecode(token);
-      const user  = await userServices.getUser(user_id);
+      const user  = await userServices.getUser(user.user_id);
       const hogar = await userServices.getHogar(user.hogar_id);
       dispatch({
         type: "login_success",
