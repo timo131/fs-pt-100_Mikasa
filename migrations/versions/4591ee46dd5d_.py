@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 4220761a0478
+Revision ID: 4591ee46dd5d
 Revises: 
-Create Date: 2025-06-09 08:22:41.526591
+Create Date: 2025-06-09 08:48:06.993010
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4220761a0478'
+revision = '4591ee46dd5d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,6 +23,8 @@ def upgrade():
     sa.Column('user_name', sa.String(length=20), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
+    sa.Column('avatar_url', sa.String(), nullable=True),
+    sa.Column('admin', sa.Boolean(), nullable=False),
     sa.Column('favorito_recetas', sa.JSON(), nullable=True),
     sa.Column('favorito_peliculas', sa.JSON(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
@@ -34,8 +36,7 @@ def upgrade():
     sa.Column('hogar_name', sa.String(length=80), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('hogar_name')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('comida',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -68,11 +69,11 @@ def upgrade():
     op.create_table('tareas',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('done_by', sa.Integer(), nullable=False),
     sa.Column('hogar_id', sa.Integer(), nullable=False),
     sa.Column('tarea', sa.String(), nullable=False),
     sa.Column('fecha', sa.DateTime(), nullable=False),
     sa.Column('done', sa.Boolean(), nullable=False),
-    sa.Column('done_by', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['done_by'], ['user.id'], ),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
@@ -94,6 +95,7 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('hogar_id', sa.Integer(), nullable=False),
     sa.Column('pagos_id', sa.Integer(), nullable=False),
+    sa.Column('estado', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
     sa.ForeignKeyConstraint(['pagos_id'], ['pagos.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
