@@ -90,7 +90,7 @@ def delete_user(user_id):
 
 
 @api.route("/hogares", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_all_hogares():
     stm = select(Hogar)
     hogares = db.session.execute(stm).scalars().all()
@@ -571,8 +571,7 @@ def register():
 
         print("Received data:", data)
 
-        if not data.get("user_name") or not data.get("email") \
-           or not data.get("password") or not data.get("hogar_name"):
+        if not data.get("user_name") or not data.get("email") or not data.get("password") or not data.get("hogar_name"):
             return jsonify({"error": "Missing one of: user_name, email, password, hogar_name"}), 400
 
         stm = select(User).where(User.email == data['email'])
@@ -580,8 +579,12 @@ def register():
 
         if existing_user:
             return jsonify({"error": "Email already taken"}), 400
-        
+
         hashed_password  = generate_password_hash(data['password'])
+
+        new_hogar = Hogar(hogar_name = data["hogar_name"])
+        db.session.add(new_hogar)
+        db.session.flush()
 
         new_user = User(
             user_name = data["user_name"],
@@ -590,20 +593,12 @@ def register():
             avatar_url = data.get("avatar_url"),
             admin = True,
             favorito_recetas = [],
-            favorito_peliculas = []
+            favorito_peliculas = [],
+            hogar_id = new_hogar.id
         )
 
         db.session.add(new_user)
-        db.session.flush()
-
-        new_hogar = Hogar(
-            hogar_name = data["hogar_name"],
-            user_id    = new_user.id
-        )
-        db.session.add(new_hogar)
-
         db.session.commit()
-
 
         token = create_access_token(identity=str(new_user.id))
 
@@ -631,6 +626,9 @@ def login():
         stm = select(User).where(User.email == data['email'])
         user = db.session.execute(stm).scalars().first()
 
+        stm2 = select(Hogar).where(Hogar.id == user.hogar_id)
+        hogar = db.session.execute(stm2).scalars().first()
+
         if not user:
             return jsonify({"error": "Email not found"}), 404
 
@@ -639,7 +637,7 @@ def login():
 
         token = create_access_token(identity=str(user.id))
 
-        return jsonify({"msg": "login ok", "token": token, "user": user.serialize()}), 200 
+        return jsonify({"msg": "login ok", "token": token, "user": user.serialize(), "hogar": hogar.serialize()}), 200 
 
     except Exception as e:
         print("Login error:", e)

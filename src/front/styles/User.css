@@ -20,6 +20,11 @@
   text-align: center;
 }
 
+.editprofile-container {
+  padding: 20px 30px;
+  background-color: #2c2c2c;
+}
+
 .user-container h2 {
   margin-bottom: 20px;
   color: #FFF8E7;
@@ -79,4 +84,31 @@ a:active {
 .user-button:active {
   background-color: #E2B659;
   color: #2c2c2c;
+}
+
+.users-table {
+  border-collapse: separate !important;
+  border-spacing: 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.user-icon {
+  padding: 10px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #6FB8A8;
+;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.user-icon:hover {
+  color: #A8C97F;
+}
+
+.user-icon:active {
+  color: #E2B659;
 }
