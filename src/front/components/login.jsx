@@ -20,13 +20,8 @@ export const Login = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const user  = await userServices.getUser(user.user_id);
-      const hogar = await userServices.getHogar(user.hogar_id);
-      dispatch({
-        type: "login_success",
-        payload: { user, hogar }
-      });
-      navigate("/hogar")
+      const data = await userServices.login(formData);
+      console.log("Respuesta del acceso:", data);
     } catch (error) {
       console.error("Error al acceder:", error);
     }
