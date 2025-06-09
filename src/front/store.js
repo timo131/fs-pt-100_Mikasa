@@ -1,38 +1,40 @@
-export const initialStore=()=>{
-  return{
-    message: null,
-    todos: [
-      {
-        id: 1,
-        title: "Make the bed",
-        background: null,
-      },
-      {
-        id: 2,
-        title: "Do my homework",
-        background: null,
-      }
-    ]
-  }
-}
+export const initialStore = () => ({
+  tasks: [],
+});
 
 export default function storeReducer(store, action = {}) {
-  switch(action.type){
-    case 'set_hello':
+  switch (action.type) {
+    case "add_task":
       return {
         ...store,
-        message: action.payload
+        tasks: [...store.tasks, action.payload],
       };
-      
-    case 'add_task':
 
-      const { id,  color } = action.payload
-
+    case "delete_task":
       return {
         ...store,
-        todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
+        tasks: store.tasks.filter((_, i) => i !== action.payload),
       };
+
+    case "edit_task":
+      return {
+        ...store,
+        tasks: store.tasks.map((task, i) =>
+          i === action.payload.index ? action.payload.updatedTask : task
+        ),
+      };
+   case "toggle_task_done":
+  return {
+    ...store,
+    tasks: store.tasks.map((task, i) =>
+      i === action.payload
+        ? { ...task, hecha: !task.hecha }
+        : task
+    ),
+  };
+
+
     default:
-      throw Error('Unknown action.');
-  }    
+      throw new Error("Unknown action.");
+  }
 }

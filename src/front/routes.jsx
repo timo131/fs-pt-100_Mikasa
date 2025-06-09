@@ -13,9 +13,13 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { JoinPage } from "./pages/JoinPage";
 import { LoginPage } from "./pages/LoginPage";
 import { PrivatePage } from "./pages/PrivatePage";
-
-
+import { Register } from "./components/register";
+import { Login } from "./components/login";
+import { Private } from "./components/private";
+import {Tareas} from "./components/tareas";
+import { Card } from "./components/card";
 import Finanzas from "./pages/Finanzas"
+
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -29,14 +33,16 @@ export const router = createBrowserRouter(
       <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
 
         {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
-        <Route index element={<Home />} />
-        <Route path="single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
-        <Route path="demo" element={<Demo />} />
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="join" element={<JoinPage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="private" element={<PrivatePage />} />
+        <Route path= "/" element={<Home />} />
+        <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
+        <Route path="/demo" element={<Demo />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/private" element={<PrivatePage />} />
+        <Route path="/tareas" element={<Tareas />} />
+        <Route path="/card" element={<Card />} />
         <Route path="/finanzas" element={<Finanzas />} />
+        <Route path="/join" element={<JoinPage />} />
       </Route>
     ),
     {
