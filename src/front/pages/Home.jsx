@@ -23,12 +23,6 @@ export const Home = () => {
 
 			<Login />
 
-			<p className="register-link">
-				¿Todavía no tienes cuenta?{" "}
-				<span onClick={() => navigate("/register")} className="register-nav">
-					Regístrate aquí
-				</span>
-			</p>
 		</div>
 	);
 };

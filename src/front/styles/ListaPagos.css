@@ -1,0 +1,22 @@
+.lista-pagos {
+  padding-bottom: 1rem;
+}
+
+
+.pago-card {
+  background-color: #fff3da;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.pago-card:hover {
+  background-color: #ffefc2;
+}
+
+
+.pago-card .btn {
+  font-weight: 500;
+  border-radius: 8px;
+}

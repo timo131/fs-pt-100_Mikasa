@@ -10,6 +10,7 @@ import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
 import { RegisterPage } from "./pages/RegisterPage";
+import { JoinPage } from "./pages/JoinPage";
 import { LoginPage } from "./pages/LoginPage";
 import { PrivatePage } from "./pages/PrivatePage";
 import { Register } from "./components/register";
@@ -17,6 +18,8 @@ import { Login } from "./components/login";
 import { Private } from "./components/private";
 import {Tareas} from "./components/tareas";
 import { Card } from "./components/card";
+import Finanzas from "./pages/Finanzas"
+
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -38,6 +41,14 @@ export const router = createBrowserRouter(
         <Route path="/private" element={<PrivatePage />} />
         <Route path="/tareas" element={<Tareas />} />
         <Route path="/card" element={<Card />} />
+        <Route path="/finanzas" element={<Finanzas />} />
+        <Route path="/join" element={<JoinPage />} />
       </Route>
-    )
+    ),
+    {
+      future: {
+        v7_startTransition:    true,
+        v7_relativeSplatPath:  true,
+      },
+    }
 );

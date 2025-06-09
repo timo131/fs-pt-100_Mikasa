@@ -18,7 +18,7 @@ CORS(api)
 
 
 @api.route("/users", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_all_users():
     stm = select(User)
     users = db.session.execute(stm).scalars().all()
@@ -42,6 +42,7 @@ def create_user():
             user_name=data.get("user_name"),
             email=data.get("email"),
             password=data.get("password"),
+            avatar_url=data.get("avatar_url"),
             favorito_recetas=data.get("favorito_recetas"),
             favorito_peliculas=data.get("favorito_peliculas"),
         )
@@ -87,22 +88,6 @@ def delete_user(user_id):
         db.session.rollback()
         return jsonify({"message": "Error deleting user"}), 500
 
-
-@api.route("/hogares", methods=["GET"])
-@jwt_required()
-def get_all_hogares():
-    stm = select(Hogar)
-    hogares = db.session.execute(stm).scalars().all()
-    return jsonify([h.serialize() for h in hogares]), 200
-
-@api.route("/hogares/<int:hogar_id>", methods=["GET"])
-@jwt_required()
-def get_hogar(hogar_id):
-    stm = select(Hogar).where(Hogar.id == hogar_id)
-    hogar = db.session.execute(stm).scalar_one_or_none()
-    if not hogar:
-        return jsonify({"message": "Hogar not found"}), 404
-    return jsonify(hogar.serialize()), 200
 
 @api.route("/hogares", methods=["GET"])
 @jwt_required()
@@ -577,46 +562,63 @@ def delete_favorito_hogar(favorito_id):
         return jsonify({"message": "Error deleting favorito"}), 500
 
 
-
-
-
-
-
-
 @api.route('/register', methods=['POST'])
 def register():
     try:
         data = request.json
+        invitees = data.pop("otros", [])
+        data.pop("repeat_password", None)
+
         print("Received data:", data)
 
-        if not data.get('email') or not data.get('password'):
-            return jsonify({"error": "Missing email or password"}), 400
+        if not data.get("user_name") or not data.get("email") \
+           or not data.get("password") or not data.get("hogar_name"):
+            return jsonify({"error": "Missing one of: user_name, email, password, hogar_name"}), 400
 
         stm = select(User).where(User.email == data['email'])
         existing_user = db.session.execute(stm).scalars().first()
 
         if existing_user:
             return jsonify({"error": "Email already taken"}), 400
+        
         hashed_password  = generate_password_hash(data['password'])
 
-
         new_user = User(
-            email=data['email'],
-            password=hashed_password,
-            is_active=True
+            user_name = data["user_name"],
+            email     = data["email"],
+            password  = hashed_password,
+            avatar_url = data.get("avatar_url"),
+            admin = True,
+            favorito_recetas = [],
+            favorito_peliculas = []
         )
 
         db.session.add(new_user)
+        db.session.flush()
+
+        new_hogar = Hogar(
+            hogar_name = data["hogar_name"],
+            user_id    = new_user.id
+        )
+        db.session.add(new_hogar)
+
         db.session.commit()
+
 
         token = create_access_token(identity=str(new_user.id))
 
-        return jsonify({"msg": "register ok", "token": token}), 200
+        return jsonify({
+            "msg": "register ok",
+            "token": token,
+            "user": new_user.serialize(),
+            "hogar": new_hogar.serialize()
+        }), 201
 
     except Exception as e:
-        print("Register error:", e)
+        print("Register error:", repr(e))
         db.session.rollback()
-        return jsonify({"error": "something went wrong"}), 400
+        return jsonify({"error": "Something went wrong server-side"}), 500
+    
 @api.route('/login', methods=['POST'])
 def login():
     try:

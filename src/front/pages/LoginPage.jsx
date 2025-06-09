@@ -1,5 +1,4 @@
 
-import '../styles/Login.css';
 import { Login } from '../components/login';
 
 export const LoginPage = () => {
