@@ -10,27 +10,28 @@ def seed():
         db.drop_all()
         db.create_all()
 
+        # Crear hogares, cada uno con un usuario diferente
+        hogares = [
+            Hogar(hogar_name="Casa Juan"),
+            Hogar(hogar_name="Casa Ana"),
+            Hogar(hogar_name="Casa Pedro"),
+            Hogar(hogar_name="Casa Maria"),
+            Hogar(hogar_name="Casa Lucia"),
+        ]
+        db.session.add_all(hogares)
+        db.session.commit()
+
         # Crear 5 usuarios
         users = [
-            User(user_name="juan", email="juan@mail.com", password=generate_password_hash("juan123"), avatar_url=None, admin=True, favorito_recetas={}, favorito_peliculas={}),
-            User(user_name="ana", email="ana@mail.com", password=generate_password_hash("ana123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
-            User(user_name="pedro", email="pedro@mail.com", password=generate_password_hash("pedro123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
-            User(user_name="maria", email="maria@mail.com", password=generate_password_hash("maria123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
-            User(user_name="lucia", email="lucia@mail.com", password=generate_password_hash("lucia123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
+            User(user_name="juan", hogar_id=1, email="juan@mail.com", password=generate_password_hash("juan123"), avatar_url=None, admin=True, favorito_recetas={}, favorito_peliculas={}),
+            User(user_name="ana", hogar_id=1, email="ana@mail.com", password=generate_password_hash("ana123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
+            User(user_name="pedro", hogar_id=1, email="pedro@mail.com", password=generate_password_hash("pedro123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
+            User(user_name="maria", hogar_id=2, email="maria@mail.com", password=generate_password_hash("maria123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
+            User(user_name="lucia", hogar_id=2, email="lucia@mail.com", password=generate_password_hash("lucia123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
         ]
         db.session.add_all(users)
         db.session.commit()
 
-        # Crear hogares, cada uno con un usuario diferente
-        hogares = [
-            Hogar(hogar_name="Casa Juan", user_id=users[0].id),
-            Hogar(hogar_name="Casa Ana", user_id=users[1].id),
-            Hogar(hogar_name="Casa Pedro", user_id=users[2].id),
-            Hogar(hogar_name="Casa Maria", user_id=users[3].id),
-            Hogar(hogar_name="Casa Lucia", user_id=users[4].id),
-        ]
-        db.session.add_all(hogares)
-        db.session.commit()
 
         # Finanzas para cada hogar
         finanzas = [

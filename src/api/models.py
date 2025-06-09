@@ -18,6 +18,7 @@ class User(db.Model):
     admin: Mapped[bool] = mapped_column(Boolean, nullable=False)
     favorito_recetas: Mapped[dict] = mapped_column(JSON, nullable=True)
     favorito_peliculas: Mapped[dict] = mapped_column(JSON, nullable=True)
+    hogar_id: Mapped[int]= mapped_column(ForeignKey("hogar.id"), nullable=True)
 
     hogares = relationship("Hogar", back_populates="user")
     finanzas = relationship("Finanzas", back_populates="user")
@@ -44,7 +45,8 @@ class User(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "hogar_id": self.hogares[0].serialize() if self.hogares else None,
+            "hogar_id": self.hogar_id,
+            "hogar": self.hogares.hogar_name,
             "email": self.email,
             "user_name": self.user_name,
             "avatar_url": self.avatar_url,
@@ -59,7 +61,7 @@ class Hogar (db.Model):
     __tablename__ = "hogar"
     id: Mapped[int] = mapped_column(primary_key=True)
     hogar_name: Mapped[str] = mapped_column(String(80), nullable=False)
-    user_id: Mapped[int]= mapped_column(ForeignKey ("user.id"))
+
 
 
     user = relationship("User", back_populates="hogares")
@@ -74,7 +76,7 @@ class Hogar (db.Model):
         return {
             "id": self.id,
             "hogar_name": self.hogar_name,
-            "user_id": self.user_id
+            "user": [u.serialize() for u in self.user] or None
         }
 
 

@@ -10,8 +10,6 @@ export const Navbar = () => {
 		: placeholder;
 
 	return (
-
-
 		<nav className="navbar navbar-expand-md bg-charcoal px-3">
 			<div className="container-fluid">
 				<div className="d-flex w-100 align-items-center justify-content-between">
@@ -36,11 +34,13 @@ export const Navbar = () => {
 				<div className="collapse navbar-collapse flex-column flex-md-row align-items-start align-items-md-center mt-2 mt-md-0" id="navbarNavAltMarkup">
 
 					<div className="d-flex d-md-none w-100 justify-content-end my-2">
+						<Link to="/profile">
 						<img
 							src={avatarSrc}
 							alt="User avatar"
 							className="rounded-circle user-avatar"
 						/>
+						</Link>
 					</div>
 
 					<div className="navbar-nav d-flex flex-column flex-grow-1 flex-md-row ms-md-auto px-md-5 gap-3 gap-md-4 w-100 justify-content-center justify-content-md-end">
@@ -50,11 +50,13 @@ export const Navbar = () => {
 						<a className="nav-link sage" href="#">Comida</a>
 					</div>
 					<div className="d-none d-md-flex align-items-center ms-md-3">
+						<Link to="/profile">
 						<img
 							src={avatarSrc}
 							alt="User avatar"
 							className="rounded-circle user-avatar"
 						/>
+						</Link>
 					</div>
 				</div>
 			</div>

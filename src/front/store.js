@@ -1,7 +1,8 @@
 export const initialStore=()=>{
   return{
     message: null,
-    user: null
+    user: null,
+    hogar: null
   }
 }
 
@@ -10,7 +11,8 @@ export default function storeReducer(store, action = {}) {
     case 'login_success':
       return {
         ...store,
-        user:  action.payload.user
+        user:  action.payload.user,
+        hogar:  action.payload.hogar
       };
     case 'set_hello':
       return {
