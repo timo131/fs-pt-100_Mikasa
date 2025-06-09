@@ -19,6 +19,7 @@ import { Private } from "./components/private";
 import {Tareas} from "./components/tareas";
 import { Card } from "./components/card";
 import Finanzas from "./pages/Finanzas"
+import {Ocio} from "./components/ocio";
 
 
 export const router = createBrowserRouter(
@@ -43,6 +44,7 @@ export const router = createBrowserRouter(
         <Route path="/card" element={<Card />} />
         <Route path="/finanzas" element={<Finanzas />} />
         <Route path="/join" element={<JoinPage />} />
+        <Route path ="/ocio" element={<Ocio />} />
       </Route>
     ),
     {
