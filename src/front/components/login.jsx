@@ -20,11 +20,16 @@ export const Login = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const data = await userServices.login(formData);
-      console.log("Respuesta del acceso:", data);
+      const { token, user } = await userServices.login(formData);
+      dispatch({
+        type: "login_success",
+        payload: { token, user }
+      });
+      navigate("/hogar")
     } catch (error) {
       console.error("Error al acceder:", error);
     }
+
   };
 
   return (

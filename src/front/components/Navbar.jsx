@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import placeholder from "../assets/img/avatar-placeholder.jpg";
 
 export const Navbar = () => {
+  	const { store } = useGlobalReducer();
+
+	const avatarSrc = store.user?.avatar_url
+		? store.user.avatar_url
+		: placeholder;
 
 	return (
 
@@ -30,7 +37,7 @@ export const Navbar = () => {
 
 					<div className="d-flex d-md-none w-100 justify-content-end my-2">
 						<img
-							src="src/front/assets/img/avatar-placeholder.jpg"
+							src={avatarSrc}
 							alt="User avatar"
 							className="rounded-circle user-avatar"
 						/>
@@ -44,7 +51,7 @@ export const Navbar = () => {
 					</div>
 					<div className="d-none d-md-flex align-items-center ms-md-3">
 						<img
-							src="src/front/assets/img/avatar-placeholder.jpg"
+							src={avatarSrc}
 							alt="User avatar"
 							className="rounded-circle user-avatar"
 						/>
