@@ -11,68 +11,63 @@ export const HogarDetails = () => {
   const navigate = useNavigate()
   const { store, dispatch } = useGlobalReducer();
   const users = store.hogar.user
-  const avatarSrc = users.avatar_url
-        ? users.avatar_url
-        : placeholder;
-
-
   return (
     <div className="register-container">
       <h2 className="ivory">{store.hogar.hogar_name}
-        {store.user.admin === true && 
-         <span className="fa-solid fa-pencil fa-2xs ms-2"></span>
+        {store.user.admin === true &&
+          <span className="fa-solid fa-pencil user-icon ms-2"></span>
         }
       </h2>
 
-        <div className="row">
-              <div className="table-responsive">
-      <table className="table table-striped align-middle rounded-3">
-        <thead>
-          <tr>
-            <th scope="col"></th>
-            <th scope="col">Username</th>
-            <th scope="col">Email</th>
-            <th scope="col">Role</th>
-            {store.user.admin === true && <th scope="col"></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(user => (
-            <tr key={user.id}>
-              <td>
-                <img
-                  src={avatarSrc}
-                  alt={`${user.user_name} avatar`}
-                  className="rounded-circle"
-                  style={{ width: '40px', height: '40px', objectFit: 'cover' }}
-                />
-              </td>
-              <td>{user.user_name}</td>
-              <td>{user.email}</td>
-              <td>
-                {user.admin
-                  ? <span className="badge bg-success">Admin</span>
-                  : <span className="badge bg-secondary">Miembro</span>
-                }
-              </td>
-              {store.user.admin === true && 
-              <td>
-                {user.id !== store.user.id && 
-                <span class="fa-solid fa-pencil"></span>
-                }
-              </td>
-              }
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+      <div className="row">
+        <div className="table-responsive">
+          <table className="table table-striped align-middle users-table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col"><span className="charcoal">Username</span></th>
+                <th scope="col"><span className="charcoal">Email</span></th>
+                <th scope="col"><span className="charcoal">Role</span></th>
+                {store.user.admin === true && <th scope="col"></th>}
+              </tr>
+            </thead>
+            <tbody>
+              {users.map(user => (
+                <tr key={user.id}>
+                  <td>
+                    <img
+                      src={user.avatar_url ? user.avatar_url : placeholder}
+                      alt={`${user.user_name} avatar`}
+                      className="rounded-circle"
+                      style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                    />
+                  </td>
+                  <td>{user.user_name}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    {user.admin
+                      ? <span className="badge rounded-pill bg-success">admin</span>
+                      : <span className="badge rounded-pill bg-secondary">miembro</span>
+                    }
+                  </td>
+                  {store.user.admin === true &&
+                    <td>
+                      {user.id !== store.user.id &&
+                        <span class="fa-solid fa-pencil user-icon"></span>
+                      }
+                    </td>
+                  }
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        {store.user.admin === true && 
+      </div>
+      {store.user.admin === true &&
         <div className="row justify-content-center">
           <button type="submit" className="user-button col-5">Invitar a más personas</button>
         </div>
-        }
+      }
     </div>
   );
 };

@@ -5,6 +5,7 @@ import "../styles/User.css";
 import { Link, useNavigate } from "react-router-dom";
 import EmailTagsInput from "../components/EmailTagsInput";
 import placeholder from "../assets/img/avatar-placeholder.jpg";
+import { EditAccount } from "./modals/editaccount";
 const CLOUD_NAME = "daavddex7";
 const UPLOAD_PRESET = "avatar_unsigned";
 
@@ -15,6 +16,11 @@ export const UserDetails = () => {
   const avatarSrc = store.user?.avatar_url
     ? store.user.avatar_url
     : placeholder;
+
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  const openEditAccountModal = () => setShowEditModal(true);
+  const closeEditAccountModal = () => setShowEditModal(false);
 
   return (
     <div className="register-container">
@@ -51,8 +57,14 @@ export const UserDetails = () => {
         </div>
       </div>
       <div className="row justify-content-center">
-        <button type="submit" className="user-button col-3">Editar</button>
+        <button onClick={openEditAccountModal} className="user-button col-3">Editar</button>
       </div>
+      {showEditModal && (
+        <EditAccount
+          show={showEditModal}
+          onClose={closeEditAccountModal}
+        />
+      )}
     </div>
   );
 };
