@@ -44,7 +44,7 @@ class User(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "hogar_id": self.hogares[0].id if self.hogares else None,
+            "hogar_id": self.hogares[0].serialize() if self.hogares else None,
             "email": self.email,
             "user_name": self.user_name,
             "avatar_url": self.avatar_url,
