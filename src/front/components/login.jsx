@@ -21,9 +21,10 @@ export const Login = () => {
     e.preventDefault();
     try {
       const { token, user } = await userServices.login(formData);
+      const hogar = await userServices.getHogar(user.hogar_id);
       dispatch({
         type: "login_success",
-        payload: { token, user }
+        payload: { token, user, hogar }
       });
       navigate("/hogar")
     } catch (error) {
