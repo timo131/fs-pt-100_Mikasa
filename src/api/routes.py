@@ -90,7 +90,7 @@ def delete_user(user_id):
 
 
 @api.route("/hogares", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_all_hogares():
     stm = select(Hogar)
     hogares = db.session.execute(stm).scalars().all()

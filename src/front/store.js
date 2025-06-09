@@ -1,10 +1,18 @@
-export const initialStore = () => ({
-  tasks: [],
-});
+export const initialStore=()=>{
+  return{
+    message: null,
+    user: null
+  }
+}
 
 export default function storeReducer(store, action = {}) {
-  switch (action.type) {
-    case "add_task":
+  switch(action.type){
+    case 'login_success':
+      return {
+        ...store,
+        user:  action.payload.user
+      };
+    case 'set_hello':
       return {
         ...store,
         tasks: [...store.tasks, action.payload],

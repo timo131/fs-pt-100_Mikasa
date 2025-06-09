@@ -97,7 +97,7 @@ export const Register = () => {
     e.preventDefault();
     try {
       const data = await userServices.register(formData);
-      navigate("/")
+      navigate("/login")
     } catch (err) {
       console.error(err);
       alert("Error creating hogar:\n" + err.message);
