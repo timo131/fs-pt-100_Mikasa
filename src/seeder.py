@@ -2,6 +2,8 @@ from api.models import db, User, Hogar, Finanzas, Pagos, User_pagos, Tareas, Com
 from flask import Flask
 from datetime import datetime
 from app import app
+from werkzeug.security import generate_password_hash
+
 
 def seed():
     with app.app_context():
@@ -10,11 +12,11 @@ def seed():
 
         # Crear 5 usuarios
         users = [
-            User(user_name="juan", email="juan@mail.com", password="1234", avatar_url=None, admin=True, favorito_recetas={}, favorito_peliculas={}),
-            User(user_name="ana", email="ana@mail.com", password="1234", avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
-            User(user_name="pedro", email="pedro@mail.com", password="1234", avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
-            User(user_name="maria", email="maria@mail.com", password="1234", avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
-            User(user_name="lucia", email="lucia@mail.com", password="1234", avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
+            User(user_name="juan", email="juan@mail.com", password=generate_password_hash("juan123"), avatar_url=None, admin=True, favorito_recetas={}, favorito_peliculas={}),
+            User(user_name="ana", email="ana@mail.com", password=generate_password_hash("ana123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
+            User(user_name="pedro", email="pedro@mail.com", password=generate_password_hash("pedro123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
+            User(user_name="maria", email="maria@mail.com", password=generate_password_hash("maria123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
+            User(user_name="lucia", email="lucia@mail.com", password=generate_password_hash("lucia123"), avatar_url=None, admin=False, favorito_recetas={}, favorito_peliculas={}),
         ]
         db.session.add_all(users)
         db.session.commit()
