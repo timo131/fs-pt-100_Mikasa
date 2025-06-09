@@ -1,0 +1,63 @@
+.finanzas-page {
+  background-color: #f8f1e4;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  color: #000;
+}
+
+.titulo-mes {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-transform: lowercase;
+}
+
+.btn-navegacion {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #000;
+}
+
+.tarjeta-gastos {
+  background-color: #dcae58;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.grafico-wrapper {
+  width: 280px;
+}
+
+.grafico-circular {
+  max-width: 100%;
+  height: auto;
+}
+
+.lista-gastos-wrapper {
+  flex: 1;
+}
+
+.lista-gastos-wrapper h4 {
+  font-weight: bold;
+}
+
+.tarjeta-cuentas {
+  background-color: #dcae58;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.tarjeta-cuentas h4,
+.tarjeta-cuentas h5 {
+  font-weight: bold;
+}
+
+.tarjeta-cuentas .badge {
+  background-color: #2069d4;
+  border-radius: 30px;
+}
+
+.balance-final {
+  margin-top: 2rem;
+}
+

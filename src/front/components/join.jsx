@@ -3,12 +3,11 @@ import userServices from "../services/userServices";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import "../styles/User.css";
 import { Link, useNavigate } from "react-router-dom";
-import EmailTagsInput from "../components/EmailTagsInput";
 import placeholder from "../assets/img/avatar-placeholder.jpg";
 const CLOUD_NAME = "daavddex7";
 const UPLOAD_PRESET = "avatar_unsigned";
 
-export const Register = () => {
+export const Join = () => {
   const navigate = useNavigate()
   const { store, dispatch } = useGlobalReducer();
   const [formData, setFormData] = useState({
@@ -116,26 +115,8 @@ export const Register = () => {
 
   return (
     <div className="register-container">
-      <h2 className="ivory">Crear tu hogar</h2>
-      <p className="ivory">Para unirte a un hogar ya creado, comprueba tu email para un enlace. Para crear un nuevo hogar, rellena el formulario.</p>
-      <form onSubmit={handleSubmit} className="user-form">
-        <div className="row">
-          <div className="col-4 d-flex align-items-center justify-content-end">
-            <label htmlFor="hogar_name" className="ivory fw-bold">Nombre del hogar</label>
-          </div>
-          <div className="col-8">
-            <input
-              placeholder="Mikasa"
-              id="hogar_name"
-              name="hogar_name"
-              value={formData.hogar_name}
-              onChange={handleChange}
-              type="text"
-              className="my-1"
-              required
-            />
-          </div>
-        </div>
+      <h2 className="ivory">Unirte a hogar_name</h2>
+        <form onSubmit={handleSubmit} className="user-form">
         <div className="row">
           <div className="col-4 d-flex align-items-center justify-content-end">
             <label htmlFor="user_name" className="ivory fw-bold">Nombre de usuario</label>
@@ -242,22 +223,8 @@ export const Register = () => {
           </div>
 
         </div >
-        <div className="row">
-          <div className="col-4 d-flex justify-content-end">
-        <label className="ivory fw-bold pt-3">
-          Invitar miembros
-        </label>
-         </div>
-         <div className="col-8">
-        <EmailTagsInput
-          id="otros"
-          emails={formData.otros}
-          onChange={handleEmailsChange}
-        />
-        </div>
-        </div>
         <div className="row justify-content-center">
-          <button type="submit" className="user-button col-8">Crear hogar</button>
+          <button type="submit" className="user-button col-8">Unirte al hogar</button>
         </div>
       </form>
       <p className="mt-4 mb-0 ivory">¿Ya tienes cuenta?<br /><Link to="/login">Acceder a tu hogar</Link></p>

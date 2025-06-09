@@ -1,7 +1,8 @@
 import { useState } from "react";
 import userServices from "../services/userServices";
 import useGlobalReducer from "../hooks/useGlobalReducer";
-import "../styles/Login.css";
+import { Link } from "react-router-dom";
+import "../styles/User.css";
 
 export const Login = () => {
   const { store, dispatch } = useGlobalReducer();
@@ -25,9 +26,9 @@ export const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Acceder</h2>
-      <form onSubmit={handleSubmit} className="login-form">
+    <div className="user-container">
+      {/* <h2>Acceder</h2> */}
+      <form onSubmit={handleSubmit} className="user-form">
         <input
           placeholder="Correo electrónico"
           name="email"
@@ -44,8 +45,9 @@ export const Login = () => {
           type="password"
           required
         />
-        <button type="submit" className="login-button">Iniciar sesión</button>
+        <button type="submit" className="user-button w-100">Iniciar sesión</button>
       </form>
+      <p className="mt-4 mb-0 ivory">Nuevo a Mikasa?<br/><Link to="/register">Crear tu hogar</Link></p>
     </div>
   );
 };

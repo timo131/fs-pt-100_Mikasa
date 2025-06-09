@@ -1,0 +1,23 @@
+.gasto-modal {
+  background-color: #fdf5e6;
+  border-radius: 10px;
+  border: 2px solid #f4cc88;
+}
+
+.gasto-modal .form-control,
+.gasto-modal .form-select {
+  border: 1px solid #d4a64b;
+  border-radius: 5px;
+}
+
+.gasto-modal .btn-dark {
+  background-color: #000;
+  border: none;
+  padding: 5px 20px;
+}
+
+.gasto-modal .btn-danger {
+  background-color: #b52a2a;
+  border: none;
+  padding: 5px 20px;
+}
