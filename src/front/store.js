@@ -1,3 +1,5 @@
+
+
 export const initialStore=()=>{
   return{
     message: null,
@@ -14,10 +16,30 @@ export default function storeReducer(store, action = {}) {
         user:  action.payload.user,
         hogar:  action.payload.hogar
       };
+    case 'logout':
+      return initialStore();
     case 'update_user':
       return {
         ...store,
         user:  action.payload,
+      };
+    case 'update_member':
+      return {
+        ...store,
+        hogar: {
+          ...store.hogar,
+          user: store.hogar.user.map(u =>
+            u.id === action.payload.id ? action.payload : u
+          )
+        }
+      };
+    case "remove_member":
+      return {
+        ...store,
+        hogar: {
+          ...store.hogar,
+          user: store.hogar.user.filter(u => u.id !== action.payload)
+        }
       };
     case 'update_hogar':
       return {

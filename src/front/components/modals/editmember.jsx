@@ -74,23 +74,23 @@ export const EditMember = ({ show, memberId, onClose }) => {
                         <div className="row justify-content-center g-2">
                             {isAdmin
                                 ? (
-                                    <div className="col-6">
-                                        <button type="button" onClick={handleRemoveAdmin} className="user-button">
+                                    <div className="col-4">
+                                        <button type="button" onClick={handleRemoveAdmin} className="user-button w-100">
                                             ¿Quitar como admin?
                                         </button>
                                     </div>
                                 )
                                 : (
-                                    <div className="col-6">
-                                        <button type="button" onClick={handleMakeAdmin} className="user-button">
+                                    <div className="col-4">
+                                        <button type="button" onClick={handleMakeAdmin} className="user-button w-100">
                                             ¿Convertir en admin?
                                         </button>
                                     </div>
                                 )
                             }
 
-                            <div className="col-6">
-                                <button type="button" onClick={handleKickOut} className="user-button text-danger">
+                            <div className="col-4">
+                                <button type="button" onClick={handleKickOut} className="user-button text-danger w-100">
                                     ¿Quitar del hogar?
                                 </button>
                             </div>

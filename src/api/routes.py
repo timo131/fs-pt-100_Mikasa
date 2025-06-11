@@ -68,6 +68,8 @@ def update_user(user_id):
         if new_pw:
             user.password = generate_password_hash(new_pw)
         user.avatar_url = data.get("avatar_url", user.avatar_url)
+        if "admin" in data:
+            user.admin = bool(data["admin"])
         db.session.commit()
         return jsonify(user.serialize()), 200
     except Exception as e:

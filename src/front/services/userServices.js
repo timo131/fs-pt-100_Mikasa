@@ -52,14 +52,21 @@ userServices.join = async (formData) => {
 
 userServices.updateuser = async (userId, formData) => {
   try {
+    const token = localStorage.getItem("token");
+    console.log(`PUT /api/users/${userId}  token:`, token);
     const resp = await fetch(`${backendUrl}/api/users/${userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"),
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(formData),
     });
+    if (resp.status === 401) {
+      const errJson = await resp.json().catch(() => null);
+      console.error("Unauthorized:", errJson);
+      throw new Error(errJson?.msg || errJson?.error || "Unauthorized");
+    }
     if (!resp.ok) throw Error("something went wrong");
     const data = await resp.json();
     return data;
