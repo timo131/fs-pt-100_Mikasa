@@ -244,17 +244,17 @@ export const Register = () => {
         </div >
         <div className="row">
           <div className="col-4 d-flex justify-content-end">
-        <label className="ivory fw-bold pt-3">
-          Invitar miembros
-        </label>
-         </div>
-         <div className="col-8">
-        <EmailTagsInput
-          id="otros"
-          emails={formData.otros}
-          onChange={handleEmailsChange}
-        />
-        </div>
+            <label className="ivory fw-bold pt-3">
+              Invitar miembros
+            </label>
+          </div>
+          <div className="col-8">
+            <EmailTagsInput
+              id="otros"
+              emails={formData.otros}
+              onChange={handleEmailsChange}
+            />
+          </div>
         </div>
         <div className="row justify-content-center">
           <button type="submit" className="user-button col-8">Crear hogar</button>

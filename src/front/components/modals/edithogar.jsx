@@ -2,13 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import userServices from "../../services/userServices";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import "../../styles/User.css";
-import EmailTagsInput from "../../components/EmailTagsInput";
-import { Link, useNavigate } from "react-router-dom";
 
-export const Invitar = ({ show, onClose }) => {
+export const EditHogar = ({ show, onClose }) => {
     const { store, dispatch } = useGlobalReducer();
     const [formData, setFormData] = useState({
-        otros: []
+        hogar_name: []
     });
 
     const handleChange = e => {
@@ -18,25 +16,20 @@ export const Invitar = ({ show, onClose }) => {
     useEffect(() => {
         if (show) {
             setFormData({
-                otros: store.user.otros || [],
+                hogar_name: store.hogar.hogar_name || "",
             });
         }
     }, [show]);
 
-    const handleEmailsChange = (newEmailsArray) => {
-        setFormData({ ...formData, otros: newEmailsArray });
-    };
-
-
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            const updated = await userServices.updateuser(store.user.id, formData);
-            dispatch({ type: "update_user", payload: updated });
+            const updated = await userServices.updatehogar(store.hogar.id, formData);
+            dispatch({ type: "update_hogar", payload: updated });
             onClose();
         } catch (err) {
             console.error(err);
-            alert("Error sending invitations:\n" + err.message);
+            alert("Error updating hogar:\n" + err.message);
         }
 
     };
@@ -53,7 +46,7 @@ export const Invitar = ({ show, onClose }) => {
                         style={{ border: "2px solid ivory" }}
                     >
                         <div className="modal-header border-0">
-                            <h3 className="modal-title ivory text-center w-100">Invitar a más gente</h3>
+                            <h3 className="modal-title ivory text-center w-100">Editar el hogar</h3>
                             <button
                                 type="button"
                                 onClick={onClose}
@@ -65,21 +58,24 @@ export const Invitar = ({ show, onClose }) => {
                         </div>
                         <form onSubmit={handleSubmit} className="user-form">
                             <div className="row">
-                                <div className="col-4 d-flex justify-content-end">
-                                    <label className="ivory fw-bold pt-3">
-                                        Invitar miembros
-                                    </label>
+                                <div className="col-4 d-flex align-items-center justify-content-end">
+                                    <span className="ivory fs-5">Nombre</span>
                                 </div>
                                 <div className="col-8">
-                                    <EmailTagsInput
-                                        id="otros"
-                                        emails={formData.otros}
-                                        onChange={handleEmailsChange}
+                                    <input
+                                        placeholder="Mikasa"
+                                        id="hogar_name"
+                                        name="hogar_name"
+                                        value={formData.hogar_name}
+                                        onChange={handleChange}
+                                        type="text"
+                                        className="my-1 w-75"
+                                        required
                                     />
                                 </div>
                             </div>
-                            <div className="row justify-content-center">
-                                <button type="submit" className="user-button col-4">Invitar</button>
+                            <div className="row justify-content-center mt-3">
+                                <button type="submit" className="user-button col-4">Editar</button>
                             </div>
                         </form>
                     </div>

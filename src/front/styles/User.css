@@ -86,6 +86,29 @@ a:active {
   color: #2c2c2c;
 }
 
+.user-button-danger {
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c2c2c;
+  background-color: #DA6868;
+;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.user-button-danger:hover {
+  background-color: #A8C97F;
+  color: #2c2c2c;
+}
+
+.user-button-danger:active {
+  background-color: #E2B659;
+  color: #2c2c2c;
+}
+
 .users-table {
   border-collapse: separate !important;
   border-spacing: 0;
@@ -111,4 +134,12 @@ a:active {
 
 .user-icon:active {
   color: #E2B659;
+}
+  
+.avatar-big {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ccc;
 }

@@ -53,7 +53,7 @@ def create_user():
         db.session.rollback()
         return jsonify({"message": "Error creating user"}), 500
 
-@api.route("/users", methods=["PUT"])
+@api.route("/users/<int:user_id>", methods=["PUT"])
 @jwt_required()
 def update_user(user_id):
     data = request.get_json()
@@ -64,16 +64,19 @@ def update_user(user_id):
     try:
         user.user_name = data.get("user_name", user.user_name)
         user.email = data.get("email", user.email)
-        user.password = data.get("password", user.password)
-        user.favorito_recetas = data.get("favorito_recetas", user.favorito_recetas)
-        user.favorito_peliculas = data.get("favorito_peliculas", user.favorito_peliculas)
+        new_pw = data.get("new_password")
+        if new_pw:
+            user.password = generate_password_hash(new_pw)
+        user.avatar_url = data.get("avatar_url", user.avatar_url)
+        if "admin" in data:
+            user.admin = bool(data["admin"])
         db.session.commit()
         return jsonify(user.serialize()), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error updating user"}), 500
 
-@api.route("/users/", methods=["DELETE"])
+@api.route("/users/<int:user_id>", methods=["DELETE"])
 @jwt_required()
 def delete_user(user_id):
     stm = select(User).where(User.id == user_id)

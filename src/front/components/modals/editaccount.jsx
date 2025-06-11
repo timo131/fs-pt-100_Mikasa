@@ -4,6 +4,7 @@ import useGlobalReducer from "../../hooks/useGlobalReducer";
 import "../../styles/User.css";
 import { Link, useNavigate } from "react-router-dom";
 import placeholder from "../../assets/img/avatar-placeholder.jpg";
+
 const CLOUD_NAME = "daavddex7";
 const UPLOAD_PRESET = "avatar_unsigned";
 
@@ -14,11 +15,14 @@ export const EditAccount = ({ show, onClose }) => {
         hogar_name: "",
         user_name: "",
         email: "",
-        password: "",
-        repeat_password: "",
+        new_password: "",
+        repeat_new_password: "",
         avatar_url: "",
         otros: []
     });
+
+    const passwordError =
+    formData.new_password !== "" && formData.repeat_new_password !== formData.new_password;
 
     const widgetRef = useRef(null);
 
@@ -80,6 +84,19 @@ export const EditAccount = ({ show, onClose }) => {
         }
     }, []);
 
+    useEffect(() => {
+        if (show) {
+            setFormData({
+                user_name: store.user.user_name,
+                email: store.user.email,
+                new_password: "",
+                repeat_new_password: "",
+                avatar_url: store.user.avatar_url || "",
+                otros: store.user.otros || [],
+            });
+        }
+    }, [show]);
+
     const handleChooseAvatar = () => {
         if (widgetRef.current) {
             widgetRef.current.open();
@@ -88,15 +105,12 @@ export const EditAccount = ({ show, onClose }) => {
         }
     };
 
-    const handleEmailsChange = (newEmailsArray) => {
-        setFormData({ ...formData, otros: newEmailsArray });
-    };
-
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            const data = await userServices.register(formData);
-            navigate("/")
+            const updated = await userServices.updateuser(store.user.id, formData);
+            dispatch({ type: "update_user", payload: updated });
+            onClose();
         } catch (err) {
             console.error(err);
             alert("Error creating hogar:\n" + err.message);
@@ -110,8 +124,8 @@ export const EditAccount = ({ show, onClose }) => {
     };
 
     const passwordsMatch =
-        formData.repeat_password === "" ||
-        formData.repeat_password === formData.password;
+        formData.repeat_new_password === "" ||
+        formData.repeat_new_password === formData.new_password;
 
     return (
         <>
@@ -124,8 +138,8 @@ export const EditAccount = ({ show, onClose }) => {
                         className="modal-content editprofile-container"
                         style={{ border: "2px solid ivory" }}
                     >
-                        <div className="modal-header">
-                            <h3 className="modal-title ivory">Editar tu perfil</h3>
+                        <div className="modal-header border-0">
+                            <h3 className="modal-title ivory text-center w-100">Editar tu perfil</h3>
                             <button
                                 type="button"
                                 onClick={onClose}
@@ -148,8 +162,7 @@ export const EditAccount = ({ show, onClose }) => {
                                         value={formData.user_name}
                                         onChange={handleChange}
                                         type="text"
-                                        className="my-1"
-                                        required
+                                        className="my-1 w-75"
                                     />
                                 </div>
                             </div>
@@ -165,8 +178,7 @@ export const EditAccount = ({ show, onClose }) => {
                                         value={formData.email}
                                         onChange={handleChange}
                                         type="email"
-                                        className="my-1"
-                                        required
+                                        className="my-1 w-75"
                                     />
                                 </div>
                             </div>
@@ -176,35 +188,35 @@ export const EditAccount = ({ show, onClose }) => {
                                 </div>
                                 <div className="col-8">
                                     <input
-                                        id="password"
-                                        name="password"
-                                        value={formData.password}
+                                        id="new_password"
+                                        name="new_password"
+                                        value={formData.new_password}
                                         onChange={handleChange}
                                         type="password"
-                                        className="my-1"
-                                        required
+                                        className="my-1 w-75"
                                     />
                                 </div>
                             </div>
                             <div className="row my-1">
                                 <div className="col-4 d-flex align-items-center justify-content-end">
-                                    <label htmlFor="repeat_password" className="ivory fw-bold">Repetir la contraseña</label>
+                                    <label htmlFor="repeat_new_password" className="ivory fw-bold">Repetir la contraseña</label>
                                 </div>
                                 <div className="col-8">
                                     <input
-                                        id="repeat_password"
-                                        name="repeat_password"
-                                        value={formData.repeat_password}
+                                        id="repeat_new_password"
+                                        name="repeat_new_password"
+                                        value={formData.repeat_new_password}
                                         onChange={handleChange}
                                         type="password"
-                                        className={`form-control my-1 ${formData.repeat_password && !passwordsMatch ? "is-invalid" : ""
-                                            }`}
-                                        required
+                                        className={`form-control w-75 my-1 ${
+                                            passwordError ? "is-invalid" : ""
+                                        }`}
                                     />
-
-                                    <div className="invalid-feedback">
-                                        Las contraseñas no coinciden.
-                                    </div>
+                                    {passwordError && (
+                                        <div className="invalid-feedback">
+                                            Las contraseñas no coinciden.
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className="row align-items-center my-3">
@@ -218,17 +230,11 @@ export const EditAccount = ({ show, onClose }) => {
                                         <img
                                             src={
                                                 store.user.avatar_url
-                                                    ? getTransformedAvatar(store.user.avatar_url)
+                                                    ? getTransformedAvatar(formData.avatar_url)
                                                     : placeholder
                                             }
                                             alt="Avatar Preview"
-                                            style={{
-                                                width: "100px",
-                                                height: "100px",
-                                                borderRadius: "50%",
-                                                objectFit: "cover",
-                                                border: "1px solid #ccc",
-                                            }}
+                                            className="avatar-big"
                                         />
                                     </div>
                                 </div>
@@ -237,7 +243,7 @@ export const EditAccount = ({ show, onClose }) => {
 
                             </div >
                             <div className="row justify-content-center">
-                                <button type="submit" className="user-button col-4">Actualizar</button>
+                                <button type="submit"  disabled={passwordError} className="user-button col-4">Actualizar</button>
                             </div>
                         </form>
                     </div>
