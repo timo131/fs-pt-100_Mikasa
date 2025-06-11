@@ -1,3 +1,5 @@
+import storeReducer from "../store";
+
 const userServices = {};
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -29,7 +31,29 @@ userServices.register = async (formData) => {
 userServices.join = async (formData) => {
   try {
     const resp = await fetch(backendUrl + "/api/join", {
-        method: "POST",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    if (!resp.ok) throw Error("something went wrong");
+    const data = await resp.json();
+
+    localStorage.setItem("token", data.token);
+
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Join failed:", error);
+    throw error;
+  }
+};
+
+userServices.updateuser = async (formData) => {
+  try {
+    const resp = await fetch(`${backendUrl}/api/users/${store.user.userId}`, {
+        method: "PUT",
         headers: {
             'Content-Type': 'application/json'
         },

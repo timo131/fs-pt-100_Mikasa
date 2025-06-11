@@ -1,6 +1,7 @@
 from api.models import db, User, Hogar, Finanzas, Pagos, User_pagos, Tareas, Comida, Favoritos_hogar
 from flask import Flask
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
 from app import app
 from werkzeug.security import generate_password_hash
 

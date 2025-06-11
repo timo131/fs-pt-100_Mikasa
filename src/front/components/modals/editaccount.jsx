@@ -4,6 +4,7 @@ import useGlobalReducer from "../../hooks/useGlobalReducer";
 import "../../styles/User.css";
 import { Link, useNavigate } from "react-router-dom";
 import placeholder from "../../assets/img/avatar-placeholder.jpg";
+
 const CLOUD_NAME = "daavddex7";
 const UPLOAD_PRESET = "avatar_unsigned";
 
@@ -95,8 +96,8 @@ export const EditAccount = ({ show, onClose }) => {
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            const data = await userServices.register(formData);
-            navigate("/")
+            const data = await userServices.updateuser(formData);
+            onClose();
         } catch (err) {
             console.error(err);
             alert("Error creating hogar:\n" + err.message);
