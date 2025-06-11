@@ -43,7 +43,7 @@ export const Navbar = () => {
 						</Link>
 					</div>
 
-					<div className="navbar-nav d-flex flex-column flex-grow-1 flex-md-row ms-md-auto px-md-5 gap-3 gap-md-4 w-100 justify-content-center justify-content-md-end">
+					<div className="navbar-nav d-flex flex-column flex-md-row ms-md-auto px-md-5 gap-3 gap-md-4 w-100 align-items-end align-items-md-center justify-content-md-end justify-content-lg-center">
 						<Link className="nav-link coral" to="/tareas">Tareas</Link>
 						<a className="nav-link ochre" href="#">Finanzas</a>
 						<a className="nav-link aqua" href="#">Ocio</a>

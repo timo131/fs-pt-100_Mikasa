@@ -117,7 +117,7 @@ export const Join = () => {
     <div className="register-container">
       <h2 className="ivory">Unirte a hogar_name</h2>
         <form onSubmit={handleSubmit} className="user-form">
-        <div className="row">
+        <div className="row my-1">
           <div className="col-4 d-flex align-items-center justify-content-end">
             <label htmlFor="user_name" className="ivory fw-bold">Nombre de usuario</label>
           </div>
@@ -133,7 +133,7 @@ export const Join = () => {
             />
           </div>
         </div>
-        <div className="row">
+        <div className="row my-1">
           <div className="col-4 d-flex align-items-center justify-content-end">
             <label htmlFor="email" className="ivory fw-bold">Correo electrónico</label>
           </div>
@@ -149,7 +149,7 @@ export const Join = () => {
             />
           </div>
         </div>
-        <div className="row">
+        <div className="row my-1">
           <div className="col-4 d-flex align-items-center justify-content-end">
             <label htmlFor="password" className="ivory fw-bold">Contraseña</label>
           </div>
@@ -165,7 +165,7 @@ export const Join = () => {
             />
           </div>
         </div>
-        <div className="row">
+        <div className="row my-1">
           <div className="col-4 d-flex align-items-center justify-content-end">
             <label htmlFor="repeat_password" className="ivory fw-bold">Repetir la contraseña</label>
           </div>
@@ -186,13 +186,13 @@ export const Join = () => {
             </div>
           </div>
         </div>
-        <div className="row align-items-center my-2">
+        <div className="row align-items-center my-3">
           <div className="col-4 d-flex justify-content-end">
             <label className="ivory fw-bold">
               Imagen de perfil
             </label>
           </div>
-          <div className="col-3">
+          <div className="col-4 d-flex justify-content-end">
             <div>
               <img
                 src={
@@ -211,20 +211,13 @@ export const Join = () => {
               />
             </div>
           </div>
-          <div className="col-5">
-            <button
-              type="button"
-              id="upload-avatar-btn"
-              onClick={handleChooseAvatar}
-              className="user-button w-100"
-            >
-              Subir
-            </button>
+          <div  className="col-3 d-flex justify-content-start">
+            <span class="fa-solid fa-pencil fa-2x user-icon" onClick={handleChooseAvatar}></span>
           </div>
 
         </div >
         <div className="row justify-content-center">
-          <button type="submit" className="user-button col-8">Unirte al hogar</button>
+          <button type="submit" className="user-button col-4">Unirte al hogar</button>
         </div>
       </form>
       <p className="mt-4 mb-0 ivory">¿Ya tienes cuenta?<br /><Link to="/login">Acceder a tu hogar</Link></p>
