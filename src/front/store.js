@@ -14,6 +14,16 @@ export default function storeReducer(store, action = {}) {
         user:  action.payload.user,
         hogar:  action.payload.hogar
       };
+    case 'update_user':
+      return {
+        ...store,
+        user:  action.payload,
+      };
+    case 'update_hogar':
+      return {
+        ...store,
+        hogar:  action.payload,
+      };
     case 'set_hello':
       return {
         ...store,

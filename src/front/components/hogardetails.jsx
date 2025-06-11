@@ -4,6 +4,9 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 import "../styles/User.css";
 import { Link, useNavigate } from "react-router-dom";
 import placeholder from "../assets/img/avatar-placeholder.jpg";
+import { Invitar } from "./modals/invitar";
+import { EditHogar } from "./modals/edithogar";
+import { EditMember } from "./modals/editmember";
 const CLOUD_NAME = "daavddex7";
 const UPLOAD_PRESET = "avatar_unsigned";
 
@@ -11,12 +14,33 @@ export const HogarDetails = () => {
   const navigate = useNavigate()
   const { store, dispatch } = useGlobalReducer();
   const users = store.hogar.user
+
+  const [showInvitarModal, setInvitarModal] = useState(false);
+  const openInvitarModal = () => setInvitarModal(true);
+  const closeInvitarModal = () => setInvitarModal(false);
+
+  const [showEditHogarModal, setEditHogarModal] = useState(false);
+  const openEditHogarModal = () => setEditHogarModal(true);
+  const closeEditHogarModal = () => setEditHogarModal(false);
+
+  const [showEditMemberModal, setEditMemberModal] = useState(false);
+  const openEditMemberModal = () => setEditMemberModal(true);
+  const closeEditMemberModal = () => setEditMemberModal(false);
+
   return (
     <div className="register-container">
       <h2 className="ivory">{store.hogar.hogar_name}
-        {store.user.admin === true &&
-          <span className="fa-solid fa-pencil user-icon ms-2"></span>
-        }
+        {store.user.admin === true && (
+          <>
+          <span onClick={openEditHogarModal} className="fa-solid fa-pencil user-icon ms-2"></span>
+          {showEditHogarModal && (
+          <EditHogar
+            show={showEditHogarModal}
+            onClose={closeEditHogarModal}
+          />
+          )}
+          </>
+        )}
       </h2>
 
       <div className="row">
@@ -52,9 +76,17 @@ export const HogarDetails = () => {
                   </td>
                   {store.user.admin === true &&
                     <td>
-                      {user.id !== store.user.id &&
-                        <span class="fa-solid fa-pencil user-icon"></span>
-                      }
+                      {user.id !== store.user.id && (
+                        <>
+                          <span onClick={openEditMemberModal} className="fa-solid fa-pencil user-icon"></span>
+                          {showEditMemberModal && (
+                            <EditMember
+                              show={showEditMemberModal}
+                              onClose={closeEditMemberModal}
+                            />
+                          )}
+                        </>
+                      )}
                     </td>
                   }
                 </tr>
@@ -63,11 +95,20 @@ export const HogarDetails = () => {
           </table>
         </div>
       </div>
-      {store.user.admin === true &&
+      {store.user.admin === true && (
+        <>
         <div className="row justify-content-center">
-          <button type="submit" className="user-button col-5">Invitar a más personas</button>
+          <button type="submit" onClick={openInvitarModal} className="user-button col-5">Invitar a más personas</button>
         </div>
-      }
+        {showInvitarModal && (
+          <Invitar
+            show={showInvitarModal}
+            onClose={closeInvitarModal}
+          />
+        )}
+        </>
+      )}
+
     </div>
   );
 };

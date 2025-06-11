@@ -15,8 +15,8 @@ export const EditAccount = ({ show, onClose }) => {
         hogar_name: "",
         user_name: "",
         email: "",
-        password: "",
-        repeat_password: "",
+        new_password: "",
+        repeat_new_password: "",
         avatar_url: "",
         otros: []
     });
@@ -81,6 +81,19 @@ export const EditAccount = ({ show, onClose }) => {
         }
     }, []);
 
+    useEffect(() => {
+        if (show) {
+            setFormData({
+                user_name: store.user.user_name,
+                email: store.user.email,
+                new_password: "",
+                repeat_new_password: "",
+                avatar_url: store.user.avatar_url || "",
+                otros: store.user.otros || [],
+            });
+        }
+    }, [show]);
+
     const handleChooseAvatar = () => {
         if (widgetRef.current) {
             widgetRef.current.open();
@@ -89,14 +102,11 @@ export const EditAccount = ({ show, onClose }) => {
         }
     };
 
-    const handleEmailsChange = (newEmailsArray) => {
-        setFormData({ ...formData, otros: newEmailsArray });
-    };
-
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            const data = await userServices.updateuser(formData);
+            const updated = await userServices.updateuser(store.user.id, formData);
+            dispatch({ type: "update_user", payload: updated });
             onClose();
         } catch (err) {
             console.error(err);
@@ -111,8 +121,8 @@ export const EditAccount = ({ show, onClose }) => {
     };
 
     const passwordsMatch =
-        formData.repeat_password === "" ||
-        formData.repeat_password === formData.password;
+        formData.repeat_new_password === "" ||
+        formData.repeat_new_password === formData.new_password;
 
     return (
         <>
@@ -150,7 +160,6 @@ export const EditAccount = ({ show, onClose }) => {
                                         onChange={handleChange}
                                         type="text"
                                         className="my-1"
-                                        required
                                     />
                                 </div>
                             </div>
@@ -167,7 +176,6 @@ export const EditAccount = ({ show, onClose }) => {
                                         onChange={handleChange}
                                         type="email"
                                         className="my-1"
-                                        required
                                     />
                                 </div>
                             </div>
@@ -177,30 +185,28 @@ export const EditAccount = ({ show, onClose }) => {
                                 </div>
                                 <div className="col-8">
                                     <input
-                                        id="password"
-                                        name="password"
-                                        value={formData.password}
+                                        id="new_password"
+                                        name="new_password"
+                                        value={formData.new_password}
                                         onChange={handleChange}
                                         type="password"
                                         className="my-1"
-                                        required
                                     />
                                 </div>
                             </div>
                             <div className="row my-1">
                                 <div className="col-4 d-flex align-items-center justify-content-end">
-                                    <label htmlFor="repeat_password" className="ivory fw-bold">Repetir la contraseña</label>
+                                    <label htmlFor="repeat_new_password" className="ivory fw-bold">Repetir la contraseña</label>
                                 </div>
                                 <div className="col-8">
                                     <input
-                                        id="repeat_password"
-                                        name="repeat_password"
-                                        value={formData.repeat_password}
+                                        id="repeat_new_password"
+                                        name="repeat_new_password"
+                                        value={formData.repeat_new_password}
                                         onChange={handleChange}
                                         type="password"
-                                        className={`form-control my-1 ${formData.repeat_password && !passwordsMatch ? "is-invalid" : ""
+                                        className={`form-control my-1 ${formData.repeat_new_password && !passwordsMatch ? "is-invalid" : ""
                                             }`}
-                                        required
                                     />
 
                                     <div className="invalid-feedback">
@@ -219,7 +225,7 @@ export const EditAccount = ({ show, onClose }) => {
                                         <img
                                             src={
                                                 store.user.avatar_url
-                                                    ? getTransformedAvatar(store.user.avatar_url)
+                                                    ? getTransformedAvatar(formData.avatar_url)
                                                     : placeholder
                                             }
                                             alt="Avatar Preview"
@@ -238,7 +244,7 @@ export const EditAccount = ({ show, onClose }) => {
 
                             </div >
                             <div className="row justify-content-center">
-                                <button type="submit" className="user-button col-4">Actualizar</button>
+                                <button type="submit"  disabled={!passwordsMatch} className="user-button col-4">Actualizar</button>
                             </div>
                         </form>
                     </div>

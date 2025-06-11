@@ -64,11 +64,10 @@ def update_user(user_id):
     try:
         user.user_name = data.get("user_name", user.user_name)
         user.email = data.get("email", user.email)
-        user.password = data.get("password", user.password)
-        user.admin = data.get("admin", user.admin)
+        new_pw = data.get("new_password")
+        if new_pw:
+            user.password = generate_password_hash(new_pw)
         user.avatar_url = data.get("avatar_url", user.avatar_url)
-        user.favorito_recetas = data.get("favorito_recetas", user.favorito_recetas)
-        user.favorito_peliculas = data.get("favorito_peliculas", user.favorito_peliculas)
         db.session.commit()
         return jsonify(user.serialize()), 200
     except Exception as e:
