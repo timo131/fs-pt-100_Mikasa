@@ -76,7 +76,7 @@ def update_user(user_id):
         db.session.rollback()
         return jsonify({"message": "Error updating user"}), 500
 
-@api.route("/users/", methods=["DELETE"])
+@api.route("/users/<int:user_id>", methods=["DELETE"])
 @jwt_required()
 def delete_user(user_id):
     stm = select(User).where(User.id == user_id)

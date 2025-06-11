@@ -13,7 +13,7 @@ const UPLOAD_PRESET = "avatar_unsigned";
 export const HogarDetails = () => {
   const navigate = useNavigate()
   const { store, dispatch } = useGlobalReducer();
-  const users = store.hogar.user
+  const users = store.hogar.users
 
   const [showInvitarModal, setInvitarModal] = useState(false);
   const openInvitarModal = () => setInvitarModal(true);

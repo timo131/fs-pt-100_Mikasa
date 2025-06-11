@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: f19375acef7e
+Revision ID: fb276e504369
 Revises: 
-Create Date: 2025-06-10 12:27:30.801405
+Create Date: 2025-06-11 17:36:36.436365
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f19375acef7e'
+revision = 'fb276e504369'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,7 +33,7 @@ def upgrade():
     sa.Column('favorito_recetas', sa.JSON(), nullable=True),
     sa.Column('favorito_peliculas', sa.JSON(), nullable=True),
     sa.Column('hogar_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
+    sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('user_name')
@@ -45,7 +45,7 @@ def upgrade():
     sa.Column('fecha', sa.DateTime(), nullable=False),
     sa.Column('recetas', sa.JSON(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('favoritos_hogar',
@@ -53,7 +53,7 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('hogar_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('finanzas',
@@ -63,7 +63,7 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('hogar_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('tareas',
@@ -74,9 +74,9 @@ def upgrade():
     sa.Column('tarea', sa.String(), nullable=False),
     sa.Column('fecha', sa.DateTime(), nullable=False),
     sa.Column('done', sa.Boolean(), nullable=False),
-    sa.ForeignKeyConstraint(['done_by'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['done_by'], ['user.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('pagos',
@@ -87,7 +87,7 @@ def upgrade():
     sa.Column('monto', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['finanzas_id'], ['finanzas.id'], ),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user_pagos',
@@ -98,7 +98,7 @@ def upgrade():
     sa.Column('estado', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
     sa.ForeignKeyConstraint(['pagos_id'], ['pagos.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

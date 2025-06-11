@@ -8,36 +8,28 @@ export const EditMember = ({ show, memberId, onClose }) => {
     const { store, dispatch } = useGlobalReducer();
 
     const member = show
-    ? store.hogar.user.find(u => u.id === memberId)
-    : null;
+        ? store.hogar.users.find(u => u.id === memberId)
+        : null;
 
     if (!show || !member) return null;
 
-    const [isAdmin, setIsAdmin] = useState(false);
+    const handleMakeAdmin = async () => {
+        await userServices.updateuser(member.id, { admin: true });
+        dispatch({ type: "update_member", payload: { ...member, admin: true } });
+        onClose();
+    };
 
-    useEffect(() => {
-    if (show && member) {
-      setIsAdmin(member.admin);
-    }
-  }, [show, member]);
+    const handleRemoveAdmin = async () => {
+        await userServices.updateuser(member.id, { admin: false });
+        dispatch({ type: "update_member", payload: { ...member, admin: false } });
+        onClose();
+    };
 
-  const handleMakeAdmin = async () => {
-    await userServices.updateuser(member.id, { admin: true });
-    dispatch({ type: "update_member", payload: { ...member, admin: true } });
-    onClose();
-  };
-
-  const handleRemoveAdmin = async () => {
-    await userServices.updateuser(member.id, { admin: false });
-    dispatch({ type: "update_member", payload: { ...member, admin: false } });
-    onClose();
-  };
-
-  const handleKickOut = async () => {
-    await userServices.deleteUser(member.id);
-    dispatch({ type: "remove_member", payload: member.id });
-    onClose();
-  };
+    const handleKickOut = async () => {
+        await userServices.deleteuser(member.id);
+        dispatch({ type: "remove_member", payload: member.id });
+        onClose();
+    };
 
 
 
@@ -47,13 +39,13 @@ export const EditMember = ({ show, memberId, onClose }) => {
                 className={`modal fade ${show ? "show d-block" : ""}`}
                 style={{ display: show ? "block" : "none" }}
             >
-                <div className="modal-dialog modal-dialog-centered modal-lg">
+                <div className="modal-dialog modal-dialog-centered">
                     <div
                         className="modal-content editprofile-container"
                         style={{ border: "2px solid ivory" }}
                     >
-                        <div className="modal-header">
-                            <h3 className="modal-title ivory">{member.user_name}</h3>
+                        <div className="modal-header border-0">
+                            <h3 className="modal-title ivory text-center w-100">{member.user_name}</h3>
                             <button
                                 type="button"
                                 onClick={onClose}
@@ -67,12 +59,11 @@ export const EditMember = ({ show, memberId, onClose }) => {
                             <img
                                 src={member.avatar_url}
                                 alt={`${member.user_name} avatar`}
-                                className="rounded-circle"
-                                style={{ width: 100, height: 100, objectFit: "cover" }}
+                                className="avatar-big"
                             />
                         </div>
-                        <div className="row justify-content-center g-2">
-                            {isAdmin
+                        <div className="row justify-content-evenly g-2">
+                            {member.admin
                                 ? (
                                     <div className="col-4">
                                         <button type="button" onClick={handleRemoveAdmin} className="user-button w-100">
@@ -88,16 +79,23 @@ export const EditMember = ({ show, memberId, onClose }) => {
                                     </div>
                                 )
                             }
-
                             <div className="col-4">
-                                <button type="button" onClick={handleKickOut} className="user-button text-danger w-100">
+                                <button type="button"
+                                    onClick={() => {
+                                        if (member.admin) {
+                                            alert("¡No se puede echar a un(a) admin!");
+                                        } else {
+                                            handleKickOut();
+                                        }
+                                    }}
+                                    className="user-button-danger w-100">
                                     ¿Quitar del hogar?
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
             {show && <div className="modal-backdrop fade show"></div>}
         </>
     );

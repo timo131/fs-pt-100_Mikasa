@@ -28,7 +28,7 @@ export default function storeReducer(store, action = {}) {
         ...store,
         hogar: {
           ...store.hogar,
-          user: store.hogar.user.map(u =>
+          users: store.hogar.users.map(u =>
             u.id === action.payload.id ? action.payload : u
           )
         }
@@ -38,7 +38,7 @@ export default function storeReducer(store, action = {}) {
         ...store,
         hogar: {
           ...store.hogar,
-          user: store.hogar.user.filter(u => u.id !== action.payload)
+          users: store.hogar.users.filter(u => u.id !== action.payload)
         }
       };
     case 'update_hogar':

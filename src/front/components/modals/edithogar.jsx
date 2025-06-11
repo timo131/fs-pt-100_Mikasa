@@ -40,13 +40,13 @@ export const EditHogar = ({ show, onClose }) => {
                 className={`modal fade ${show ? "show d-block" : ""}`}
                 style={{ display: show ? "block" : "none" }}
             >
-                <div className="modal-dialog modal-dialog-centered modal-lg">
+                <div className="modal-dialog modal-dialog-centered">
                     <div
                         className="modal-content editprofile-container"
                         style={{ border: "2px solid ivory" }}
                     >
-                        <div className="modal-header">
-                            <h3 className="modal-title ivory">Editar el hogar</h3>
+                        <div className="modal-header border-0">
+                            <h3 className="modal-title ivory text-center w-100">Editar el hogar</h3>
                             <button
                                 type="button"
                                 onClick={onClose}
@@ -59,7 +59,7 @@ export const EditHogar = ({ show, onClose }) => {
                         <form onSubmit={handleSubmit} className="user-form">
                             <div className="row">
                                 <div className="col-4 d-flex align-items-center justify-content-end">
-                                    <label htmlFor="hogar_name" className="ivory fw-bold">Nombre</label>
+                                    <span className="ivory fs-5">Nombre</span>
                                 </div>
                                 <div className="col-8">
                                     <input
@@ -69,12 +69,12 @@ export const EditHogar = ({ show, onClose }) => {
                                         value={formData.hogar_name}
                                         onChange={handleChange}
                                         type="text"
-                                        className="my-1"
+                                        className="my-1 w-75"
                                         required
                                     />
                                 </div>
                             </div>
-                            <div className="row justify-content-center">
+                            <div className="row justify-content-center mt-3">
                                 <button type="submit" className="user-button col-4">Editar</button>
                             </div>
                         </form>

@@ -34,17 +34,7 @@ export const UserDetails = () => {
         </div>
         <div className="col-6 d-flex justify-content-start">
           <div>
-            <img
-              src={avatarSrc}
-              alt="Avatar Preview"
-              style={{
-                width: "100px",
-                height: "100px",
-                borderRadius: "50%",
-                objectFit: "cover",
-                border: "1px solid #ccc",
-              }}
-            />
+            <img src={avatarSrc} alt="Avatar Preview" className="avatar-big"/>
           </div>
         </div>
       </div >

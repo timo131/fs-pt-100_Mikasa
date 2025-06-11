@@ -1,5 +1,3 @@
-import storeReducer from "../store";
-
 const userServices = {};
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -63,15 +61,33 @@ userServices.updateuser = async (userId, formData) => {
       body: JSON.stringify(formData),
     });
     if (resp.status === 401) {
-      const errJson = await resp.json().catch(() => null);
-      console.error("Unauthorized:", errJson);
-      throw new Error(errJson?.msg || errJson?.error || "Unauthorized");
+      const err = await resp.json().catch(() => null);
+      console.error("Unauthorized:", err);
+      throw new Error(err?.msg || err?.error || "Unauthorized");
     }
     if (!resp.ok) throw Error("something went wrong");
     const data = await resp.json();
     return data;
   } catch (error) {
-    console.log("Update error:", error);
+    console.log("Deletion error:", error);
+    throw error;
+  }
+};
+
+userServices.deleteuser = async (userId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const resp = await fetch(`${backendUrl}/api/users/${userId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.message || resp.statusText);
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Delete error:", error);
     throw error;
   }
 };
@@ -94,7 +110,6 @@ userServices.updatehogar = async (hogarId, formData) => {
     throw error;
   }
 };
-
 
 userServices.login = async (formData) => {
   try {

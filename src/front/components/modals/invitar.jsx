@@ -47,13 +47,13 @@ export const Invitar = ({ show, onClose }) => {
                 className={`modal fade ${show ? "show d-block" : ""}`}
                 style={{ display: show ? "block" : "none" }}
             >
-                <div className="modal-dialog modal-dialog-centered modal-lg">
+                <div className="modal-dialog modal-dialog-centered">
                     <div
                         className="modal-content editprofile-container"
                         style={{ border: "2px solid ivory" }}
                     >
-                        <div className="modal-header">
-                            <h3 className="modal-title ivory">Invitar a más gente</h3>
+                        <div className="modal-header border-0">
+                            <h3 className="modal-title ivory text-center w-100">Invitar a más gente</h3>
                             <button
                                 type="button"
                                 onClick={onClose}
