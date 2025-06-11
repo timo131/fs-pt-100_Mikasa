@@ -23,22 +23,29 @@ export const HogarDetails = () => {
   const openEditHogarModal = () => setEditHogarModal(true);
   const closeEditHogarModal = () => setEditHogarModal(false);
 
-  const [showEditMemberModal, setEditMemberModal] = useState(false);
-  const openEditMemberModal = () => setEditMemberModal(true);
-  const closeEditMemberModal = () => setEditMemberModal(false);
+  const [showEditMemberModal, setShowEditMemberModal] = useState(false);
+  const [selectedMemberId, setSelectedMemberId] = useState(null);
+  const openEditMemberModal = (id) => {
+    setSelectedMemberId(id);
+    setShowEditMemberModal(true);
+  };
+  const closeEditMemberModal = () => {
+    setShowEditMemberModal(false);
+    setSelectedMemberId(null);
+  };
 
   return (
     <div className="register-container">
       <h2 className="ivory">{store.hogar.hogar_name}
         {store.user.admin === true && (
           <>
-          <span onClick={openEditHogarModal} className="fa-solid fa-pencil user-icon ms-2"></span>
-          {showEditHogarModal && (
-          <EditHogar
-            show={showEditHogarModal}
-            onClose={closeEditHogarModal}
-          />
-          )}
+            <span onClick={openEditHogarModal} className="fa-solid fa-pencil user-icon ms-2"></span>
+            {showEditHogarModal && (
+              <EditHogar
+                show={showEditHogarModal}
+                onClose={closeEditHogarModal}
+              />
+            )}
           </>
         )}
       </h2>
@@ -74,21 +81,25 @@ export const HogarDetails = () => {
                       : <span className="badge rounded-pill bg-secondary">miembro</span>
                     }
                   </td>
-                  {store.user.admin === true &&
+                  {store.user.admin && (
                     <td>
                       {user.id !== store.user.id && (
                         <>
-                          <span onClick={openEditMemberModal} className="fa-solid fa-pencil user-icon"></span>
-                          {showEditMemberModal && (
+                          <span
+                            onClick={() => openEditMemberModal(user.id)}
+                            className="fa-solid fa-pencil user-icon"
+                          />
+                          {showEditMemberModal && selectedMemberId === user.id && (
                             <EditMember
                               show={showEditMemberModal}
+                              memberId={selectedMemberId}
                               onClose={closeEditMemberModal}
                             />
                           )}
                         </>
                       )}
                     </td>
-                  }
+                  )}
                 </tr>
               ))}
             </tbody>
@@ -97,15 +108,15 @@ export const HogarDetails = () => {
       </div>
       {store.user.admin === true && (
         <>
-        <div className="row justify-content-center">
-          <button type="submit" onClick={openInvitarModal} className="user-button col-5">Invitar a más personas</button>
-        </div>
-        {showInvitarModal && (
-          <Invitar
-            show={showInvitarModal}
-            onClose={closeInvitarModal}
-          />
-        )}
+          <div className="row justify-content-center">
+            <button type="submit" onClick={openInvitarModal} className="user-button col-5">Invitar a más personas</button>
+          </div>
+          {showInvitarModal && (
+            <Invitar
+              show={showInvitarModal}
+              onClose={closeInvitarModal}
+            />
+          )}
         </>
       )}
 
