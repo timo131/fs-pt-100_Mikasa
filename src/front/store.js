@@ -1,47 +1,45 @@
-
-
-export const initialStore=()=>{
-  return{
+export const initialStore = () => {
+  return {
     message: null,
-    user:  JSON.parse(localStorage.getItem("user")) || null,
+    user: JSON.parse(localStorage.getItem("user")) || null,
     hogar: JSON.parse(localStorage.getItem("hogar")) || null,
     token: localStorage.getItem("token") || null,
-  }
-}
+  };
+};
 
 export default function storeReducer(store, action = {}) {
-  switch(action.type){
-    case 'login_success':
+  switch (action.type) {
+    case "login_success":
       localStorage.setItem("token", action.payload.token);
       localStorage.setItem("user", JSON.stringify(action.payload.user));
       localStorage.setItem("hogar", JSON.stringify(action.payload.hogar));
       return {
         ...store,
-        user:  action.payload.user,
-        hogar:  action.payload.hogar,
-        token: action.payload.token
+        user: action.payload.user,
+        hogar: action.payload.hogar,
+        token: action.payload.token,
       };
-    case 'logout':
+    case "logout":
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       localStorage.removeItem("hogar");
       return initialStore();
-    case 'update_user':
+    case "update_user":
       localStorage.setItem("user", JSON.stringify(action.payload));
       return {
         ...store,
-        user:  action.payload,
+        user: action.payload,
       };
-    case 'update_member':
+    case "update_member":
       localStorage.setItem("hogar", JSON.stringify(action.payload));
       return {
         ...store,
         hogar: {
           ...store.hogar,
-          users: store.hogar.users.map(u =>
+          users: store.hogar.users.map((u) =>
             u.id === action.payload.id ? action.payload : u
-          )
-        }
+          ),
+        },
       };
     case "remove_member":
       localStorage.setItem("hogar", JSON.stringify(action.payload));
@@ -49,19 +47,24 @@ export default function storeReducer(store, action = {}) {
         ...store,
         hogar: {
           ...store.hogar,
-          users: store.hogar.users.filter(u => u.id !== action.payload)
-        }
+          users: store.hogar.users.filter((u) => u.id !== action.payload),
+        },
       };
-    case 'update_hogar':
+    case "update_hogar":
       localStorage.setItem("hogar", JSON.stringify(action.payload));
       return {
         ...store,
-        hogar:  action.payload,
+        hogar: action.payload,
       };
-    case 'set_hello':
+    case "set_hello":
       return {
         ...store,
         tasks: [...store.tasks, action.payload],
+      };
+    case "add_task":
+      return {
+        ...store,
+        tasks: [...(store.tasks || []), action.payload],
       };
 
     case "delete_task":
@@ -77,16 +80,13 @@ export default function storeReducer(store, action = {}) {
           i === action.payload.index ? action.payload.updatedTask : task
         ),
       };
-   case "toggle_task_done":
-  return {
-    ...store,
-    tasks: store.tasks.map((task, i) =>
-      i === action.payload
-        ? { ...task, hecha: !task.hecha }
-        : task
-    ),
-  };
-
+    case "toggle_task_done":
+      return {
+        ...store,
+        tasks: store.tasks.map((task, i) =>
+          i === action.payload ? { ...task, hecha: !task.hecha } : task
+        ),
+      };
 
     default:
       throw new Error("Unknown action.");
