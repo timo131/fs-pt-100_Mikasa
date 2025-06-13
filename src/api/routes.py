@@ -453,11 +453,14 @@ def get_all_comida():
 @api.route("/comida/<int:comida_id>", methods=["GET"])
 # @jwt_required()
 def get_comida(comida_id):
-    stm = select(Comida).where(Comida.id == comida_id)
-    comida = db.session.execute(stm).scalar_one_or_none()
-    if not comida:
-        return jsonify({"message": "Comida not found"}), 404
-    return jsonify(comida.serialize()), 200
+    spoon_url = f"https://api.spoonacular.com/recipes/{comida_id}/information"
+    params = {
+      "apiKey": os.getenv("SPOONACULAR_KEY"),
+      "includeNutrition": "false"
+    }
+    resp = requests.get(spoon_url, params=params)
+    resp.raise_for_status()
+    return jsonify(resp.json()), 200
 
 @api.route("/comida", methods=["POST"])
 # @jwt_required()

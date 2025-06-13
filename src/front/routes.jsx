@@ -23,6 +23,7 @@ import { Card } from "./components/card";
 import Finanzas from "./pages/Finanzas"
 import {Ocio} from "./components/ocio";
 import { Detalle } from "./components/Detalle";
+import { DetalleReceta } from "./components/DetalleReceta";
 import { Profile } from "./pages/Profile";
 
 
@@ -52,7 +53,8 @@ export const router = createBrowserRouter(
         <Route path="hogar" element={<HogarPage />} />
         <Route path="/join" element={<JoinPage />} />
         <Route path ="/ocio" element={<Ocio />} />
-         <Route path="/detalle/:id" element={<Detalle />} />
+        <Route path="/detalle/:id" element={<Detalle />} />
+        <Route path="/comida/:id" element={<DetalleReceta />} />
         
       </Route>
     ),
