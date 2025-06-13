@@ -22,7 +22,7 @@ export const Tareas = () => {
 		navigate("/card", { state: { task, index } });
 	};
 
-	const filteredTasks = store.tasks.filter((t) => {
+	const filteredTasks = store.tasks?.filter((t) => {
 		if (filtro === "hechas") return t.hecha;
 		if (filtro === "pendientes") return !t.hecha;
 		return true;
@@ -50,10 +50,10 @@ export const Tareas = () => {
 			</div>
 
 			<div className="container">
-				{filteredTasks.length === 0 ? (
+				{filteredTasks?.length === 0 ? (
 					<p>No hay tareas que coincidan con el filtro.</p>
 				) : (
-					filteredTasks.map((t, i) => (
+					filteredTasks?.map((t, i) => (
 						<div
 							key={i}
 							className={`card p-3 mb-3 text-start 
