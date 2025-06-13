@@ -51,6 +51,7 @@ export const router = createBrowserRouter(
         <Route path="/join" element={<JoinPage />} />
         <Route path ="/ocio" element={<Ocio />} />
          <Route path="/detalle/:id" element={<Detalle />} />
+        
       </Route>
     ),
     {
