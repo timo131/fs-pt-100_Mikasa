@@ -13,12 +13,14 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { JoinPage } from "./pages/JoinPage";
 import { LoginPage } from "./pages/LoginPage";
 import { PrivatePage } from "./pages/PrivatePage";
+import { HogarPage } from "./pages/HogarPage";
 import { Register } from "./components/register";
 import { Login } from "./components/login";
 import { Private } from "./components/private";
 import {Tareas} from "./components/tareas";
 import { Card } from "./components/card";
 import Finanzas from "./pages/Finanzas"
+import { Profile } from "./pages/Profile";
 
 
 export const router = createBrowserRouter(
@@ -41,7 +43,9 @@ export const router = createBrowserRouter(
         <Route path="/private" element={<PrivatePage />} />
         <Route path="/tareas" element={<Tareas />} />
         <Route path="/card" element={<Card />} />
-        <Route path="/finanzas" element={<Finanzas />} />
+        <Route path="finanzas" element={<Finanzas />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="hogar" element={<HogarPage />} />
         <Route path="/join" element={<JoinPage />} />
       </Route>
     ),
