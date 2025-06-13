@@ -444,14 +444,14 @@ def delete_tarea(tarea_id):
 
 
 @api.route("/comida", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_all_comida():
     stm = select(Comida)
     comida = db.session.execute(stm).scalars().all()
     return jsonify([c.serialize() for c in comida]), 200
 
 @api.route("/comida/<int:comida_id>", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_comida(comida_id):
     stm = select(Comida).where(Comida.id == comida_id)
     comida = db.session.execute(stm).scalar_one_or_none()
@@ -460,7 +460,7 @@ def get_comida(comida_id):
     return jsonify(comida.serialize()), 200
 
 @api.route("/comida", methods=["POST"])
-@jwt_required()
+# @jwt_required()
 def create_comida():
     data = request.get_json()
     try:
@@ -480,7 +480,7 @@ def create_comida():
         return jsonify({"message": "Error creating comida"}), 500
 
 @api.route("/comida/<int:comida_id>", methods=["PUT"])
-@jwt_required()
+# @jwt_required()
 def update_comida(comida_id):
     data = request.get_json()
     stm = select(Comida).where(Comida.id == comida_id)
@@ -501,7 +501,7 @@ def update_comida(comida_id):
         return jsonify({"message": "Error updating comida"}), 500
 
 @api.route("/comida/<int:comida_id>", methods=["DELETE"])
-@jwt_required()
+# @jwt_required()
 def delete_comida(comida_id):
     stm = select(Comida).where(Comida.id == comida_id)
     comida = db.session.execute(stm).scalar_one_or_none()
