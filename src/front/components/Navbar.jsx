@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import placeholder from "../assets/img/avatar-placeholder.jpg";
+import {Link} from "react-router-dom";
 
 export const Navbar = () => {
   	const { store } = useGlobalReducer();

@@ -20,6 +20,8 @@ import { Private } from "./components/private";
 import {Tareas} from "./components/tareas";
 import { Card } from "./components/card";
 import Finanzas from "./pages/Finanzas"
+import {Ocio} from "./components/ocio";
+import { Detalle } from "./components/Detalle";
 import { Profile } from "./pages/Profile";
 
 
@@ -47,6 +49,9 @@ export const router = createBrowserRouter(
         <Route path="profile" element={<Profile />} />
         <Route path="hogar" element={<HogarPage />} />
         <Route path="/join" element={<JoinPage />} />
+        <Route path ="/ocio" element={<Ocio />} />
+         <Route path="/detalle/:id" element={<Detalle />} />
+        
       </Route>
     ),
     {
