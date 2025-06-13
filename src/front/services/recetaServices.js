@@ -4,11 +4,12 @@ const BASE_URL = "https://api.spoonacular.com/recipes";
 
 const recetaServices = {};
 
-recetaServices.searchRecetas = async (query) => {
+recetaServices.searchRecetas = async (query, limit = 2) => {
   try {
     const url = new URL(`${BASE_URL}/complexSearch`);
     url.searchParams.set("apiKey", API_KEY);
     url.searchParams.set("query", query);
+    url.searchParams.set("number", limit); 
 
     const resp = await fetch(url);
     if (!resp.ok) throw new Error(`Status ${resp.status}`);

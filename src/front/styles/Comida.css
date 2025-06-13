@@ -1,0 +1,33 @@
+
+
+.receta-carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 1rem;
+}
+
+.receta-carousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.receta-carousel::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.receta-card {
+  flex: 0 0 auto;
+  width: 200px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.receta-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}

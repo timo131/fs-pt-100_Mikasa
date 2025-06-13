@@ -2,17 +2,31 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import recetaServices from "../services/recetaServices";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 import DOMPurify from "dompurify";
 
 export const DetalleReceta = () => {
   const { id } = useParams();
+  const { store, dispatch } = useGlobalReducer();
   const [receta, setReceta] = useState(null);
 
   useEffect(() => {
-    recetaServices.getRecetaById(id).then(setReceta);
-  }, [id]);
+    // If it’s not in the cache yet, fetch it and dispatch into the store
+    if (!receta) {
+      setLoading(true);
+      recetaServices
+        .getRecetaById(id)
+        .then((data) => {
+          dispatch({ type: "ADD_RECIPE", payload: data });
+        })
+        .catch((err) => console.error("Error fetching receta:", err))
+        .finally(() => setLoading(false));
+    }
+  }, [id, receta, dispatch]);
 
-  if (!receta) return <p>Cargando...</p>;
+  if (loading || !receta) {
+    return <p>Cargando…</p>;
+  }
 
   return (
     <div className="container mt-5">

@@ -4,6 +4,8 @@ export const initialStore = () => {
     user: JSON.parse(localStorage.getItem("user")) || null,
     hogar: JSON.parse(localStorage.getItem("hogar")) || null,
     token: localStorage.getItem("token") || null,
+    recetasByID: {},
+    recetasSearch: []
   };
 };
 
@@ -86,6 +88,28 @@ export default function storeReducer(store, action = {}) {
         tasks: store.tasks.map((task, i) =>
           i === action.payload ? { ...task, hecha: !task.hecha } : task
         ),
+      };
+
+    case "SET_RECETA_SEARCH_RESULTS":
+      return {
+        ...state,
+        searchResults: action.payload.map(r => r.id),
+        recipesById: {
+          ...state.recipesById,
+          ...action.payload.reduce((acc, r) => {
+            acc[r.id] = r;
+            return acc;
+          }, {}),
+        },
+      };
+
+    case "ADD_RECETA":
+      return {
+        ...state,
+        recipesById: {
+          ...state.recipesById,
+          [action.payload.id]: action.payload,
+        },
       };
 
     default:
