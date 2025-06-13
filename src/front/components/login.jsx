@@ -1,11 +1,13 @@
 import { useState } from "react";
 import userServices from "../services/userServices";
 import useGlobalReducer from "../hooks/useGlobalReducer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/User.css";
 
 export const Login = () => {
+  const navigate = useNavigate()
   const { store, dispatch } = useGlobalReducer();
+
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -18,11 +20,17 @@ export const Login = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const data = await userServices.login(formData);
-      console.log("Respuesta del acceso:", data);
+      const { token, user } = await userServices.login(formData);
+      const hogar = await userServices.getHogar(user.hogar_id);
+      dispatch({
+        type: "login_success",
+        payload: { token, user, hogar }
+      });
+      navigate("/hogar")
     } catch (error) {
       console.error("Error al acceder:", error);
     }
+
   };
 
   return (
