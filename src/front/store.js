@@ -4,6 +4,7 @@ export const initialStore = () => {
     user: JSON.parse(localStorage.getItem("user")) || null,
     hogar: JSON.parse(localStorage.getItem("hogar")) || null,
     token: localStorage.getItem("token") || null,
+    tasks: JSON.parse(localStorage.getItem("tasks")) || [],
   };
 };
 
@@ -19,17 +20,14 @@ export default function storeReducer(store, action = {}) {
         hogar: action.payload.hogar,
         token: action.payload.token,
       };
-    case "logout":
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("hogar");
-      return initialStore();
+
     case "update_user":
       localStorage.setItem("user", JSON.stringify(action.payload));
       return {
         ...store,
         user: action.payload,
       };
+
     case "update_member":
       localStorage.setItem("hogar", JSON.stringify(action.payload));
       return {
@@ -41,6 +39,7 @@ export default function storeReducer(store, action = {}) {
           ),
         },
       };
+
     case "remove_member":
       localStorage.setItem("hogar", JSON.stringify(action.payload));
       return {
@@ -50,43 +49,62 @@ export default function storeReducer(store, action = {}) {
           users: store.hogar.users.filter((u) => u.id !== action.payload),
         },
       };
+
     case "update_hogar":
       localStorage.setItem("hogar", JSON.stringify(action.payload));
       return {
         ...store,
         hogar: action.payload,
       };
-    case "set_hello":
-      return {
-        ...store,
-        tasks: [...store.tasks, action.payload],
-      };
-    case "add_task":
-      return {
-        ...store,
-        tasks: [...(store.tasks || []), action.payload],
-      };
 
-    case "delete_task":
+    case "set_hello": {
+      const newTasks = [...(store.tasks || []), action.payload];
+      localStorage.setItem("tasks", JSON.stringify(newTasks));
       return {
         ...store,
-        tasks: store.tasks.filter((_, i) => i !== action.payload),
+        tasks: newTasks,
       };
+    }
 
-    case "edit_task":
+    case "add_task": {
+      const newTasks = [...(store.tasks || []), action.payload];
+      localStorage.setItem("tasks", JSON.stringify(newTasks));
       return {
         ...store,
-        tasks: store.tasks.map((task, i) =>
-          i === action.payload.index ? action.payload.updatedTask : task
-        ),
+        tasks: newTasks,
       };
-    case "toggle_task_done":
+    }
+
+    case "delete_task": {
+      const newTasks = store.tasks.filter((_, i) => i !== action.payload);
+      localStorage.setItem("tasks", JSON.stringify(newTasks));
       return {
         ...store,
-        tasks: store.tasks.map((task, i) =>
-          i === action.payload ? { ...task, hecha: !task.hecha } : task
-        ),
+        tasks: newTasks,
       };
+    }
+
+    case "edit_task": {
+      const newTasks = store.tasks.map((task, i) =>
+        i === action.payload.index ? action.payload.updatedTask : task
+      );
+      localStorage.setItem("tasks", JSON.stringify(newTasks));
+      return {
+        ...store,
+        tasks: newTasks,
+      };
+    }
+
+    case "toggle_task_done": {
+      const newTasks = store.tasks.map((task, i) =>
+        i === action.payload ? { ...task, hecha: !task.hecha } : task
+      );
+      localStorage.setItem("tasks", JSON.stringify(newTasks));
+      return {
+        ...store,
+        tasks: newTasks,
+      };
+    }
 
     default:
       throw new Error("Unknown action.");
