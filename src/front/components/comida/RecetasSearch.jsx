@@ -10,16 +10,17 @@ export const RecetasSearch = () => {
     const [results, setResults] = useState([]);
     const { store, dispatch } = useGlobalReducer()
 
-    useEffect(() => {
-        recetaServices.searchRecetas(query).then(results => {
-            // …
-        });
-    }, [query]);
+    // useEffect(() => {
+    //     recetaServices.searchRecetas(query).then(results => {
+    //         // …
+    //     });
+    // }, [query]);
 
     const handleSearch = async (e) => {
         e.preventDefault();
         if (!query) return;
         const recetas = await recetaServices.searchRecetas(query);
+        console.log("Fetched recetas:", recetas);
         dispatch({ type: "SET_RECETA_SEARCH_RESULTS", payload: recetas });
     };
 
@@ -39,11 +40,11 @@ export const RecetasSearch = () => {
                     Buscar
                 </button>
             </form>
-            {results.length > 0 && (
+            {store.recetasSearch.length > 0 && (
                 <div className="search-results mt-4">
                     <div className="receta-carousel">
-                        {results.map(receta => (
-                            <RecetaCard key={receta.id} id={receta.id}/>
+                        {store.recetasSearch.map(id => (
+                            <RecetaCard key={id} id={id} />
                         ))}
                     </div>
                 </div>

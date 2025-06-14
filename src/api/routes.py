@@ -25,7 +25,7 @@ def get_all_users():
     return jsonify([u.serialize() for u in users]), 200
 
 @api.route("/users/<int:user_id>", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_user(user_id):
     stm = select(User).where(User.id == user_id)
     user = db.session.execute(stm).scalar_one_or_none()
@@ -54,7 +54,7 @@ def create_user():
         return jsonify({"message": "Error creating user"}), 500
 
 @api.route("/users/<int:user_id>", methods=["PUT"])
-@jwt_required()
+# @jwt_required()
 def update_user(user_id):
     data = request.get_json()
     stm = select(User).where(User.id == user_id)
@@ -70,6 +70,10 @@ def update_user(user_id):
         user.avatar_url = data.get("avatar_url", user.avatar_url)
         if "admin" in data:
             user.admin = bool(data["admin"])
+        if "favorito_recetas" in data:
+            user.favorito_recetas = data["favorito_recetas"]
+        if "deseado_recetas" in data:
+            user.deseado_recetas = data["deseado_recetas"]
         db.session.commit()
         return jsonify(user.serialize()), 200
     except Exception as e:

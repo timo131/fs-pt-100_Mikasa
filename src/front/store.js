@@ -92,10 +92,10 @@ export default function storeReducer(store, action = {}) {
 
     case "SET_RECETA_SEARCH_RESULTS":
       return {
-        ...state,
-        searchResults: action.payload.map(r => r.id),
-        recipesById: {
-          ...state.recipesById,
+        ...store,
+        recetasSearch: action.payload.map(r => r.id),
+        recetasById: {
+          ...store.recetasById,
           ...action.payload.reduce((acc, r) => {
             acc[r.id] = r;
             return acc;
@@ -105,11 +105,36 @@ export default function storeReducer(store, action = {}) {
 
     case "ADD_RECETA":
       return {
-        ...state,
-        recipesById: {
-          ...state.recipesById,
+        ...store,
+        recetasById: {
+          ...store.recetasById,
           [action.payload.id]: action.payload,
         },
+      };
+
+    case "ADD_RECETA_FAVORITA":
+        const updatedFavoritos = [
+          ...(state.user?.favorito_recetas || []),
+          action.payload,
+        ];
+      return {
+        ...store,
+        user: {
+          ...store.user,
+          favorito_recetas: updatedFavoritos
+        }
+      };
+
+    case "ADD_RECETA_DESEADA":
+      return {
+        ...store,
+        user: {
+          ...store.user,
+          deseado_recetas: {
+            ...(store.hogar?.deseado_recetas || {}),
+            [action.payload.id]: action.payload.rating,
+          }
+        }
       };
 
     default:

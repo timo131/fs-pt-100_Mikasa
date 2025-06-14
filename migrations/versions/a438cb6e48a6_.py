@@ -1,14 +1,8 @@
 """empty message
 
-<<<<<<<< HEAD:migrations/versions/990caf1c2d45_.py
-Revision ID: 990caf1c2d45
+Revision ID: a438cb6e48a6
 Revises: 
-Create Date: 2025-06-13 09:43:55.740616
-========
-Revision ID: 8a30fee745cd
-Revises: 
-Create Date: 2025-06-13 08:28:25.349947
->>>>>>>> c7696af (outline created):migrations/versions/8a30fee745cd_.py
+Create Date: 2025-06-14 18:15:05.835192
 
 """
 from alembic import op
@@ -16,11 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<<< HEAD:migrations/versions/990caf1c2d45_.py
-revision = '990caf1c2d45'
-========
-revision = '8a30fee745cd'
->>>>>>>> c7696af (outline created):migrations/versions/8a30fee745cd_.py
+revision = 'a438cb6e48a6'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -41,6 +31,7 @@ def upgrade():
     sa.Column('avatar_url', sa.String(), nullable=True),
     sa.Column('admin', sa.Boolean(), nullable=False),
     sa.Column('favorito_recetas', sa.JSON(), nullable=True),
+    sa.Column('deseado_recetas', sa.JSON(), nullable=True),
     sa.Column('favorito_peliculas', sa.JSON(), nullable=True),
     sa.Column('hogar_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ondelete='SET NULL'),

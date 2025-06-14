@@ -163,6 +163,7 @@ class User(db.Model):
     avatar_url: Mapped[str] = mapped_column(nullable=True)
     admin: Mapped[bool] = mapped_column(Boolean, nullable=False)
     favorito_recetas: Mapped[dict] = mapped_column(JSON, nullable=True)
+    deseado_recetas: Mapped[dict] = mapped_column(JSON, nullable=True)
     favorito_peliculas: Mapped[dict] = mapped_column(JSON, nullable=True)
     hogar_id: Mapped[int] = mapped_column(ForeignKey("hogar.id", ondelete="SET NULL"), nullable=True)
     hogar = relationship("Hogar", back_populates="users", foreign_keys=[hogar_id], passive_deletes=True)
@@ -184,7 +185,8 @@ class User(db.Model):
             "user_name": self.user_name,
             "avatar_url": self.avatar_url,
             "admin": self.admin,
-            "favorito_receta": self.favorito_recetas,
+            "favorito_recetas": self.favorito_recetas or [],
+            "deseado_recetas": self.deseado_recetas or [],
             "favorito_peliculas": self.favorito_peliculas,
 
         }

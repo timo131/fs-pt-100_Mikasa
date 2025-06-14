@@ -9,6 +9,7 @@ export const DetalleReceta = () => {
   const { id } = useParams();
   const { store, dispatch } = useGlobalReducer();
   const [receta, setReceta] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // If it’s not in the cache yet, fetch it and dispatch into the store
@@ -17,7 +18,8 @@ export const DetalleReceta = () => {
       recetaServices
         .getRecetaById(id)
         .then((data) => {
-          dispatch({ type: "ADD_RECIPE", payload: data });
+          dispatch({ type: "ADD_RECETA", payload: data });
+          setReceta(data);
         })
         .catch((err) => console.error("Error fetching receta:", err))
         .finally(() => setLoading(false));
@@ -37,7 +39,7 @@ export const DetalleReceta = () => {
     <p><strong>Ingredientes:</strong></p>
         <ul>
           {receta.extendedIngredients.map((ingredient) => (
-            <li key={ingredient.id || ingredient.name}>
+            <li key={ingredient.id || ingredient.name || `ingredient-${index}`}>
               {ingredient.original}
             </li>
           ))}
