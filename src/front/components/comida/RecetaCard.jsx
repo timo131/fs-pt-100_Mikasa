@@ -76,7 +76,7 @@ export const RecetaCard = ({ id }) => {
     setShowRating(false);
 
     try {
-      await fetch(`/api/users/${userId}`, {
+      await fetch(`/users/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -114,7 +114,7 @@ export default function storeReducer(store, action = {}) {
 
     case "ADD_RECETA_FAVORITA":
         const updatedFavoritos = [
-          ...(state.user?.favorito_recetas || []),
+          ...(store.user?.favorito_recetas || []),
           action.payload,
         ];
       return {
