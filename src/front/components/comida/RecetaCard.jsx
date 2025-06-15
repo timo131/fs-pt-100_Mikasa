@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import recetaServices from "../../services/recetaServices";
+import userServices from "../../services/userServices";
 import "../../styles/Comida.css";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import { useNavigate } from "react-router-dom";
@@ -44,19 +45,11 @@ export const RecetaCard = ({ id }) => {
   const toggleFavorite = async () => {
     const updatedFavoritos = isFavorite
       ? favoritos.filter((r) => r.id !== receta.id)
-      : [...favoritos, receta];
+      : [...favoritos, receta.id];
 
     dispatch({ type: "ADD_RECETA_FAVORITA", payload: receta });
-
     try {
-      await fetch(`/users/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ favorito_recetas: updatedFavoritos }),
-      });
+      await userServices.updateuser(userId, { favorito_recetas: updatedFavoritos });
     } catch (err) {
       console.error("Error updating favoritos:", err);
     }
@@ -76,18 +69,12 @@ export const RecetaCard = ({ id }) => {
     setShowRating(false);
 
     try {
-      await fetch(`/users/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ deseado_recetas: updated }),
-      });
+      await userServices.updateuser(userId, { deseado_recetas: updated });
     } catch (err) {
       console.error("Error saving deseado_recetas:", err);
     }
   };
+
 
   return (
     <div className="receta-card m-2">

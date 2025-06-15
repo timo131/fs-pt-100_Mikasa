@@ -113,10 +113,11 @@ export default function storeReducer(store, action = {}) {
       };
 
     case "ADD_RECETA_FAVORITA":
-        const updatedFavoritos = [
-          ...(store.user?.favorito_recetas || []),
-          action.payload,
-        ];
+      const currentFavoritos = store.user?.favorito_recetas || [];
+      const recetaId = action.payload;
+      const updatedFavoritos = currentFavoritos.includes(recetaId)
+        ? currentFavoritos.filter(id => id !== recetaId) // remove if already exists
+        : [...currentFavoritos, recetaId];   
       return {
         ...store,
         user: {
