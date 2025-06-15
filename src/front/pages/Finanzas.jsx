@@ -3,7 +3,9 @@ import finanzasService from '../services/finanzasService';
 import '../styles/FinanzasPage.css';
 import GastoModal from '../components/GastoModal';
 import ListaPagos from '../components/ListaPagos';
+import { Chart, registerables } from 'chart.js'
 
+Chart.register(...registerables);
 const meses = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
@@ -26,7 +28,7 @@ const FinanzasPage = () => {
     try {
       const pagosData = await finanzasService.getPagos(token);
       const usuariosData = await finanzasService.getUsuarios(token);
-      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      const tokenPayload = JSON.parse(window.atob(token.split('.')[1]));
       const userId = tokenPayload.user_id;
 
       setPagos(pagosData);
