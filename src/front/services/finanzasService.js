@@ -44,10 +44,9 @@ finanzasService.postGasto = async (token, gasto) => {
 
   const payload = {
     ...gasto,
-    hogar_id: parseInt(hogar_id), // Asegúrate que sea número
+    hogar_id: parseInt(hogar_id),
   };
-
-  console.log("Datos que se envían:", payload);
+ 
 
   const res = await fetch(`${backendUrl}/api/pagos`, {
     method: "POST",

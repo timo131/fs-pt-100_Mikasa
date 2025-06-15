@@ -23,6 +23,9 @@ const FinanzasPage = () => {
   useEffect(() => {
     cargarDatos();
   }, []);
+  useEffect(() => {
+    renderGrafico(pagos);
+  }, [mesActual, anoActual, pagos])
 
   const cargarDatos = async () => {
     try {
@@ -34,7 +37,6 @@ const FinanzasPage = () => {
       setPagos(pagosData);
       setUsuarios(usuariosData);
       setUsuarioId(userId);
-      renderGrafico(pagosData);
     } catch (err) {
       console.error(err);
     }
@@ -44,7 +46,6 @@ const FinanzasPage = () => {
     try {
       const data = await finanzasService.getPagos(token);
       setPagos(data);
-      renderGrafico(data);
     } catch (error) {
       console.error("Error al obtener los pagos:", error);
     }
@@ -121,7 +122,7 @@ const FinanzasPage = () => {
   let balance = 0;
 
   pagosDelMes.forEach(pago => {
-    pago.usuarios.forEach(u => {
+    pago.usuarios?.forEach(u => {
       const montoIndividual = pago.monto / pago.usuarios.length;
       if (u.id === usuarioId) {
         if (!u.pagado && pago.creador_id !== usuarioId) {
@@ -134,7 +135,6 @@ const FinanzasPage = () => {
       }
     });
   });
-
   return (
     <div className="container-fluid finanzas-page">
       <div className="row mb-4">
@@ -152,16 +152,13 @@ const FinanzasPage = () => {
               <h6 className="text-center mb-3">Distribución por categoría</h6>
               <canvas id="graficoGastos"></canvas>
             </div>
-
             <div className="w-100 w-md-50 lista-gastos ps-md-4 pe-md-2 pt-3">
               <h4 className="text-center mb-3">Mis Gastos</h4>
-              {usuarioId && (
-                <ListaPagos
-                  pagos={pagosDelMes}
-                  usuarioId={usuarioId}
-                  onMarcarPagado={onMarcarPagado}
-                />
-              )}
+              <ListaPagos
+                pagos={pagosDelMes}
+                usuarioId={usuarioId}
+                onMarcarPagado={onMarcarPagado}
+              />
               <div className="text-center mt-3">
                 <button
                   className="btn btn-dark w-100 mt-2"
@@ -222,6 +219,6 @@ const FinanzasPage = () => {
       />
     </div>
   );
-}; 
+};
 
 export default FinanzasPage;
