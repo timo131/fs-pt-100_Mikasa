@@ -35,13 +35,27 @@ finanzasService.getPagos = async (token) => {
 };
 
 finanzasService.postGasto = async (token, gasto) => {
+  const hogar_id = localStorage.getItem("hogar_id");
+
+  if (!hogar_id) {
+    console.error("hogar_id no está definido en localStorage");
+    throw new Error("hogar_id no disponible");
+  }
+
+  const payload = {
+    ...gasto,
+    hogar_id: parseInt(hogar_id), // Asegúrate que sea número
+  };
+
+  console.log("Datos que se envían:", payload);
+
   const res = await fetch(`${backendUrl}/api/pagos`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(gasto),
+    body: JSON.stringify(payload),
   });
 
   if (!res.ok) {
@@ -52,6 +66,7 @@ finanzasService.postGasto = async (token, gasto) => {
 
   return await res.json();
 };
+
 finanzasService.marcarComoPagado = async (token, pagoId) => {
   const res = await fetch(`${backendUrl}/api/pagos/${pagoId}/pagar`, {
     method: "POST",

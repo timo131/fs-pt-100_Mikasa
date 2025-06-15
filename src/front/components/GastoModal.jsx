@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import finanzasService from "../services/finanzasService";
 import "../styles/gastoModal.css"
 
+
 const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
   const [form, setForm] = useState({
     nombre: "",
@@ -29,13 +30,13 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
   const handleSubmit = async () => {
     try {
       const gasto = {
-        nombre: form.nombre,
-        cantidad: parseFloat(form.cantidad),
-        tipo: form.tipo,
-        compartido_con: form.compartidoCon,
-        categoria: form.categoria,
-        frecuencia: form.frecuencia,
-        fecha_limite: form.fechaLimite,
+      descripcion: form.nombre, 
+      monto: parseFloat(form.cantidad),
+      tipo: form.tipo,
+      compartido_con: form.compartidoCon, 
+      categoria: form.categoria,
+      frecuencia: form.frecuencia,
+      fecha_limite: form.fechaLimite || null,
       };
 
       await finanzasService.postGasto(token, gasto);

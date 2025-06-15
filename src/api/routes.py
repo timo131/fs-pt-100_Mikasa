@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Hogar, Finanzas, Pagos, User_pagos, Tareas, Comida, Favoritos_hogar
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from datetime import datetime
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import select
@@ -232,7 +233,12 @@ def delete_finanza(finanza_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error deleting finanza"}), 500
-
+    
+def parse_fecha(fecha_str):
+    try:
+        return datetime.strptime(fecha_str, "%Y-%m-%d").date()
+    except Exception:
+        return None
 
 @api.route("/pagos", methods=["GET"])
 @jwt_required()
@@ -254,12 +260,23 @@ def get_pago(pago_id):
 @jwt_required()
 def create_pago():
     data = request.get_json()
+    fecha_str = data.get("fecha")
+    fecha = parse_fecha(fecha_str) if fecha_str else datetime.utcnow().date()
+    
+    fecha_limite_str = data.get("fecha_limite")
+    fecha_limite = parse_fecha(fecha_limite_str) if fecha_limite_str else None
+
     try:
         user_id = get_jwt_identity()
         pago = Pagos(
             tipo=data.get("tipo"),
             monto=data.get("monto"),
-            fecha=data.get("fecha"),
+            fecha=fecha,
+            fecha_limite=fecha_limite,
+            descripcion=data.get("descripcion"),
+            compartido_con=data.get("compartido_con"),
+            categoria=data.get("categoria"),
+            frecuencia=data.get("frecuencia"),
             hogar_id=data.get("hogar_id"),
             user_id=user_id
         )
@@ -268,7 +285,7 @@ def create_pago():
         return jsonify(pago.serialize()), 201
     except Exception as e:
         db.session.rollback()
-        return jsonify({"message": "Error creating pago"}), 500
+        return jsonify({"message": "Error creating pago", "error": str(e)}), 500
 
 @api.route("/pagos/<int:pago_id>", methods=["PUT"])
 @jwt_required()
@@ -278,18 +295,32 @@ def update_pago(pago_id):
     pago = db.session.execute(stm).scalar_one_or_none()
     if not pago:
         return jsonify({"message": "Pago not found"}), 404
+
+    fecha_str = data.get("fecha")
+    fecha = parse_fecha(fecha_str) if fecha_str else datetime.utcnow().date()
+    
+    fecha_limite_str = data.get("fecha_limite")
+    fecha_limite = parse_fecha(fecha_limite_str) if fecha_limite_str else pago.fecha_limite
+    if fecha_limite_str and not fecha_limite:
+        return jsonify({"message": "Fecha límite inválida"}), 400
+
     try:
         user_id = get_jwt_identity()
         pago.tipo = data.get("tipo", pago.tipo)
         pago.monto = data.get("monto", pago.monto)
-        pago.fecha = data.get("fecha", pago.fecha)
+        pago.fecha = fecha
+        pago.fecha_limite = fecha_limite
+        pago.descripcion = data.get("descripcion", pago.descripcion)
+        pago.compartido_con = data.get("compartido_con", pago.compartido_con)
+        pago.categoria = data.get("categoria", pago.categoria)
+        pago.frecuencia = data.get("frecuencia", pago.frecuencia)
         pago.hogar_id = data.get("hogar_id", pago.hogar_id)
         pago.user_id = user_id
         db.session.commit()
         return jsonify(pago.serialize()), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({"message": "Error updating pago"}), 500
+        return jsonify({"message": "Error updating pago", "error": str(e)}), 500
 
 @api.route("/pagos/<int:pago_id>", methods=["DELETE"])
 @jwt_required()
@@ -304,7 +335,7 @@ def delete_pago(pago_id):
         return jsonify({"message": "Pago deleted"}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({"message": "Error deleting pago"}), 500
+        return jsonify({"message": "Error deleting pago", "error": str(e)}), 500
 
 
 @api.route("/user_pagos", methods=["GET"])

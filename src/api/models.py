@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean, DateTime, JSON, ForeignKey
+from sqlalchemy import String, Boolean, DateTime, JSON, ForeignKey,Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 
@@ -27,13 +27,20 @@ class Finanzas (db.Model):
         }
 
 
-class Pagos (db.Model):
+class Pagos(db.Model):
     __tablename__ = "pagos"
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     hogar_id: Mapped[int] = mapped_column(ForeignKey("hogar.id"))
-    finanzas_id: Mapped[int] = mapped_column(ForeignKey("finanzas.id"))
+    finanzas_id: Mapped[int] = mapped_column(ForeignKey("finanzas.id"), nullable=True)
     monto: Mapped[int] = mapped_column(nullable=False)
+    descripcion: Mapped[str] = mapped_column(String(255), nullable=True)
+    compartido_con: Mapped[str] = mapped_column(String(255), nullable=True)
+    categoria: Mapped[str] = mapped_column(String(100), nullable=True)
+    frecuencia: Mapped[str] = mapped_column(String(50), nullable=True)
+    fecha_limite: Mapped[Date] = mapped_column(Date, nullable=True)
+    tipo: Mapped[str] = mapped_column(String(50), nullable=True)
+    fecha: Mapped[Date] = mapped_column(Date, nullable=True)
 
     user = relationship("User", back_populates="pagos", passive_deletes=True)
     hogar = relationship("Hogar", back_populates="pagos")
@@ -47,9 +54,15 @@ class Pagos (db.Model):
             "hogar_id": self.hogar_id,
             "user_name": self.user.user_name,
             "finanzas_id": self.finanzas_id,
-            "monto": self.monto
+            "monto": self.monto,
+            "descripcion": self.descripcion,
+            "compartido_con": self.compartido_con,
+            "categoria": self.categoria,
+            "frecuencia": self.frecuencia,
+            "fecha_limite": self.fecha_limite.isoformat() if self.fecha_limite else None,
+            "tipo": self.tipo,
+            "fecha": self.fecha.isoformat() if self.fecha else None
         }
-
 
 class User_pagos(db.Model):
     __tablename__ = "user_pagos"
