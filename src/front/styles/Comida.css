@@ -1,0 +1,33 @@
+
+.receta-card {
+  height: 300px;
+  width: 220px;
+  min-width: 220px;
+  background-color: #FFF8E7;
+  border: 1px solid #2c2c2c;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.receta-card:hover {
+  background-color: #6FB8A8;
+}
+
+.receta-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0.5rem;
+  max-height: 120px;
+  min-height: 120px;
+}
+
+.comida-container {
+  min-height: 350px;
+}

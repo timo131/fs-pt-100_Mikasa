@@ -4,9 +4,19 @@ import "../styles/Home.css";
 import { Login } from "../components/login";
 import { Register } from "../components/register";
 import { Private } from "../components/private";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import { useEffect } from "react";
 
 export const Home = () => {
+	const { store } = useGlobalReducer();
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (token) {
+		navigate("/hogar");
+		}
+	}, [navigate]);
 
 	return (
 		<div className="home-container">
