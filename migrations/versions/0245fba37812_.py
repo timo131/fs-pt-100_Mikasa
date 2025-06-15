@@ -1,5 +1,6 @@
 """empty message
 
+<<<<<<< HEAD
 <<<<<<<< HEAD:migrations/versions/0245fba37812_.py
 Revision ID: 0245fba37812
 Revises: 
@@ -9,6 +10,11 @@ Revision ID: 6937659e338e
 Revises: 
 Create Date: 2025-06-15 11:34:25.104104
 >>>>>>>> 9d108aa3722e649daf542d315c056ce12dfecdc8:migrations/versions/6937659e338e_.py
+=======
+Revision ID: 0245fba37812
+Revises: 
+Create Date: 2025-06-11 08:19:07.111613
+>>>>>>> 3ab3948b0b2f9ab7ebb3641f3b0e1b41d66b168d
 
 """
 from alembic import op
@@ -16,11 +22,15 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
+<<<<<<< HEAD
 <<<<<<<< HEAD:migrations/versions/0245fba37812_.py
 revision = '0245fba37812'
 ========
 revision = '6937659e338e'
 >>>>>>>> 9d108aa3722e649daf542d315c056ce12dfecdc8:migrations/versions/6937659e338e_.py
+=======
+revision = '0245fba37812'
+>>>>>>> 3ab3948b0b2f9ab7ebb3641f3b0e1b41d66b168d
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -41,10 +51,9 @@ def upgrade():
     sa.Column('avatar_url', sa.String(), nullable=True),
     sa.Column('admin', sa.Boolean(), nullable=False),
     sa.Column('favorito_recetas', sa.JSON(), nullable=True),
-    sa.Column('deseado_recetas', sa.JSON(), nullable=True),
     sa.Column('favorito_peliculas', sa.JSON(), nullable=True),
     sa.Column('hogar_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('user_name')
@@ -56,7 +65,7 @@ def upgrade():
     sa.Column('fecha', sa.DateTime(), nullable=False),
     sa.Column('recetas', sa.JSON(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('favoritos_hogar',
@@ -64,7 +73,7 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('hogar_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('finanzas',
@@ -74,7 +83,7 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('hogar_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('tareas',
@@ -85,9 +94,9 @@ def upgrade():
     sa.Column('tarea', sa.String(), nullable=False),
     sa.Column('fecha', sa.DateTime(), nullable=False),
     sa.Column('done', sa.Boolean(), nullable=False),
-    sa.ForeignKeyConstraint(['done_by'], ['user.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['done_by'], ['user.id'], ),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('pagos',
@@ -98,7 +107,7 @@ def upgrade():
     sa.Column('monto', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['finanzas_id'], ['finanzas.id'], ),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user_pagos',
@@ -109,7 +118,7 @@ def upgrade():
     sa.Column('estado', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
     sa.ForeignKeyConstraint(['pagos_id'], ['pagos.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
