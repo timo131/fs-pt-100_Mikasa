@@ -17,27 +17,22 @@ export const ComidaPage = () => {
     return (
         <>
             <div className="container my-4">
-                <div className="row mb-4">
-                    <div className="col-12">
-                        <h2 className="text-center">Comida</h2>
-                    </div>
-                </div>
 
                 <div className="row g-3 mb-3">
                     <div className="col-12">
-                        <div className="border bg-sage rounded p-3">
+                        <div className="border-charcoal bg-sage rounded p-3 comida-container">
                             <RecetasSearch />
                         </div>
                     </div>
                     <div className="col-12">
-                        <div className="border bg-sage rounded p-3">
+                        <div className="border-charcoal bg-sage rounded p-3 comida-container">
                             <RecetasPendientes />
                         </div>
                     </div>
                 </div>
                 <div className="row g-3">
                     <div className="col-12">
-                        <div className="border bg-sage rounded p-3">
+                        <div className="border-charcoal bg-sage rounded p-3 comida-container">
                             <RecetasFavoritas />
                         </div>
                     </div>

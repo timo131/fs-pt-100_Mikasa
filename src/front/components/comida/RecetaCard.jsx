@@ -4,6 +4,7 @@ import userServices from "../../services/userServices";
 import "../../styles/Comida.css";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import { useNavigate } from "react-router-dom";
+import { Rating } from "../modals/rating";
 
 export const RecetaCard = ({ id }) => {
   const navigate = useNavigate();
@@ -16,20 +17,18 @@ export const RecetaCard = ({ id }) => {
   const receta = store.recetasById?.[id];
 
   useEffect(() => {
-    if (!receta) {
-      setLoading(true);
+    if (!store.recetasById?.[id]) {
       recetaServices.getRecetaById(id)
         .then((data) => {
-          dispatch({ type: "ADD_RECETA", payload: data });
+          if (data) {
+            dispatch({ type: "ADD_RECETA", payload: data });
+          }
         })
         .catch((err) => {
           console.error("Error fetching receta:", err);
-        })
-        .finally(() => {
-          setLoading(false);
         });
     }
-  }, [id, receta, dispatch]);
+  }, [id, store.recetasById, dispatch]);
 
   if (loading || !receta) {
     return <div className="card m-2 p-3">Cargando…</div>;
@@ -38,16 +37,17 @@ export const RecetaCard = ({ id }) => {
   const favoritos = store.user?.favorito_recetas || [];
   const recetasDeseadas = store.user?.deseado_recetas || {};
 
-  const isFavorite = favoritos.some((fav) => fav.id === receta.id);
+  const isFavorite = favoritos.includes(receta.id);
   const isLiked = recetasDeseadas.hasOwnProperty(receta.id);
   const currentRating = recetasDeseadas[receta.id] || null;
 
   const toggleFavorite = async () => {
-    const updatedFavoritos = isFavorite
-      ? favoritos.filter((r) => r.id !== receta.id)
+    const isAlreadyFavorite = favoritos.includes(receta.id);
+    const updatedFavoritos = isAlreadyFavorite
+      ? favoritos.filter((id) => id !== receta.id)
       : [...favoritos, receta.id];
 
-    dispatch({ type: "ADD_RECETA_FAVORITA", payload: receta });
+    dispatch({ type: "UPDATE_RECETA_FAVORITA", payload: updatedFavoritos });
     try {
       await userServices.updateuser(userId, { favorito_recetas: updatedFavoritos });
     } catch (err) {
@@ -56,6 +56,8 @@ export const RecetaCard = ({ id }) => {
   };
 
   const handleRatingChange = async (ratingValue) => {
+    const current = recetasDeseadas[receta.id];
+    if (current === ratingValue) return;
     const updated = {
       ...recetasDeseadas,
       [receta.id]: ratingValue,
@@ -73,72 +75,47 @@ export const RecetaCard = ({ id }) => {
     } catch (err) {
       console.error("Error saving deseado_recetas:", err);
     }
+    setTimeout(() => document.activeElement.blur(), 0);
   };
 
 
   return (
-    <div className="receta-card m-2">
-      {receta.image && (
-        <img src={receta.image} alt={receta.title} className="card-img-top" />
-      )}
-      <div className="card-body">
-        <h5 className="card-title">{receta.title}</h5>
-        <p>{receta.cuisines?.[0]}</p>
-        <p><strong>Porciones:</strong> {receta.servings}</p>
-        <p><strong>Listo en:</strong> {receta.readyInMinutes} min.</p>
-        <p><strong>Valor nutricional:</strong> {receta.healthScore} %</p>
+    <>
+      <div className="receta-card m-2">
 
-        <div className="d-flex justify-content-between mt-2">
-          <button
-            className="btn btn-sm btn-outline-info"
-            onClick={() => navigate(`/comida/${receta.id}`)}
-          >
-            Detalles
+        <div className="card-body small d-flex flex-column justify-content-between h-100" onClick={() => navigate(`/comida/${receta.id}`)}>
+          <div className="d-flex flex-column justify-content-between h-100">
+            <div className="d-flex align-items-center justify-content-center h-100">
+
+              <h6 className="card-title text-center fw-bold m-0">{receta.title}</h6>
+            </div>
+            <p className="text-center mb-0">{receta.cuisines?.[0]}</p>
+            <div className="d-flex flex-row justify-content-center align-items-center gap-3 ms-1">
+              <div><span className="fa-solid charcoal fa-users me-2"></span>{receta.servings}</div>
+              <div><span className="fa-regular charcoal fa-clock me-2"></span>{receta.readyInMinutes} min</div>
+              <div><span className="fa-solid charcoal fa-apple-whole me-2"></span>{receta.healthScore} %</div>
+            </div>
+            <div className="text-center mt-2">
+              {receta.image && (
+                <img src={receta.image} alt={receta.title} />
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="card-footer d-flex justify-content-around align-items-center mt-2">
+          <button className="btn btn-sm" data-bs-toggle="modal" data-bs-target={`#ratingModal-${id}`} title="Me gusta">
+            <span className={`fa-${isLiked ? "solid" : "regular"} fa-thumbs-up text-outline fa-2x
+              ${currentRating <= 0
+                ? "ochre"
+                : "sage"
+              }`}></span>
           </button>
-          <button
-            className="btn btn-sm"
-            onClick={toggleFavorite}
-            title="Añadir a favoritos"
-          >
-            {isFavorite ? (
-              <i className="fa-solid fa-heart text-danger"></i>
-            ) : (
-              <i className="fa-regular fa-heart"></i>
-            )}
-          </button>
-          <button
-            className="btn btn-sm"
-            onClick={() => setShowRating(true)}
-            title="Quiero ver"
-          >
-            {isLiked ? (
-              <i className="fa-solid fa-thumbs-up text-primary"></i>
-            ) : (
-              <i className="fa-regular fa-thumbs-up"></i>
-            )}
+          <button className="btn btn-sm" onClick={toggleFavorite} title="Favorito">
+            <span className={`fa fa-${isFavorite ? "solid" : "regular"} fa-heart text-outline fa-2x coral`}></span>
           </button>
         </div>
-
-        {showRating && (
-          <div className="mt-2">
-            {[1, 2, 3, 4, 5].map((value) => (
-              <button
-                key={value}
-                className="btn btn-sm mx-1"
-                onClick={() => handleRatingChange(value)}
-              >
-                {{
-                  1: "mehhh",
-                  2: "no me apetece",
-                  3: "ni fu ni fa",
-                  4: "me apetece",
-                  5: "me apetece mogollón",
-                }[value]}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
-    </div>
-  );
-};
+        <Rating id={id} onRate={handleRatingChange} />
+    </>
+    );
+  };

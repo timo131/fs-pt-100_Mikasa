@@ -5,7 +5,12 @@ export const initialStore = () => {
     hogar: JSON.parse(localStorage.getItem("hogar")) || null,
     token: localStorage.getItem("token") || null,
     recetasByID: {},
-    recetasSearch: []
+    recetasSearch: [],
+    if (user) {
+      user.favorito_recetas = [];
+      user.deseado_recetas = {};
+      localStorage.setItem("user", JSON.stringify(user));
+    }
   };
 };
 
@@ -93,7 +98,7 @@ export default function storeReducer(store, action = {}) {
     case "SET_RECETA_SEARCH_RESULTS":
       return {
         ...store,
-        recetasSearch: action.payload.map(r => r.id),
+        recetasSearch: action.payload.map((r) => r.id),
         recetasById: {
           ...store.recetasById,
           ...action.payload.reduce((acc, r) => {
@@ -112,30 +117,43 @@ export default function storeReducer(store, action = {}) {
         },
       };
 
-    case "ADD_RECETA_FAVORITA":
-      const currentFavoritos = store.user?.favorito_recetas || [];
-      const recetaId = action.payload;
-      const updatedFavoritos = currentFavoritos.includes(recetaId)
-        ? currentFavoritos.filter(id => id !== recetaId) // remove if already exists
-        : [...currentFavoritos, recetaId];   
+    case "UPDATE_RECETA_FAVORITA":
+      const updatedUser = {
+        ...store.user,
+        favorito_recetas: action.payload,
+      };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
       return {
         ...store,
-        user: {
-          ...store.user,
-          favorito_recetas: updatedFavoritos
-        }
+        user: updatedUser,
       };
 
     case "ADD_RECETA_DESEADA":
+      const currentRating = store.user?.deseado_recetas?.[action.payload.id];
+      if (currentRating === action.payload.rating) return store;
       return {
         ...store,
         user: {
           ...store.user,
           deseado_recetas: {
-            ...(store.hogar?.deseado_recetas || {}),
+            ...(store.user?.deseado_recetas || {}),
             [action.payload.id]: action.payload.rating,
-          }
-        }
+          },
+        },
+        hogar: {
+          ...store.hogar,
+          users: store.hogar.users.map((u) =>
+            u.id === store.user.id
+              ? {
+                  ...u,
+                  deseado_recetas: {
+                    ...(u.deseado_recetas || {}),
+                    [action.payload.id]: action.payload.rating,
+                  },
+                }
+              : u
+          ),
+        },
       };
 
     default:

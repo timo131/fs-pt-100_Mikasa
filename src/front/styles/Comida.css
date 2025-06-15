@@ -1,33 +1,33 @@
 
-
-.receta-carousel {
-  display: flex;
-  overflow-x: auto;
-  gap: 16px;
-  padding: 1rem;
-}
-
-.receta-carousel::-webkit-scrollbar {
-  height: 8px;
-}
-
-.receta-carousel::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 4px;
-}
-
 .receta-card {
-  flex: 0 0 auto;
-  width: 200px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  text-align: center;
+  height: 300px;
+  width: 220px;
+  min-width: 220px;
+  background-color: #FFF8E7;
+  border: 1px solid #2c2c2c;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.receta-card:hover {
+  background-color: #6FB8A8;
 }
 
 .receta-card img {
   width: 100%;
-  height: auto;
-  border-radius: 4px;
+  height: 120px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0.5rem;
+  max-height: 120px;
+  min-height: 120px;
+}
+
+.comida-container {
+  min-height: 350px;
 }
