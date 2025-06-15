@@ -26,7 +26,7 @@ def get_all_users():
     return jsonify([u.serialize() for u in users]), 200
 
 @api.route("/users/<int:user_id>", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_user(user_id):
     stm = select(User).where(User.id == user_id)
     user = db.session.execute(stm).scalar_one_or_none()
@@ -54,8 +54,8 @@ def create_user():
         db.session.rollback()
         return jsonify({"message": "Error creating user"}), 500
 
-@api.route("/users", methods=["PUT"])
-@jwt_required()
+@api.route("/users/<int:user_id>", methods=["PUT"])
+# @jwt_required()
 def update_user(user_id):
     data = request.get_json()
     stm = select(User).where(User.id == user_id)
@@ -65,16 +65,23 @@ def update_user(user_id):
     try:
         user.user_name = data.get("user_name", user.user_name)
         user.email = data.get("email", user.email)
-        user.password = data.get("password", user.password)
-        user.favorito_recetas = data.get("favorito_recetas", user.favorito_recetas)
-        user.favorito_peliculas = data.get("favorito_peliculas", user.favorito_peliculas)
+        new_pw = data.get("new_password")
+        if new_pw:
+            user.password = generate_password_hash(new_pw)
+        user.avatar_url = data.get("avatar_url", user.avatar_url)
+        if "admin" in data:
+            user.admin = bool(data["admin"])
+        if "favorito_recetas" in data:
+            user.favorito_recetas = data["favorito_recetas"]
+        if "deseado_recetas" in data:
+            user.deseado_recetas = data["deseado_recetas"]
         db.session.commit()
         return jsonify(user.serialize()), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error updating user"}), 500
 
-@api.route("/users/", methods=["DELETE"])
+@api.route("/users/<int:user_id>", methods=["DELETE"])
 @jwt_required()
 def delete_user(user_id):
     stm = select(User).where(User.id == user_id)
@@ -472,23 +479,26 @@ def delete_tarea(tarea_id):
 
 
 @api.route("/comida", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_all_comida():
     stm = select(Comida)
     comida = db.session.execute(stm).scalars().all()
     return jsonify([c.serialize() for c in comida]), 200
 
 @api.route("/comida/<int:comida_id>", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_comida(comida_id):
-    stm = select(Comida).where(Comida.id == comida_id)
-    comida = db.session.execute(stm).scalar_one_or_none()
-    if not comida:
-        return jsonify({"message": "Comida not found"}), 404
-    return jsonify(comida.serialize()), 200
+    spoon_url = f"https://api.spoonacular.com/recipes/{comida_id}/information"
+    params = {
+      "apiKey": os.getenv("SPOONACULAR_KEY"),
+      "includeNutrition": "false"
+    }
+    resp = requests.get(spoon_url, params=params)
+    resp.raise_for_status()
+    return jsonify(resp.json()), 200
 
 @api.route("/comida", methods=["POST"])
-@jwt_required()
+# @jwt_required()
 def create_comida():
     data = request.get_json()
     try:
@@ -508,7 +518,7 @@ def create_comida():
         return jsonify({"message": "Error creating comida"}), 500
 
 @api.route("/comida/<int:comida_id>", methods=["PUT"])
-@jwt_required()
+# @jwt_required()
 def update_comida(comida_id):
     data = request.get_json()
     stm = select(Comida).where(Comida.id == comida_id)
@@ -529,7 +539,7 @@ def update_comida(comida_id):
         return jsonify({"message": "Error updating comida"}), 500
 
 @api.route("/comida/<int:comida_id>", methods=["DELETE"])
-@jwt_required()
+# @jwt_required()
 def delete_comida(comida_id):
     stm = select(Comida).where(Comida.id == comida_id)
     comida = db.session.execute(stm).scalar_one_or_none()
