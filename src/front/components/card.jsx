@@ -41,7 +41,7 @@ export const Card = () => {
       } else {
         setFormData({
           ...formData,
-          miembros: formData.miembros.filter((m) => m !== value),
+          miembros: formData.miembros.filter((miembros) => miembros !== value),
         });
       }
     } else {
@@ -53,9 +53,10 @@ export const Card = () => {
     e.preventDefault();
 
     const asignadaAFinal =
-      formData.asignadaA === "equipo" && formData.miembros.length > 0
-        ? `Compartido con: ${formData.miembros.join(", ")}`
-        : "Usuario personal";
+  formData.asignadaA === "equipo" && formData.miembros.length > 0
+    ? `Compartido con: ${formData.miembros.join(", ")}`
+    : `Asignada a: ${formData.asignadaA}`;
+;
 
     const tarea = {
       ...formData,
