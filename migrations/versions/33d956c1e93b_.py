@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 990caf1c2d45
+Revision ID: 33d956c1e93b
 Revises: 
-Create Date: 2025-06-13 09:43:55.740616
+Create Date: 2025-06-16 10:32:41.084067
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '990caf1c2d45'
+revision = '33d956c1e93b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,6 +31,7 @@ def upgrade():
     sa.Column('avatar_url', sa.String(), nullable=True),
     sa.Column('admin', sa.Boolean(), nullable=False),
     sa.Column('favorito_recetas', sa.JSON(), nullable=True),
+    sa.Column('deseado_recetas', sa.JSON(), nullable=True),
     sa.Column('favorito_peliculas', sa.JSON(), nullable=True),
     sa.Column('hogar_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ondelete='SET NULL'),
@@ -83,8 +84,15 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('hogar_id', sa.Integer(), nullable=False),
-    sa.Column('finanzas_id', sa.Integer(), nullable=False),
+    sa.Column('finanzas_id', sa.Integer(), nullable=True),
     sa.Column('monto', sa.Integer(), nullable=False),
+    sa.Column('descripcion', sa.String(length=255), nullable=True),
+    sa.Column('compartido_con', sa.String(length=255), nullable=True),
+    sa.Column('categoria', sa.String(length=100), nullable=True),
+    sa.Column('frecuencia', sa.String(length=50), nullable=True),
+    sa.Column('fecha_limite', sa.Date(), nullable=True),
+    sa.Column('tipo', sa.String(length=50), nullable=True),
+    sa.Column('fecha', sa.Date(), nullable=True),
     sa.ForeignKeyConstraint(['finanzas_id'], ['finanzas.id'], ),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),

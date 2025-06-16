@@ -1,57 +1,53 @@
-import "../styles/ListaPagos.css";
+import React from 'react';
+import '../styles/ListaPagos.css';
 
 const ListaPagos = ({ pagos, usuarioId, onMarcarPagado }) => {
+  if (!pagos || pagos.length === 0) {
+    return <p className="text-muted text-center">No hay gastos registrados este mes.</p>;
+  }
+
   return (
-    <div className="lista-pagos">
+    <ul className="list-group">
       {pagos.map((pago) => {
-        const yaPago = pago.usuarios.find(
-          (u) => u.id === usuarioId && u.pagado === true
-        );
+        const esCreador = pago.creador_id === usuarioId;
+        const usuarioActual = (pago.usuarios || []).find(u => u.id === usuarioId);
+        const estaPagado = usuarioActual?.pagado || false;
 
         return (
-          <div key={pago.id} className="card pago-card mb-3">
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-start">
-                <div>
-                  <h5 className="card-title mb-2"> {pago.descripcion}</h5>
-                  <p className="mb-1">
-                    <strong>Monto:</strong> ${pago.monto}
-                  </p>
-                  <p className="mb-1">
-                    <strong>Creado por:</strong> {pago.creador}
-                  </p>
-                  <p className="mb-1"><strong>Participantes:</strong></p>
-                  <ul className="list-unstyled ms-3 mb-2">
-                    {pago.usuarios.map((usuario) => (
-                      <li key={usuario.id}>
-                        {usuario.nombre}
-                        {usuario.pagado ? (
-                          <span className="badge bg-success ms-2">Pagado</span>
-                        ) : (
-                          <span className="badge bg-warning text-dark ms-2">
-                            Pendiente
-                          </span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                {!yaPago && (
-                  <div className="ms-3">
-                    <button
-                      className="btn btn-outline-dark btn-sm"
-                      onClick={() => onMarcarPagado(pago.id)}
-                    >
-                      Marcar como pagado
-                    </button>
-                  </div>
-                )}
-              </div>
+          <li
+            key={pago.id}
+            className="list-group-item lista-pago-item"
+          >
+            <div className="tipo-gasto-titulo text-center mb-2">
+              {pago.recurrente ? 'Gasto Recurrente' : 'Gasto Único'}
             </div>
-          </div>
+            <div className="d-flex justify-content-between align-items-center flex-column flex-md-row w-100">
+              <div>
+                <strong>{pago.descripcion || 'Sin descripción'}</strong>
+                <div className="text-muted small">
+                  ${pago.monto.toFixed(2)} · {new Date(pago.fecha).toLocaleDateString()}
+                </div>
+                <div className="badge bg-secondary me-2">{pago.categoria}</div>
+                <div className="badge bg-light text-dark">
+                  {esCreador ? 'Tú creaste' : 'Compartido'}
+                </div>
+              </div>
+              {!esCreador && (
+                <div className="mt-2 mt-md-0">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={estaPagado}
+                    onChange={() => onMarcarPagado(pago.id)}
+                    title="Marcar como pagado"
+                  />
+                </div>
+              )}
+            </div>
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 };
 

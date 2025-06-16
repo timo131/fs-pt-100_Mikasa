@@ -14,7 +14,7 @@ export const Navbar = () => {
 			<div className="container-fluid">
 				<div className="d-flex w-100 align-items-center justify-content-between">
 					<Link to={ store.token ? "/hogar" : "/login" } className="navbar-brand d-flex align-items-center">
-						<img src="src/front/assets/img/mikasa_ivory_sm.png" className="logo" alt="Mikasa logo" />
+						<img src="/src/front/assets/img/mikasa_ivory_sm.png" className="logo" alt="Mikasa logo" />
 					</Link>
 
 					<button

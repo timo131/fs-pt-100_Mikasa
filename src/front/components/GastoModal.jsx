@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import finanzasService from "../services/finanzasService";
 import "../styles/gastoModal.css"
 
+
 const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
-  const [form, setForm] = useState({
+  const initialForm = {
     nombre: "",
     cantidad: "",
     tipo: "propio",
@@ -11,7 +12,16 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
     categoria: "",
     frecuencia: "única",
     fechaLimite: "",
-  });
+  };
+
+  const [form, setForm] = useState(initialForm);
+
+  useEffect(() => {
+    if (show) {
+      setForm(initialForm);
+    }
+  }, [show])
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -29,13 +39,13 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
   const handleSubmit = async () => {
     try {
       const gasto = {
-        nombre: form.nombre,
-        cantidad: parseFloat(form.cantidad),
-        tipo: form.tipo,
-        compartido_con: form.compartidoCon,
-        categoria: form.categoria,
-        frecuencia: form.frecuencia,
-        fecha_limite: form.fechaLimite,
+      descripcion: form.nombre, 
+      monto: parseFloat(form.cantidad),
+      tipo: form.tipo,
+      compartido_con: form.compartidoCon, 
+      categoria: form.categoria,
+      frecuencia: form.frecuencia,
+      fecha_limite: form.fechaLimite || null,
       };
 
       await finanzasService.postGasto(token, gasto);
@@ -66,6 +76,7 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
               value={form.cantidad}
               onChange={handleChange}
               step="0.01"
+              required
             />
           </div>
           <input
@@ -75,6 +86,7 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
             name="nombre"
             value={form.nombre}
             onChange={handleChange}
+            required
           />
           <div className="mb-2">
             <div className="form-check form-check-inline">
@@ -110,6 +122,7 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
                       value={user.id}
                       onChange={handleChange}
                       checked={form.compartidoCon.includes(user.id)}
+                      required
                     />
                     <label className="form-check-label">{user.nombre}</label>
                   </div>
@@ -122,6 +135,7 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
             name="categoria"
             value={form.categoria}
             onChange={handleChange}
+            required
           >
             <option value="">categoría</option>
             <option value="comida">Comida</option>
@@ -163,6 +177,7 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
               name="fechaLimite"
               value={form.fechaLimite}
               onChange={handleChange}
+              required
             />
           </div>
 

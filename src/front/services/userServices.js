@@ -14,9 +14,13 @@ userServices.register = async (formData) => {
       const text = await resp.text().catch(() => null);
       throw new Error(text || resp.statusText);
     }
-    const data = await resp.json();
 
+    const data = await resp.json();
     localStorage.setItem("token", data.token);
+
+    if (data.user?.hogar_id) {
+      localStorage.setItem("hogar_id", data.user.hogar_id);
+    }
 
     console.log(data);
     return data;
@@ -25,6 +29,7 @@ userServices.register = async (formData) => {
     throw error;
   }
 };
+
 
 userServices.join = async (formData) => {
   try {
@@ -36,9 +41,13 @@ userServices.join = async (formData) => {
       body: JSON.stringify(formData),
     });
     if (!resp.ok) throw Error("something went wrong");
-    const data = await resp.json();
 
+    const data = await resp.json();
     localStorage.setItem("token", data.token);
+
+    if (data.user?.hogar_id) {
+      localStorage.setItem("hogar_id", data.user.hogar_id);
+    }
 
     console.log(data);
     return data;
@@ -126,6 +135,12 @@ userServices.login = async (formData) => {
     if (!resp.ok) throw Error(data.error || "Something went wrong");
 
     localStorage.setItem('token', data.token)
+
+    if (data.user?.hogar_id) {
+      localStorage.setItem('hogar_id', data.user.hogar_id);
+    } else {
+      console.warn("No se encontró hogar_id en el usuario");
+    }
 
     return data;
 
