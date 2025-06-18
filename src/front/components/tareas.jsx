@@ -29,64 +29,85 @@ export const Tareas = () => {
 	});
 
 	return (
-		<div className="tareas text-center text-white">
-			<h1>Mis Tareas</h1>
-
-			<button className="btn btn-warning mt-3 mb-4" onClick={handleRedirect}>
-				Agregar Nueva Tarea
-			</button>
-
-			<div className="mb-4">
-				<label className="me-2"><strong>Filtrar:</strong></label>
-				<select
-					className="form-select w-auto d-inline"
-					value={filtro}
-					onChange={(e) => setFiltro(e.target.value)}
-				>
-					<option value="todas">Todas</option>
-					<option value="hechas">Hechas</option>
-					<option value="pendientes">Pendientes</option>
-				</select>
+		<>
+			<div className="titulo text-center">
+				<h1>
+					<i className="fa-solid fa-clipboard-list me-2"></i> Mis Tareas
+				</h1>
 			</div>
 
-			<div className="container">
-				{filteredTasks?.length === 0 ? (
-					<p>No hay tareas que coincidan con el filtro.</p>
-				) : (
-					filteredTasks?.map((t, i) => (
-						<div
-							key={i}
-							className={`card p-3 mb-3 text-start 
-		${t.hecha ? "bg-dark text-white  border-black" : "bg-light"} 
-		text-black`}
+			<div className="tareas text-white px-3">
+				
+				<div className="d-flex justify-content-end mb-3">
+					<div>
+						<label className="me-2"><strong>Filtrar:</strong></label>
+						<select
+							className="form-select d-inline w-auto"
+							value={filtro}
+							onChange={(e) => setFiltro(e.target.value)}
 						>
-							<h5 className={t.hecha ? "text-decoration-line-through" : ""}>{t.nombre}</h5>
-							<p><strong>Asignada a:</strong> {t.asignadaA}</p>
-							<p><strong>Frecuencia:</strong> {t.frecuencia}</p>
-							<p><strong>Descripción:</strong> {t.descripcion}</p>
-							<p><strong>Fecha:</strong> {t.fecha}</p>
+							<option value="todas">Todas</option>
+							<option value="hechas">Hechas</option>
+							<option value="pendientes">Pendientes</option>
+						</select>
+					</div>
+				</div>
 
-							<div className="mt-2 text-end">
-								<button
-									className={`btn btn-sm ${t.hecha ? "btn-success" : "btn-outline-success"} me-2`}
-									onClick={() => dispatch({ type: "toggle_task_done", payload: i })}
-								>
-									{t.hecha ? "Hecha" : "Marcar como hecha"}
-								</button>
+				<div className="text-center">
+					<button className="btn btn-warning mt-1 mb-4" onClick={handleRedirect}>
+						Agregar Nueva Tarea
+					</button>
+				</div>
 
-								<button className="btn btn-sm btn-outline-warning me-2" onClick={() => handleEdit(i)}>
-									Editar
-								</button>
-								<button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(i)}>
-									Borrar
-								</button>
-							</div>
-						</div>
-					))
-				)}
+				<div className="container">
+					<div className="row">
+						{filteredTasks?.length === 0 ? (
+							<p>No hay tareas que coincidan con el filtro.</p>
+						) : (
+							filteredTasks.map((t, i) => (
+								<div key={i} className="col-12 col-md-6 col-lg-4 mb-4">
+									<div
+										className={`card p-3 h-100 text-start 
+											${t.hecha ? "hecha" : "pendiente"}`}
+									>
+										<h5 className={t.hecha ? "text-decoration-line-through" : ""}>{t.nombre}</h5>
+										<div className="d-flex flex-wrap gap-2 mb-2">
+											<p className="mb-0"><strong>Asignada a:</strong> {t.asignadaA}</p>
+											<p className="mb-0"><strong>Frecuencia:</strong> {t.frecuencia}</p>
+											<p className="mb-0"><strong>Fecha:</strong> {t.fecha}</p>
+										</div>
+										<p className="mt-2"><strong>Descripción:</strong> {t.descripcion}</p>
+
+										<div className="mt-auto text-end">
+											<button
+												className={`btn btn-sm ${t.hecha ? "btn-success" : "btn-outline-success"} me-2`}
+												onClick={() => dispatch({ type: "toggle_task_done", payload: i })}
+											>
+												{t.hecha ? "Hecha" : "Marcar como hecha"}
+											</button>
+
+											<button
+												className={`btn btn-sm ${t.hecha ? "btn-light text-success" : "btn-outline-warning"} me-2`}
+												onClick={() => handleEdit(i)}
+											>
+												<i className="fa-regular fa-pen-to-square"></i>
+											</button>
+
+											<button
+												className="btn btn-sm btn-outline-danger"
+												onClick={() => handleDelete(i)}
+											>
+												<i className="fa-solid fa-trash"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							))
+						)}
+					</div>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
-
 

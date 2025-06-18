@@ -1,3 +1,21 @@
-.tareas{
-    background-color:rgb(218, 104, 104); 
+.tareas {
+    background-color: rgb(218, 104, 104);
+    min-height: 100vh;
+    padding: 20px;
 }
+.titulo {
+	background-color: #581010;
+	color: white;
+	font-family: 'Courier New', Courier, monospace;
+	width: 100%;
+	padding: 20px 0;
+	text-align: center;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+	letter-spacing: 1px;
+}
+.card.hecha {
+	background-color: #d1e7dd !important;
+	color: #14532d;
+	border: 1px solid #14532d;
+}
+
