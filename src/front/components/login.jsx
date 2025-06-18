@@ -35,7 +35,6 @@ export const Login = () => {
 
   return (
     <div className="user-container">
-      {/* <h2>Acceder</h2> */}
       <form onSubmit={handleSubmit} className="user-form">
         <input
           placeholder="Correo electrónico"
