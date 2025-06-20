@@ -156,6 +156,12 @@ export default function storeReducer(store, action = {}) {
         user: updatedUser,
       };
 
+    case "logout":
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("hogar");
+      return initialStore();
+
     case "ADD_RECETA_DESEADA":
       const currentRating = store.user?.deseado_recetas?.[action.payload.id];
       if (currentRating === action.payload.rating) return store;
