@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/ListaPagos.css';
 
-const ListaPagos = ({ pagos, usuarioId, onMarcarPagado }) => {
+const ListaPagos = ({ pagos, usuarioId, onMarcarPagado, onEliminar }) => {
   if (!pagos || pagos.length === 0) {
     return <p className="text-muted text-center">No hay gastos registrados este mes.</p>;
   }
@@ -16,32 +16,41 @@ const ListaPagos = ({ pagos, usuarioId, onMarcarPagado }) => {
         return (
           <li
             key={pago.id}
-            className="list-group-item lista-pago-item"
+            className="list-group-item lista-pago-item d-flex justify-content-between align-items-center flex-column flex-md-row w-100"
           >
-            <div className="tipo-gasto-titulo text-center mb-2">
-              {pago.recurrente ? 'Gasto Recurrente' : 'Gasto Único'}
-            </div>
-            <div className="d-flex justify-content-between align-items-center flex-column flex-md-row w-100">
-              <div>
-                <strong>{pago.descripcion || 'Sin descripción'}</strong>
-                <div className="text-muted small">
-                  ${pago.monto.toFixed(2)} · {new Date(pago.fecha).toLocaleDateString()}
-                </div>
-                <div className="badge bg-secondary me-2">{pago.categoria}</div>
-                <div className="badge bg-light text-dark">
-                  {esCreador ? 'Tú creaste' : 'Compartido'}
-                </div>
+            <div>
+              <div className="tipo-gasto-titulo text-center mb-2">
+                {pago.recurrente ? 'Gasto Recurrente' : 'Gasto Único'}
               </div>
+              <h6 className='fw-bold'>{pago.descripcion || 'Sin descripción'}</h6>
+              <div className="text-muted small">
+                ${pago.monto.toFixed(2)} · {new Date(pago.fecha).toLocaleDateString()}
+              </div>
+              <div className="badge bg-secondary me-2">{pago.categoria}</div>
+              <div className="badge bg-light text-dark">
+                {esCreador ? '' : 'Compartido'}
+              </div>
+            </div>
+
+            <div className="d-flex align-items-center gap-3 mt-2 mt-md-0">
               {!esCreador && (
-                <div className="mt-2 mt-md-0">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={estaPagado}
-                    onChange={() => onMarcarPagado(pago.id)}
-                    title="Marcar como pagado"
-                  />
-                </div>
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  checked={estaPagado}
+                  onChange={() => onMarcarPagado(pago.id)}
+                  title="Marcar como pagado"
+                />
+              )}
+              {esCreador && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-danger"
+                  onClick={() => onEliminar(pago.id)}
+                  title="Eliminar gasto"
+                >
+                  <i className="fa-solid fa-trash"></i>
+                </button>
               )}
             </div>
           </li>

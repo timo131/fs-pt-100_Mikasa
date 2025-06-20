@@ -700,3 +700,42 @@ def get_user_inf():
     except Exception as e:
         print(e)
         return jsonify({"error": "something went wrong"})
+    
+@api.route('/mailer/<address>', methods=['POST'])
+def handle_mail(address):
+   return send_email(address)
+
+@api.route("/check_mail", methods=['POST'])
+def check_mail():
+    try:
+        data = request.json
+        #buscamos el correo en la base de datos y almacenamos el resultado en la variable user
+        user = User.query.filter_by(email=data['email']).first()
+        #si no se encuentra, se devuelve que el correo no se ha encontrado
+        if not user:
+            return jsonify({'success': False, 'msg': 'email not found'}),404
+        #creamos el token que se va a enviar y necesario para la recuperacion de la contraseña 
+        token = create_access_token(identity=user.id)
+        result = send_email(data['email'], token)
+        print(result)
+        return jsonify({'success': True, 'token': token, 'email': data['email']}), 200
+    except Exception as e:
+        print('error: '+ e)
+        return jsonify({'success': False, 'msg': 'something went wrong'})
+
+
+#ruta para actualizar el password. Se consume desde la vista para hacer el reset en el front
+@api.route('/password_update', methods=['PUT'])
+@jwt_required()
+def password_update():
+    try:
+        data = request.json
+        id = get_jwt_identity()
+        user = User.query.get(id)
+        user.password = generate_password_hash(data['password'])
+        db.session.commit()
+        return jsonify({'success': True, 'msg': 'Contraseña actualizada exitosamente, intente iniciar sesion'}), 200
+    except Exception as e:
+        db.session.rollback()
+        print (f"Error al enviar el correo: {str(e)}")
+        return jsonify({'success': False, 'msg': f"Error al enviar el correo: {str(e)}"})

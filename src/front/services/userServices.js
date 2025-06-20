@@ -22,7 +22,6 @@ userServices.register = async (formData) => {
       localStorage.setItem("hogar_id", data.user.hogar_id);
     }
 
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Register failed:", error);
