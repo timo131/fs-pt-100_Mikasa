@@ -31,6 +31,11 @@ export default function storeReducer(store, action = {}) {
         hogar: action.payload.hogar,
         token: action.payload.token,
       };
+    case "logout":
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("hogar");
+      return initialStore()
 
     case "update_user":
       localStorage.setItem("user", JSON.stringify(action.payload));
