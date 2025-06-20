@@ -5,7 +5,7 @@ import os
 def send_email(address, token, tipo="reset", username=None):
     try:
         if os.getenv("FLASK_DEBUG") == "1":
-            frontend_url = "https://glowing-space-succotash-9g76r4xvgggh9xww-3000.app.github.dev/reset"
+            frontend_url = f"{os.getenv('FRONT_END_URL')}/reset"
         else:
             frontend_url = f"{os.getenv('BACKEND_URL')}/reset"
 
