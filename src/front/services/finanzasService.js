@@ -90,5 +90,17 @@ finanzasService.getUsuarios = async() => {
     return await res.json();
   }
 }
+finanzasService.eliminarGasto = async (id, token) => {
+  const response = await fetch(`${backendUrl}/api/pagos/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al eliminar el gasto");
+  }
+};
 
 export default finanzasService;

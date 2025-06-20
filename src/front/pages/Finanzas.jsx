@@ -59,6 +59,14 @@ const FinanzasPage = () => {
       console.error("Error al marcar como pagado:", error);
     }
   };
+  const eliminarGasto = async (id) => {
+    try {
+      await finanzasService.eliminarGasto(id, token);
+      fetchPagos();
+    } catch (err) {
+      console.error("Error al eliminar el gasto:", err);
+    }
+  }
 
   const renderGrafico = (pagos) => {
     const categorias = {};
@@ -85,7 +93,21 @@ const FinanzasPage = () => {
       },
       options: {
         responsive: true,
-        plugins: { legend: { position: 'bottom' } }
+        plugins: {
+          legend: {
+            position: 'bottom',
+            align: 'center',
+            labels: {
+              usePointStyle: true,
+              pointStyle: 'circle',
+              padding: 20,
+              font: {
+                size: 14
+              },
+              color: '#000'
+            }
+          }
+        }
       }
     });
   };
@@ -137,44 +159,14 @@ const FinanzasPage = () => {
   });
   return (
     <div className="container-fluid finanzas-page">
-      <div className="row mb-4">
-        <div className="col-12 d-flex justify-content-center align-items-center titulo-mes">
-          <button className="btn-navegacion" onClick={() => cambiarMes(-1)}>&lt;</button>
-          <h2 className="mx-3">{meses[mesActual]}</h2>
-          <button className="btn-navegacion" onClick={() => cambiarMes(1)}>&gt;</button>
-        </div>
-      </div>
-
-      {mostrarGraficoYPagos && (
-        <div className="row seccion-superior mb-4">
-          <div className="col-12 tarjeta-gastos d-flex flex-column flex-md-row p-3">
-            <div className="grafico-categorias p-3 w-100 w-md-50">
-              <h6 className="text-center mb-3">Distribución por categoría</h6>
-              <canvas id="graficoGastos"></canvas>
-            </div>
-            <div className="w-100 w-md-50 lista-gastos ps-md-4 pe-md-2 pt-3">
-              <h4 className="text-center mb-3">Mis Gastos</h4>
-              <ListaPagos
-                pagos={pagosDelMes}
-                usuarioId={usuarioId}
-                onMarcarPagado={onMarcarPagado}
-              />
-              <div className="text-center mt-3">
-                <button
-                  className="btn btn-dark w-100 mt-2"
-                  onClick={() => setShowModal(true)}
-                >
-                  Añadir
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="row seccion-cuentas">
+      <div className="row seccion-cuentas my-3">
         <div className="col-12 tarjeta-cuentas p-4">
-          <h4 className="text-center mb-4">Cuentas</h4>
+          <div className="col-12 d-flex justify-content-center align-items-center titulo-mes">
+            <button className="btn-navegacion" onClick={() => cambiarMes(-1)}>&lt;</button>
+            <h2 className="mx-3">{meses[mesActual]}</h2>
+            <button className="btn-navegacion" onClick={() => cambiarMes(1)}>&gt;</button>
+          </div>
+          <h4 className="text-center my-4">Cuentas</h4>
           <div className="row">
             <div className="col-md-6">
               <h5>Lo que debo</h5>
@@ -209,6 +201,39 @@ const FinanzasPage = () => {
           </div>
         </div>
       </div>
+
+      {mostrarGraficoYPagos && (
+        <div className="seccion-superior mb-4">
+          <div className="tarjeta-gastos row p-3">
+            <h4 className="text-center mb-3">Mis Gastos</h4>
+            <div className="col-md-6 grafico-categorias d-flex justify-content-center align-items-center p-3">
+              <div className="grafico-wrapper">
+                <h4 className="text-center mb-3">En qué gasto tanto</h4>
+                <div className="grafico-container">
+                  <canvas id="graficoGastos"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 lista-gastos-wrapper p-3">
+              <button
+                className="btn btn-dark w-100 my-2"
+                onClick={() => setShowModal(true)}
+              >
+                Otro Gasto más?
+              </button>
+              <div className="lista-gastos-scroll">
+                <ListaPagos
+                  pagos={pagosDelMes}
+                  usuarioId={usuarioId}
+                  onMarcarPagado={onMarcarPagado}
+                  onEliminar={eliminarGasto}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <GastoModal
         show={showModal}

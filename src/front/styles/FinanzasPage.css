@@ -8,7 +8,6 @@
 .titulo-mes {
   font-size: 1.8rem;
   font-weight: bold;
-  text-transform: lowercase;
 }
 
 .btn-navegacion {
@@ -25,16 +24,32 @@
 }
 
 .grafico-wrapper {
-  width: 280px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.grafico-circular {
-  max-width: 100%;
-  height: auto;
+.grafico-container {
+  position: relative;
+  width: 100%;
+  height: 350px; 
+}
+
+#graficoGastos {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .lista-gastos-wrapper {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .lista-gastos-wrapper h4 {
@@ -47,10 +62,6 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.tarjeta-cuentas h4,
-.tarjeta-cuentas h5 {
-  font-weight: bold;
-}
 
 .tarjeta-cuentas .badge {
   background-color: #2069d4;
@@ -61,3 +72,8 @@
   margin-top: 2rem;
 }
 
+.lista-gastos-scroll {
+  height: 350px; 
+  overflow-y: auto;
+  padding-right: 5px;
+}
