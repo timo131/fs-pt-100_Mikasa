@@ -113,7 +113,7 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
             </div>
             {form.tipo === "compartido" && (
               <div className="d-flex flex-wrap gap-2 mt-1">
-                {users.map((user) => (
+                {users?.map((user) => (
                   <div key={user.id} className="form-check">
                     <input
                       className="form-check-input"

@@ -22,7 +22,6 @@ userServices.register = async (formData) => {
       localStorage.setItem("hogar_id", data.user.hogar_id);
     }
 
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Register failed:", error);
@@ -203,6 +202,29 @@ userServices.getHogar = async (hogarId) => {
     console.log(error);
   }
 }
+userServices.sendInvitation = async (email, username) => {
+  try {
+    const token = localStorage.getItem("token");
+    const resp = await fetch(`${backendUrl}/api/send_invitation`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ email, username }),
+    });
 
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      throw new Error(data.msg || "Error sending invitation");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("sendInvitation error:", error);
+    throw error;
+  }
+};
 
 export default userServices;

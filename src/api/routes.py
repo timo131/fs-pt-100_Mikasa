@@ -9,6 +9,7 @@ from datetime import datetime
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import select
+from api.mail.mailer import send_email
 
 
 api = Blueprint('api', __name__)
@@ -700,3 +701,65 @@ def get_user_inf():
     except Exception as e:
         print(e)
         return jsonify({"error": "something went wrong"})
+    
+@api.route("/check_mail", methods=['POST'])
+def check_mail():
+    try:
+        data = request.json
+        user = User.query.filter_by(email=data['email']).first()
+        if not user:
+            return jsonify({'success': False, 'msg': 'email not found'}), 404
+
+        token = create_access_token(identity=user.id)
+        result = send_email(data['email'], token, tipo="reset")
+
+        return jsonify({'success': True, 'token': token, 'email': data['email']}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'msg': f'something went wrong: {str(e)}'}), 500
+
+
+
+@api.route("/send_invitation", methods=["POST"])
+def send_invitation():
+    try:
+        data = request.get_json()
+        email = data.get("email")
+        username = data.get("username")
+        print(data,email,username)
+        if not email or not username:
+            return jsonify({"success": False, "msg": "Faltan el correo o el nombre de usuario"}), 400
+
+        token = create_access_token(identity=email)
+        result = send_email(email, token, tipo="invite", username=username)
+
+        if result["success"]:
+            return jsonify({"success": True, "msg": "Invitación enviada con éxito"}), 200
+        else:
+            return jsonify({"success": False, "msg": result["msg"]}), 500
+
+    except Exception as e:
+        return jsonify({"success": False, "msg": f"Error interno: {str(e)}"}), 500
+
+
+@api.route('/mailer/<address>', methods=['POST'])
+def handle_mail(address):
+   return send_email(address)
+
+@api.route('/password_update', methods=['PUT'])
+@jwt_required()
+def password_update():
+    try:
+        data = request.json
+        id = get_jwt_identity()
+
+        user = User.query.get(id)
+        if not user:
+            return jsonify({'success': False, 'msg': 'Usuario no encontrado'}), 404
+
+        user.password = generate_password_hash(data['password'])
+        db.session.commit()
+
+        return jsonify({'success': True, 'msg': 'Contraseña actualizada exitosamente'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'msg': f"Error al actualizar contraseña: {str(e)}"}), 500
