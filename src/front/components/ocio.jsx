@@ -7,9 +7,8 @@ export const Ocio = () => {
   const [results, setResults] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [likes, setLikes] = useState([]);
-  const [ratings, setRatings] = useState({}); 
-  
-  
+  const [ratings, setRatings] = useState({});
+  const [selectedMovie, setSelectedMovie] = useState(null);
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favoritos");
     if (storedFavorites) setFavorites(JSON.parse(storedFavorites));
@@ -21,7 +20,6 @@ export const Ocio = () => {
     if (storedRatings) setRatings(JSON.parse(storedRatings));
   }, []);
 
-  
   useEffect(() => {
     localStorage.setItem("favoritos", JSON.stringify(favorites));
   }, [favorites]);
@@ -50,22 +48,15 @@ export const Ocio = () => {
     }
   };
 
-  const toggleLike = (movie) => {
+  const openModal = (movie) => {
     const isLiked = likes.some((like) => like.imdbID === movie.imdbID);
-    if (isLiked) {
-      
-      setLikes(likes.filter((like) => like.imdbID !== movie.imdbID));
-      setRatings((prev) => {
-        const newRatings = { ...prev };
-        delete newRatings[movie.imdbID];
-        return newRatings;
-      });
-    } else {
-      setLikes([...likes, movie]);
-    }
+    if (!isLiked) setLikes([...likes, movie]);
+
+    setSelectedMovie(movie);
+    const modal = new window.bootstrap.Modal(document.getElementById("ratingModal"));
+    modal.show();
   };
 
-  
   const handleRatingChange = (movieId, ratingValue) => {
     setRatings((prev) => ({
       ...prev,
@@ -84,46 +75,64 @@ export const Ocio = () => {
   return (
     <div className="container-ocio">
       <nav className="navbar bg-body-tertiary">
-        <div className="container-fluid">
-          <a className="navbar-brand">
-            <i className="fa-solid fa-tv"></i> <i className="fa-solid fa-film"></i>
-          </a>
-          <form className="d-flex" role="search" onSubmit={handleSearch}>
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Busca películas o series"
-              aria-label="Search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <button className="btn btn-outline-success" type="submit">
-              Buscar
-            </button>
-          </form>
-        </div>
-      </nav>
+  <div className="container-fluid d-flex justify-content-end">
+    <form className="d-flex" role="search" onSubmit={handleSearch}>
+      <input
+        className="form-control me-2"
+        type="search"
+        placeholder="Busca películas o series"
+        aria-label="Search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      <button className="btn btn-outline-success" type="submit">
+        <i className="fa-solid fa-magnifying-glass"></i> Buscar
+      </button>
+    </form>
+  </div>
+</nav>
 
       <h1 className="text-center my-5">Películas y Series</h1>
+
+      {favorites.length > 0 && (
+        <div className="favorites mt-5 section-highlight">
+          <h2 className="text-center d-flex justify-content-center align-items-center gap-2">
+            <i className="fa-solid fa-heart fa-xl text-danger"></i>
+            Mis Favoritas
+            <i className="fa-solid fa-heart fa-xl text-danger"></i>
+          </h2>
+          <div className="movie-carousel">
+            {favorites.map((movie) => (
+              <div key={movie.imdbID} className="movie-card">
+                {movie.Poster && movie.Poster !== "N/A" && (
+                  <img src={movie.Poster} alt={movie.Title} />
+                )}
+                <h6>
+                  {movie.Title} ({movie.Year})
+                </h6>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {results.length > 0 && (
         <div className="search-results mt-4">
           <div className="movie-carousel">
             {results.map((movie) => {
               const isLiked = likes.some((like) => like.imdbID === movie.imdbID);
-              const currentRating = ratings[movie.imdbID] || null;
               return (
                 <div key={movie.imdbID} className="movie-card">
                   {movie.Poster && movie.Poster !== "N/A" && (
                     <img src={movie.Poster} alt={movie.Title} />
                   )}
-                  <h6>{movie.Title} ({movie.Year})</h6>
-                  <div className="d-flex justify-content-between mt-2">
+                  <h6>
+                    {movie.Title} ({movie.Year})
+                  </h6>
+                  <div className="movie-buttons">
                     <button
                       className="btn btn-sm btn-outline-info"
-                      onClick={() =>
-                        (window.location.href = `/detalle/${movie.imdbID}`)
-                      }
+                      onClick={() => (window.location.href = `/detalle/${movie.imdbID}`)}
                     >
                       Detalles
                     </button>
@@ -133,55 +142,23 @@ export const Ocio = () => {
                       title="Añadir a favoritos"
                     >
                       {favorites.some((fav) => fav.imdbID === movie.imdbID) ? (
-                        <i className="fa-solid fa-heart text-danger"></i>
+                        <i className="fa-solid fa-heart fa-lg text-danger"></i>
                       ) : (
-                        <i className="fa-regular fa-heart"></i>
+                        <i className="fa-regular fa-heart fa-lg"></i>
                       )}
                     </button>
                     <button
                       className="btn btn-sm"
-                      onClick={() => toggleLike(movie)}
+                      onClick={() => openModal(movie)}
                       title="Quiero ver"
                     >
                       {isLiked ? (
-                        <i className="fa-solid fa-thumbs-up text-primary"></i>
+                        <i className="fa-solid fa-thumbs-up fa-lg text-primary"></i>
                       ) : (
-                        <i className="fa-regular fa-thumbs-up"></i>
+                        <i className="fa-regular fa-thumbs-up fa-lg"></i>
                       )}
                     </button>
                   </div>
-
-                  
-                  {isLiked && (
-                    <div className="mt-2 d-flex justify-content-start flex-wrap">
-                      {[
-                        { id: 1, label: "mehhhh" },
-                        { id: 2, label: "no me apetece" },
-                        { id: 3, label: "ni fu ni fa" },
-                        { id: 4, label: "me apetece" },
-                        { id: 5, label: "me apetece mogollon" },
-                      ].map(({ id, label }) => (
-                        <div className="form-check form-check-inline" key={id}>
-                          <input
-                            className="form-check-input"
-                            type="radio"
-                            name={`rating-${movie.imdbID}`}
-                            id={`rating-${movie.imdbID}-${id}`}
-                            value={label}
-                            checked={ratings[movie.imdbID] === label}
-                            onChange={() => handleRatingChange(movie.imdbID, label)}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={`rating-${movie.imdbID}-${id}`}
-                          >
-                            {label}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
                 </div>
               );
             })}
@@ -189,69 +166,76 @@ export const Ocio = () => {
         </div>
       )}
 
-      {favorites.length > 0 && (
-        <div className="favorites mt-5">
-          <h2 className="text-center">Mis Favoritas</h2>
+      {likes.length > 0 && (
+        <div className="favorites mt-5 section-highlight">
+          <h2 className="text-center d-flex justify-content-center align-items-center gap-2">
+            <i className="fa-solid fa-eye fa-xl"></i>
+            Películas que quiero ver
+            <i className="fa-solid fa-film fa-xl"></i>
+          </h2>
           <div className="movie-carousel">
-            {favorites.map((movie) => (
+            {likes.map((movie) => (
               <div key={movie.imdbID} className="movie-card">
                 {movie.Poster && movie.Poster !== "N/A" && (
                   <img src={movie.Poster} alt={movie.Title} />
                 )}
-                <h6>{movie.Title} ({movie.Year})</h6>
+                <h6>
+                  {movie.Title} ({movie.Year})
+                </h6>
+                <p className="mt-2">
+                  {ratings[movie.imdbID]
+                    ? `Te apetece: ${ratings[movie.imdbID]}`
+                    : "Sin valorar"}
+                </p>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {likes.length > 0 && (
-        <div className="favorites mt-5">
-          <h2 className="text-center">Películas que quiero ver</h2>
-          <div className="movie-carousel">
-            {likes.map((movie) => {
-              const currentRating = ratings[movie.imdbID] || null;
-              return (
-                <div key={movie.imdbID} className="movie-card">
-                  {movie.Poster && movie.Poster !== "N/A" && (
-                    <img src={movie.Poster} alt={movie.Title} />
+      <div
+        className="modal fade"
+        id="ratingModal"
+        tabIndex="-1"
+        aria-labelledby="ratingModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="ratingModalLabel">
+                ¿Cuánto te apetece ver esta película?
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Cerrar"
+              ></button>
+            </div>
+            <div className="modal-body">
+              {selectedMovie && (
+                <div className="d-flex flex-column gap-2">
+                  {["No me gusta", "Ni fu ni fa", "Podría verla", "Me apetece", "Me encanta"].map(
+                    (label, index) => (
+                      <button
+                        key={index}
+                        className="btn btn-outline-primary"
+                        onClick={() =>
+                          handleRatingChange(selectedMovie.imdbID, label)
+                        }
+                        data-bs-dismiss="modal"
+                      >
+                        {label}
+                      </button>
+                    )
                   )}
-                  <h6>{movie.Title} ({movie.Year})</h6>
-
-                  <div className="mt-2 d-flex justify-content-start flex-wrap">
-                    {[
-                      "mehhhh",
-                      "no me apetece",
-                      "ni fu ni fa",
-                      "me apetece",
-                      "me apetece mogollon",
-                    ].map((label, index) => (
-                      <div className="form-check form-check-inline" key={index}>
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name={`rating-display-${movie.imdbID}`}
-                          id={`rating-display-${movie.imdbID}-${index}`}
-                          value={label}
-                          checked={currentRating === label}
-                          disabled
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor={`rating-display-${movie.imdbID}-${index}`}
-                        >
-                          {label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-
                 </div>
-              );
-            })}
+              )}
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
