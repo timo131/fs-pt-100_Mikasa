@@ -8,7 +8,7 @@ export const Tareas = () => {
 	const navigate = useNavigate();
 
 	const [filtro, setFiltro] = useState("todas");
-
+gi
 	const handleRedirect = () => {
 		navigate("/card");
 	};

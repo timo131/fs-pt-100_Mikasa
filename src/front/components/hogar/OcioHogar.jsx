@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../styles/Ocio.css"; // Asegurate que este archivo contenga los estilos necesarios
+import "../../styles/Ocio.css";
 
 export const OcioHogar = () => {
   const [likes, setLikes] = useState([]);
