@@ -24,7 +24,7 @@ export const UserDetails = () => {
 
   return (
     <div className="register-container">
-      <h2 className="ivory">{store.user.user_name}
+      <h2 className="ivory mb-3">{store.user.user_name}
       </h2>
       <div className="row align-items-center my-2">
         <div className="col-6 d-flex justify-content-end">

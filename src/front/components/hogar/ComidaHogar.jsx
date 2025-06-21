@@ -14,12 +14,13 @@ export const ComidaHogar = () => {
     });
 
     const sortedRecetaIds = Object.entries(ratingSums)
+        .filter(([, sum]) => sum > 0)
         .sort(([, aRating], [, bRating]) => bRating - aRating)
         .map(([id]) => id);
 
     return (
         <>
-            <h3 className="text-center ivory text-outline">¿Qué comemos?</h3><p className="text-center charcoal">ordenadas por ranking combinado</p>
+            <h3 className="text-center ivory text-outline">Recetas</h3><p className="text-center charcoal">ordenadas por ranking combinado</p>
             {sortedRecetaIds.length > 0 ? (
                 <div className="search-results mt-4">
                     <div className="row g-3 justify-content-center">

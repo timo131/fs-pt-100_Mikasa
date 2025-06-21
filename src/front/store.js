@@ -141,7 +141,10 @@ export default function storeReducer(store, action = {}) {
         ...store,
         recetasById: {
           ...store.recetasById,
-          [action.payload.id]: action.payload,
+          [action.payload.id]: {
+            ...(store.recetasById?.[action.payload.id] || {}),
+            ...action.payload,
+          },
         },
       };
 
