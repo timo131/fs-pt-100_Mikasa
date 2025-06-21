@@ -14,15 +14,17 @@ export const Profile = () => {
 
     return (
         <>
-            <div className="container d-flex">
-                <div className="me-5">
-                    <HogarDetails />
-                </div>
-                <UserDetails />
+        <div className='row'>
+            <div className='col gap-4'>
+                <HogarDetails/>
             </div>
-            <div className='d-flex justify-content-center align-items-center mb-5'>
-                <button onClick={handleLogout} className="user-button-danger w-25">Cerrar sesión</button>
+            <div className='col gap-4'>
+                <UserDetails/>
             </div>
+        </div>
+        <div className='d-flex justify-content-center align-items-center mb-5'>
+            <button onClick={handleLogout} className="user-button-danger w-25">Cerrar sesión</button>
+        </div>
         </>
     )
 }

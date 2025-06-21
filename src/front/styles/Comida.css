@@ -31,3 +31,13 @@
 .comida-container {
   min-height: 350px;
 }
+
+.recipe-img{
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0.5rem;
+  max-height: 300px;
+  min-height: 300px;
+  width: auto;
+  max-width: 100%;
+}

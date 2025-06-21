@@ -14,8 +14,8 @@ export const OcioHogar = () => {
   }, []);
 
   return (
-    <div className="container mt-4 text-center">
-      <h3>Películas que quiero ver en casa</h3>
+    <>
+      <h3 className="text-center ivory text-outline">Películas y series</h3>
 
       {likes.length === 0 ? (
         <p>No hay películas guardadas aún.</p>
@@ -64,6 +64,6 @@ export const OcioHogar = () => {
           })}
         </div>
       )}
-    </div>
+    </>
   );
 };

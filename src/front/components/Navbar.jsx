@@ -66,7 +66,7 @@ export const Navbar = () => {
 						</Link>
 					</div>
 
-					<div className="d-flex align-items-center ms-md-3">
+					<div className="d-none d-md-flex align-items-center ms-md-3">
 						{store.token ? (
 							<Link to="/profile">
 								<img
