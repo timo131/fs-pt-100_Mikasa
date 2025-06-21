@@ -17,11 +17,28 @@ export const RecetaCard = ({ id }) => {
   const receta = store.recetasById?.[id];
 
   useEffect(() => {
-    if (!store.recetasById?.[id]) {
+    const receta = store.recetasById?.[id];
+
+    const isMissingDetails =
+      !receta?.servings ||
+      !receta?.readyInMinutes ||
+      !receta?.healthScore ||
+      !receta?.title ||
+      !receta?.image;
+
+    if (isMissingDetails) {
       recetaServices.getRecetaById(id)
         .then((data) => {
           if (data) {
-            dispatch({ type: "ADD_RECETA", payload: data });
+            const payload = { id: data.id };
+
+            if (data.title) payload.title = data.title;
+            if (data.image) payload.image = data.image;
+            if (data.servings != null) payload.servings = data.servings;
+            if (data.healthScore != null) payload.healthScore = data.healthScore;
+            if (data.readyInMinutes != null) payload.readyInMinutes = data.readyInMinutes;
+
+            dispatch({ type: "ADD_RECETA", payload });
           }
         })
         .catch((err) => {
@@ -126,7 +143,7 @@ export const RecetaCard = ({ id }) => {
           </button>
         </div>
       </div>
-        <Rating id={id} onRate={handleRatingChange} />
+      <Rating id={id} onRate={handleRatingChange} />
     </>
-    );
-  };
+  );
+};
