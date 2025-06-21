@@ -75,20 +75,33 @@ finanzasService.marcarComoPagado = async (token, pagoId) => {
   });
   return await res.json();
 };
-finanzasService.getUsuarios = async() => {
-  getUsuarios: async (token) => {
-    const res = await fetch(`${backendUrl}/api/user`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
 
-    if (!res.ok) {
-      throw new Error("Error al obtener los usuarios");
-    }
+finanzasService.getUsuarios = async (token) => {
+  const res = await fetch(`${backendUrl}/api/users`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
-    return await res.json();
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Error en getUsuarios:", res.status, text);
+    throw new Error("Error al obtener los usuarios");
   }
-}
+
+  return await res.json();
+};
+finanzasService.eliminarGasto = async (id, token) => {
+  const response = await fetch(`${backendUrl}/api/pagos/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al eliminar el gasto");
+  }
+};
 
 export default finanzasService;

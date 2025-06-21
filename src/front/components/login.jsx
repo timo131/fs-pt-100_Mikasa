@@ -21,6 +21,7 @@ export const Login = () => {
     e.preventDefault();
     try {
       const { token, user } = await userServices.login(formData);
+      console.log("Respuesta login:", { token, user })
       const hogar = await userServices.getHogar(user.hogar_id);
       dispatch({
         type: "login_success",
@@ -54,7 +55,9 @@ export const Login = () => {
         />
         <button type="submit" className="user-button w-100">Iniciar sesión</button>
       </form>
-      <p className="mt-4 mb-0 ivory">Nuevo a Mikasa?<br/><Link to="/register">Crear tu hogar</Link></p>
+
+
+      <p className="mt-4 mb-0 ivory">Nuevo Usuario?<br/><Link to="/register">Crear tu hogar</Link></p>
     </div>
   );
 };
