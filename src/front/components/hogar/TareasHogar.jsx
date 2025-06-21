@@ -10,7 +10,7 @@ export const TareasHogar = () => {
 
   return (
     <div className="tareas text-center text-white">
-      <h3 className="mb-4">Tareas del Hogar</h3>
+      <h3 className="mb-4">Tareas</h3>
 
       {tareasCompartidas?.length === 0 ? (
         <p>No hay tareas compartidas.</p>
@@ -18,11 +18,10 @@ export const TareasHogar = () => {
         <div className="container">
           {tareasCompartidas.map((task, i) => (
             <div
-              key={i}
-              className={`card p-3 mb-3 text-start ${
-                task.hecha ? "card-hecha text-white" : "bg-light text-black"
-              }`}
-            >
+  key={i}
+  className={`card p-3 mb-3 text-start ${task.hecha ? "card-hecha" : "bg-light text-black"}`}
+>
+
               <h5 className={task.hecha ? "text-decoration-line-through" : ""}>
                 {task.nombre}
               </h5>
@@ -32,12 +31,10 @@ export const TareasHogar = () => {
               <p><strong>Fecha:</strong> {task.fecha}</p>
 
               <button
-                className={`btn btn-sm mt-2 ${
-                  task.hecha ? "btn-hecha" : "btn-outline-success"
-                }`}
+                className={`btn btn-sm ${task.hecha ? "btn-success" : "btn-outline-success"} mt-2`}
                 onClick={() => dispatch({ type: "toggle_task_done", payload: i })}
               >
-                {task.hecha ? <i className="boton-hecho fa-solid fa-user-check"></i> : "Marcar como hecha"}
+                {task.hecha ? <i className="fa-solid fa-user-check"></i> : "Marcar como hecha"}
               </button>
             </div>
           ))}
@@ -46,3 +43,4 @@ export const TareasHogar = () => {
     </div>
   );
 };
+
