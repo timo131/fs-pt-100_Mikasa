@@ -55,6 +55,9 @@ export const router = createBrowserRouter(
         <Route path ="/ocio" element={<Ocio />} />
         <Route path="/detalle/:id" element={<Detalle />} />
         <Route path="/comida/:id" element={<DetalleReceta />} />
+        <Route path="/login" element={<Login />} />
+        <Route path ="/register" element ={<Register />} />
+        <Route path ="/private" element ={<Private />} />  
         
       </Route>
     ),

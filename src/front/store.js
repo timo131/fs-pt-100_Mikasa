@@ -182,13 +182,5 @@ export default function storeReducer(store, action = {}) {
               : u
           ),
         },
-      };
-    case "logout":
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("hogar");
-      return initialStore();
-    default:
-      throw new Error("Unknown action.");
   }
 }

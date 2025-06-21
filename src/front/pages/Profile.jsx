@@ -17,7 +17,7 @@ export const Profile = () => {
         <HogarDetails/>
         <UserDetails/>
         <div className='d-flex justify-content-center align-items-center mb-5'>
-            <button onClick={handleLogout} className="user-button-danger w-25">Cerrar sessión</button>
+            <button onClick={handleLogout} className="user-button-danger w-25">Cerrar sesión</button>
         </div>
         </>
     )
