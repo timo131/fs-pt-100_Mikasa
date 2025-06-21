@@ -24,17 +24,18 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
 
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const { name, value, type, checked } = e.target;
 
-    if (type === "checkbox" && name === "compartidoCon") {
-      const updated = checked
-        ? [...form.compartidoCon, value]
-        : form.compartidoCon.filter((u) => u !== value);
-      setForm({ ...form, compartidoCon: updated });
-    } else {
-      setForm({ ...form, [name]: value });
-    }
-  };
+  if (type === "checkbox" && name === "compartidoCon") {
+    const userId = Number(value);
+    const updated = checked
+      ? [...form.compartidoCon, userId]
+      : form.compartidoCon.filter((u) => u !== userId);
+    setForm({ ...form, compartidoCon: updated });
+  } else {
+    setForm({ ...form, [name]: value });
+  }
+};
 
   const handleSubmit = async () => {
     try {
@@ -122,9 +123,8 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
                       value={user.id}
                       onChange={handleChange}
                       checked={form.compartidoCon.includes(user.id)}
-                      required
                     />
-                    <label className="form-check-label">{user.nombre}</label>
+                    <label className="form-check-label">{user.user_name}</label>
                   </div>
                 ))}
               </div>

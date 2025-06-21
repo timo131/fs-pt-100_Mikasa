@@ -43,7 +43,6 @@ app.config['MAIL_USERNAME'] = os.getenv("EMAIL_USERNAME")
 app.config['MAIL_PASSWORD'] = os.getenv("EMAIL_PASSWORD")
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_DEFAULT_SENDER'] = ('Pepe', 'pepe@pepe.pe')
-print(os.getenv("EMAIL_PASSWORD"),os.getenv("EMAIL_USERNAME"))
 mail.init_app(app)
 
 # add the admin
