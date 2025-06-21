@@ -491,7 +491,7 @@ def get_all_comida():
 def get_comida(comida_id):
     spoon_url = f"https://api.spoonacular.com/recipes/{comida_id}/information"
     params = {
-      "apiKey": os.getenv("SPOONACULAR_KEY"),
+      "apiKey":os.getenv("SPOONACULAR_KEY"),
       "includeNutrition": "false"
     }
     resp = requests.get(spoon_url, params=params)
