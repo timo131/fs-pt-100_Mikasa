@@ -8,7 +8,7 @@ export const FinanzasHogar = () => {
 
     return (
         <>
-            <h3 className="text-center">Finanzas</h3>
+            <h3 className="text-center ivory text-outline">Finanzas</h3>
         </>
     )
 }

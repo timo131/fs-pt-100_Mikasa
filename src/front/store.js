@@ -141,7 +141,10 @@ export default function storeReducer(store, action = {}) {
         ...store,
         recetasById: {
           ...store.recetasById,
-          [action.payload.id]: action.payload,
+          [action.payload.id]: {
+            ...(store.recetasById?.[action.payload.id] || {}),
+            ...action.payload,
+          },
         },
       };
 
@@ -155,6 +158,12 @@ export default function storeReducer(store, action = {}) {
         ...store,
         user: updatedUser,
       };
+
+    case "logout":
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("hogar");
+      return initialStore();
 
     case "ADD_RECETA_DESEADA":
       const currentRating = store.user?.deseado_recetas?.[action.payload.id];

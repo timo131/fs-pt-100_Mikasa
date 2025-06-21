@@ -17,11 +17,28 @@ export const RecetaCard = ({ id }) => {
   const receta = store.recetasById?.[id];
 
   useEffect(() => {
-    if (!store.recetasById?.[id]) {
+    const receta = store.recetasById?.[id];
+
+    const isMissingDetails =
+      !receta?.servings ||
+      !receta?.readyInMinutes ||
+      !receta?.healthScore ||
+      !receta?.title ||
+      !receta?.image;
+
+    if (isMissingDetails) {
       recetaServices.getRecetaById(id)
         .then((data) => {
           if (data) {
-            dispatch({ type: "ADD_RECETA", payload: data });
+            const payload = { id: data.id };
+
+            if (data.title) payload.title = data.title;
+            if (data.image) payload.image = data.image;
+            if (data.servings != null) payload.servings = data.servings;
+            if (data.healthScore != null) payload.healthScore = data.healthScore;
+            if (data.readyInMinutes != null) payload.readyInMinutes = data.readyInMinutes;
+
+            dispatch({ type: "ADD_RECETA", payload });
           }
         })
         .catch((err) => {
@@ -78,6 +95,11 @@ export const RecetaCard = ({ id }) => {
     setTimeout(() => document.activeElement.blur(), 0);
   };
 
+  console.log("Is favorite:", isFavorite); // Should be false until clicked
+  console.log("Is liked:", isLiked); // Same here
+  console.log("Favoritos:", favoritos);
+  console.log("Deseadas:", recetasDeseadas);
+
 
   return (
     <>
@@ -91,9 +113,15 @@ export const RecetaCard = ({ id }) => {
             </div>
             <p className="text-center mb-0">{receta.cuisines?.[0]}</p>
             <div className="d-flex flex-row justify-content-center align-items-center gap-3 ms-1">
-              <div><span className="fa-solid charcoal fa-users me-2"></span>{receta.servings}</div>
-              <div><span className="fa-regular charcoal fa-clock me-2"></span>{receta.readyInMinutes} min</div>
-              <div><span className="fa-solid charcoal fa-apple-whole me-2"></span>{receta.healthScore} %</div>
+              {receta.servings != null && (
+                <div><span className="fa-solid charcoal fa-users me-2"></span>{receta.servings}</div>
+              )}
+              {receta.readyInMinutes != null && (
+                <div><span className="fa-regular charcoal fa-clock me-2"></span>{receta.readyInMinutes} min</div>
+              )}
+              {receta.healthScore != null && (
+                <div><span className="fa-solid charcoal fa-apple-whole me-2"></span>{receta.healthScore} %</div>
+              )}
             </div>
             <div className="text-center mt-2">
               {receta.image && (
@@ -104,18 +132,18 @@ export const RecetaCard = ({ id }) => {
         </div>
         <div className="card-footer d-flex justify-content-around align-items-center mt-2">
           <button className="btn btn-sm" data-bs-toggle="modal" data-bs-target={`#ratingModal-${id}`} title="Me gusta">
-            <span className={`fa-${isLiked ? "solid" : "regular"} fa-thumbs-up text-outline fa-2x
+            <span className={`fa-${isLiked ? "solid" : "regular"} fa-thumbs-up fa-2x
               ${currentRating <= 0
                 ? "ochre"
                 : "sage"
               }`}></span>
           </button>
           <button className="btn btn-sm" onClick={toggleFavorite} title="Favorito">
-            <span className={`fa fa-${isFavorite ? "solid" : "regular"} fa-heart text-outline fa-2x coral`}></span>
+            <span className={`fa fa-${isFavorite ? "solid" : "regular"} fa-heart fa-2x coral`}></span>
           </button>
         </div>
       </div>
-        <Rating id={id} onRate={handleRatingChange} />
+      <Rating id={id} onRate={handleRatingChange} />
     </>
-    );
-  };
+  );
+};
