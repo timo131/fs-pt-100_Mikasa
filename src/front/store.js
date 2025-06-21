@@ -1,5 +1,6 @@
 export const initialStore = () => {
-  const user = JSON.parse(localStorage.getItem("user")) || null;
+  const userString = localStorage.getItem("user");
+  const user = userString ? JSON.parse(userString) : null;
 
   if (user) {
     user.favorito_recetas = [];
@@ -7,17 +8,22 @@ export const initialStore = () => {
     localStorage.setItem("user", JSON.stringify(user));
   }
 
+  const hogarString = localStorage.getItem("hogar");
+  const hogar = hogarString ? JSON.parse(hogarString) : null;
+
+  const tasksString = localStorage.getItem("tasks");
+  const tasks = tasksString ? JSON.parse(tasksString) : [];
+
   return {
     message: null,
     user,
-    hogar: JSON.parse(localStorage.getItem("hogar")) || null,
+    hogar,
     token: localStorage.getItem("token") || null,
     recetasById: {},
     recetasSearch: [],
-    tasks: JSON.parse(localStorage.getItem("tasks")) || [],
+    tasks,
   };
 };
-
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
@@ -31,11 +37,6 @@ export default function storeReducer(store, action = {}) {
         hogar: action.payload.hogar,
         token: action.payload.token,
       };
-    case "logout":
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("hogar");
-      return initialStore()
 
     case "update_user":
       localStorage.setItem("user", JSON.stringify(action.payload));
@@ -181,13 +182,5 @@ export default function storeReducer(store, action = {}) {
               : u
           ),
         },
-      };
-      case "logout":
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("hogar");
-      return initialStore();
-    default:
-      throw new Error("Unknown action.");
   }
 }

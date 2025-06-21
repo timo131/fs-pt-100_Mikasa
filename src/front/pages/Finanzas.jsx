@@ -26,7 +26,6 @@ const FinanzasPage = () => {
   useEffect(() => {
     renderGrafico(pagos);
   }, [mesActual, anoActual, pagos])
-
   const cargarDatos = async () => {
     try {
       const pagosData = await finanzasService.getPagos(token);
