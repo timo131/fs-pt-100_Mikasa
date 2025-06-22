@@ -6,7 +6,7 @@ export const Navbar = () => {
 	const { store } = useGlobalReducer();
 	const location = useLocation();
 
-	const avatarSrc = store.user?.avatar_url
+	const avatarSrc = store?.user?.avatar_url
 		? store.user.avatar_url
 		: placeholder;
 

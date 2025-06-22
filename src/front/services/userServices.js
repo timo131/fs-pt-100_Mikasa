@@ -196,7 +196,6 @@ userServices.getHogar = async (hogarId) => {
     });
     if (!resp.ok) throw Error("Could not fetch hogar");
     const data = await resp.json();
-    console.log(data)
     return data;
   } catch (error) {
     console.log(error);

@@ -9,6 +9,7 @@ from datetime import datetime
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from api.mail.mailer import send_email
 
 
@@ -18,13 +19,13 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
-
 @api.route("/users", methods=["GET"])
 # @jwt_required()
 def get_all_users():
     stm = select(User)
     users = db.session.execute(stm).scalars().all()
     return jsonify([u.serialize() for u in users]), 200
+
 
 @api.route("/users/<int:user_id>", methods=["GET"])
 # @jwt_required()
@@ -34,6 +35,7 @@ def get_user(user_id):
     if not user:
         return jsonify({"message": "User not found"}), 404
     return jsonify(user.serialize()), 200
+
 
 @api.route("/users", methods=["POST"])
 @jwt_required()
@@ -54,6 +56,7 @@ def create_user():
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error creating user"}), 500
+
 
 @api.route("/users/<int:user_id>", methods=["PUT"])
 # @jwt_required()
@@ -82,6 +85,7 @@ def update_user(user_id):
         db.session.rollback()
         return jsonify({"message": "Error updating user"}), 500
 
+
 @api.route("/users/<int:user_id>", methods=["DELETE"])
 @jwt_required()
 def delete_user(user_id):
@@ -105,6 +109,7 @@ def get_all_hogares():
     hogares = db.session.execute(stm).scalars().all()
     return jsonify([h.serialize() for h in hogares]), 200
 
+
 @api.route("/hogares/<int:hogar_id>", methods=["GET"])
 @jwt_required()
 def get_hogar(hogar_id):
@@ -113,6 +118,7 @@ def get_hogar(hogar_id):
     if not hogar:
         return jsonify({"message": "Hogar not found"}), 404
     return jsonify(hogar.serialize()), 200
+
 
 @api.route("/hogares", methods=["POST"])
 @jwt_required()
@@ -131,6 +137,7 @@ def create_hogar():
         db.session.rollback()
         return jsonify({"message": "Error creating hogar"}), 500
 
+
 @api.route("/hogares/<int:hogar_id>", methods=["PUT"])
 @jwt_required()
 def update_hogar(hogar_id):
@@ -148,6 +155,7 @@ def update_hogar(hogar_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error updating hogar"}), 500
+
 
 @api.route("/hogares/<int:hogar_id>", methods=["DELETE"])
 @jwt_required()
@@ -172,6 +180,7 @@ def get_all_finanzas():
     finanzas = db.session.execute(stm).scalars().all()
     return jsonify([f.serialize() for f in finanzas]), 200
 
+
 @api.route("/finanzas/<int:finanza_id>", methods=["GET"])
 @jwt_required()
 def get_finanza(finanza_id):
@@ -180,6 +189,7 @@ def get_finanza(finanza_id):
     if not finanza:
         return jsonify({"message": "Finanza not found"}), 404
     return jsonify(finanza.serialize()), 200
+
 
 @api.route("/finanzas", methods=["POST"])
 @jwt_required()
@@ -199,6 +209,7 @@ def create_finanza():
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error creating finanza"}), 500
+
 
 @api.route("/finanzas/<int:finanza_id>", methods=["PUT"])
 @jwt_required()
@@ -220,6 +231,7 @@ def update_finanza(finanza_id):
         db.session.rollback()
         return jsonify({"message": "Error updating finanza"}), 500
 
+
 @api.route("/finanzas/<int:finanza_id>", methods=["DELETE"])
 @jwt_required()
 def delete_finanza(finanza_id):
@@ -234,36 +246,72 @@ def delete_finanza(finanza_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error deleting finanza"}), 500
-    
+
+
 def parse_fecha(fecha_str):
     try:
         return datetime.strptime(fecha_str, "%Y-%m-%d").date()
     except Exception:
         return None
 
+
 @api.route("/pagos", methods=["GET"])
 @jwt_required()
 def get_all_pagos():
-    stm = select(Pagos)
+    stm = select(Pagos).options(selectinload(
+        Pagos.user_pagos).selectinload(User_pagos.user))
     pagos = db.session.execute(stm).scalars().all()
-    return jsonify([p.serialize() for p in pagos]), 200
+
+    result = []
+    for pago in pagos:
+        pago_dict = pago.serialize()
+        usuarios = []
+        for up in pago.user_pagos:
+            usuarios.append({
+                "user_pago_id": up.id,
+                "user_id": up.user.id,
+                "user_name": up.user.user_name,
+                "monto_pagar": pago.monto / len(pago.user_pagos) if pago.user_pagos else pago.monto,
+                "pagado": up.estado
+            })
+        pago_dict["usuarios"] = usuarios
+        result.append(pago_dict)
+
+    return jsonify(result), 200
+
 
 @api.route("/pagos/<int:pago_id>", methods=["GET"])
 @jwt_required()
 def get_pago(pago_id):
-    stm = select(Pagos).where(Pagos.id == pago_id)
+    stm = select(Pagos).options(selectinload(Pagos.user_pagos).selectinload(
+        User_pagos.user)).where(Pagos.id == pago_id)
     pago = db.session.execute(stm).scalar_one_or_none()
+
     if not pago:
         return jsonify({"message": "Pago not found"}), 404
-    return jsonify(pago.serialize()), 200
+
+    pago_dict = pago.serialize()
+    usuarios = []
+    for up in pago.user_pagos:
+        usuarios.append({
+            "user_pago_id": up.id,
+            "user_id": up.user.id,
+            "user_name": up.user.user_name,
+            "monto_pagar": pago.monto / len(pago.user_pagos) if pago.user_pagos else pago.monto,
+            "pagado": up.estado
+        })
+    pago_dict["usuarios"] = usuarios
+
+    return jsonify(pago_dict), 200
+
 
 @api.route("/pagos", methods=["POST"])
 @jwt_required()
 def create_pago():
     data = request.get_json()
+    compartidos = data.get("compartido_con", [])
     fecha_str = data.get("fecha")
     fecha = parse_fecha(fecha_str) if fecha_str else datetime.utcnow().date()
-    
     fecha_limite_str = data.get("fecha_limite")
     fecha_limite = parse_fecha(fecha_limite_str) if fecha_limite_str else None
 
@@ -282,11 +330,37 @@ def create_pago():
             user_id=user_id
         )
         db.session.add(pago)
+        db.session.flush()
+
+        user_pago_creador = User_pagos(
+            user_id=user_id,
+            pago_id=pago.id,
+            hogar_id=pago.hogar_id,
+            estado=True
+        )
+        db.session.add(user_pago_creador)
+
+        for uid in compartidos:
+            if uid != user_id:
+                existe = db.session.execute(
+                select(User_pagos).where(User_pagos.user_id == uid, User_pagos.pago_id == pago.id)
+            ).scalar_one_or_none()
+            if not existe:
+                user_pago = User_pagos(
+                user_id=uid,
+                pago_id=pago.id,
+                hogar_id=pago.hogar_id,
+                estado=False
+                )
+                db.session.add(user_pago)
+
         db.session.commit()
         return jsonify(pago.serialize()), 201
+
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error creating pago", "error": str(e)}), 500
+
 
 @api.route("/pagos/<int:pago_id>", methods=["PUT"])
 @jwt_required()
@@ -299,9 +373,10 @@ def update_pago(pago_id):
 
     fecha_str = data.get("fecha")
     fecha = parse_fecha(fecha_str) if fecha_str else datetime.utcnow().date()
-    
+
     fecha_limite_str = data.get("fecha_limite")
-    fecha_limite = parse_fecha(fecha_limite_str) if fecha_limite_str else pago.fecha_limite
+    fecha_limite = parse_fecha(
+        fecha_limite_str) if fecha_limite_str else pago.fecha_limite
     if fecha_limite_str and not fecha_limite:
         return jsonify({"message": "Fecha límite inválida"}), 400
 
@@ -323,19 +398,26 @@ def update_pago(pago_id):
         db.session.rollback()
         return jsonify({"message": "Error updating pago", "error": str(e)}), 500
 
+
 @api.route("/pagos/<int:pago_id>", methods=["DELETE"])
 @jwt_required()
 def delete_pago(pago_id):
     stm = select(Pagos).where(Pagos.id == pago_id)
     pago = db.session.execute(stm).scalar_one_or_none()
+
     if not pago:
         return jsonify({"message": "Pago not found"}), 404
+
     try:
+        db.session.query(User_pagos).filter_by(pago_id=pago_id).delete()
+
         db.session.delete(pago)
         db.session.commit()
+
         return jsonify({"message": "Pago deleted"}), 200
     except Exception as e:
         db.session.rollback()
+        print(f"Error al eliminar el pago: {e}")
         return jsonify({"message": "Error deleting pago", "error": str(e)}), 500
 
 
@@ -346,6 +428,7 @@ def get_all_user_pagos():
     user_pagos = db.session.execute(stm).scalars().all()
     return jsonify([up.serialize() for up in user_pagos]), 200
 
+
 @api.route("/user_pagos/<int:user_pago_id>", methods=["GET"])
 @jwt_required()
 def get_user_pago(user_pago_id):
@@ -354,6 +437,7 @@ def get_user_pago(user_pago_id):
     if not user_pago:
         return jsonify({"message": "User_pago not found"}), 404
     return jsonify(user_pago.serialize()), 200
+
 
 @api.route("/user_pagos", methods=["POST"])
 @jwt_required()
@@ -373,24 +457,29 @@ def create_user_pago():
         db.session.rollback()
         return jsonify({"message": "Error creating user_pago"}), 500
 
+
 @api.route("/user_pagos/<int:user_pago_id>", methods=["PUT"])
 @jwt_required()
 def update_user_pago(user_pago_id):
     data = request.get_json()
+
+    if not data or "estado" not in data:
+        return jsonify({"message": "Estado no proporcionado"}), 400
+
     stm = select(User_pagos).where(User_pagos.id == user_pago_id)
     user_pago = db.session.execute(stm).scalar_one_or_none()
+
     if not user_pago:
         return jsonify({"message": "User_pago not found"}), 404
+
     try:
-        user_id = get_jwt_identity()
-        user_pago.user_id = user_id
-        user_pago.pago_id = data.get("pago_id", user_pago.pago_id)
-        user_pago.estado = data.get("estado", user_pago.estado)
+        user_pago.estado = data["estado"]
         db.session.commit()
         return jsonify(user_pago.serialize()), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({"message": "Error updating user_pago"}), 500
+        return jsonify({"message": "Error updating user_pago", "error": str(e)}), 500
+
 
 @api.route("/user_pagos/<int:user_pago_id>", methods=["DELETE"])
 @jwt_required()
@@ -415,6 +504,7 @@ def get_all_tareas():
     tareas = db.session.execute(stm).scalars().all()
     return jsonify([t.serialize() for t in tareas]), 200
 
+
 @api.route("/tareas/<int:tarea_id>", methods=["GET"])
 @jwt_required()
 def get_tarea(tarea_id):
@@ -423,6 +513,7 @@ def get_tarea(tarea_id):
     if not tarea:
         return jsonify({"message": "Tarea not found"}), 404
     return jsonify(tarea.serialize()), 200
+
 
 @api.route("/tareas", methods=["POST"])
 @jwt_required()
@@ -443,6 +534,7 @@ def create_tarea():
         db.session.rollback()
         return jsonify({"message": "Error creating tarea"}), 500
 
+
 @api.route("/tareas/<int:tarea_id>", methods=["PUT"])
 @jwt_required()
 def update_tarea(tarea_id):
@@ -462,6 +554,7 @@ def update_tarea(tarea_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error updating tarea"}), 500
+
 
 @api.route("/tareas/<int:tarea_id>", methods=["DELETE"])
 @jwt_required()
@@ -486,17 +579,19 @@ def get_all_comida():
     comida = db.session.execute(stm).scalars().all()
     return jsonify([c.serialize() for c in comida]), 200
 
+
 @api.route("/comida/<int:comida_id>", methods=["GET"])
 # @jwt_required()
 def get_comida(comida_id):
     spoon_url = f"https://api.spoonacular.com/recipes/{comida_id}/information"
     params = {
-      "apiKey":os.getenv("SPOONACULAR_KEY"),
-      "includeNutrition": "false"
+        "apiKey": os.getenv("SPOONACULAR_KEY"),
+        "includeNutrition": "false"
     }
     resp = requests.get(spoon_url, params=params)
     resp.raise_for_status()
     return jsonify(resp.json()), 200
+
 
 @api.route("/comida", methods=["POST"])
 # @jwt_required()
@@ -518,6 +613,7 @@ def create_comida():
         db.session.rollback()
         return jsonify({"message": "Error creating comida"}), 500
 
+
 @api.route("/comida/<int:comida_id>", methods=["PUT"])
 # @jwt_required()
 def update_comida(comida_id):
@@ -538,6 +634,7 @@ def update_comida(comida_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error updating comida"}), 500
+
 
 @api.route("/comida/<int:comida_id>", methods=["DELETE"])
 # @jwt_required()
@@ -562,6 +659,7 @@ def get_all_favoritos_hogar():
     favoritos = db.session.execute(stm).scalars().all()
     return jsonify([f.serialize() for f in favoritos]), 200
 
+
 @api.route("/favoritos_hogar/<int:favorito_id>", methods=["GET"])
 @jwt_required()
 def get_favorito_hogar(favorito_id):
@@ -570,6 +668,7 @@ def get_favorito_hogar(favorito_id):
     if not favorito:
         return jsonify({"message": "Favorito not found"}), 404
     return jsonify(favorito.serialize()), 200
+
 
 @api.route("/favoritos_hogar", methods=["POST"])
 @jwt_required()
@@ -587,6 +686,7 @@ def create_favorito_hogar():
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error creating favorito"}), 500
+
 
 @api.route("/favoritos_hogar/<int:favorito_id>", methods=["DELETE"])
 @jwt_required()
@@ -622,21 +722,21 @@ def register():
         if existing_user:
             return jsonify({"error": "Email already taken"}), 400
 
-        hashed_password  = generate_password_hash(data['password'])
+        hashed_password = generate_password_hash(data['password'])
 
-        new_hogar = Hogar(hogar_name = data["hogar_name"])
+        new_hogar = Hogar(hogar_name=data["hogar_name"])
         db.session.add(new_hogar)
         db.session.flush()
 
         new_user = User(
-            user_name = data["user_name"],
-            email     = data["email"],
-            password  = hashed_password,
-            avatar_url = data.get("avatar_url"),
-            admin = True,
-            favorito_recetas = [],
-            favorito_peliculas = [],
-            hogar_id = new_hogar.id
+            user_name=data["user_name"],
+            email=data["email"],
+            password=hashed_password,
+            avatar_url=data.get("avatar_url"),
+            admin=True,
+            favorito_recetas=[],
+            favorito_peliculas=[],
+            hogar_id=new_hogar.id
         )
 
         db.session.add(new_user)
@@ -655,7 +755,8 @@ def register():
         print("Register error:", repr(e))
         db.session.rollback()
         return jsonify({"error": "Something went wrong server-side"}), 500
-    
+
+
 @api.route('/login', methods=['POST'])
 def login():
     try:
@@ -679,29 +780,31 @@ def login():
 
         token = create_access_token(identity=str(user.id))
 
-        return jsonify({"msg": "login ok", "token": token, "user": user.serialize(), "hogar": hogar.serialize()}), 200 
+        return jsonify({"msg": "login ok", "token": token, "user": user.serialize(), "hogar": hogar.serialize()}), 200
 
     except Exception as e:
         print("Login error:", e)
         db.session.rollback()
         return jsonify({"error": "Something went wrong"}), 400
-    
+
+
 @api.route('/private', methods=['GET'])
-@jwt_required() 
+@jwt_required()
 def get_user_inf():
     try:
         id = get_jwt_identity()
-        
+
         stm = select(User).where(User.id == id)
         user = db.session.execute(stm).scalar_one_or_none()
         if not user:
             return jsonify({"msg": "What"}), 418
-        
+
         return jsonify(user.serialize())
     except Exception as e:
         print(e)
         return jsonify({"error": "something went wrong"})
-    
+
+
 @api.route("/check_mail", methods=['POST'])
 def check_mail():
     try:
@@ -718,14 +821,13 @@ def check_mail():
         return jsonify({'success': False, 'msg': f'something went wrong: {str(e)}'}), 500
 
 
-
 @api.route("/send_invitation", methods=["POST"])
 def send_invitation():
     try:
         data = request.get_json()
         email = data.get("email")
         username = data.get("username")
-        print(data,email,username)
+        print(data, email, username)
         if not email or not username:
             return jsonify({"success": False, "msg": "Faltan el correo o el nombre de usuario"}), 400
 
@@ -743,7 +845,8 @@ def send_invitation():
 
 @api.route('/mailer/<address>', methods=['POST'])
 def handle_mail(address):
-   return send_email(address)
+    return send_email(address)
+
 
 @api.route('/password_update', methods=['PUT'])
 @jwt_required()

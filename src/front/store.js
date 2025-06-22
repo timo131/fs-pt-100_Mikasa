@@ -14,6 +14,9 @@ export const initialStore = () => {
   const tasksString = localStorage.getItem("tasks");
   const tasks = tasksString ? JSON.parse(tasksString) : [];
 
+  const gastosString = localStorage.getItem("gastos");
+  const gastos = gastosString ? JSON.parse(gastosString) : [];
+
   return {
     message: null,
     user,
@@ -22,6 +25,7 @@ export const initialStore = () => {
     recetasById: {},
     recetasSearch: [],
     tasks,
+    gastos,
   };
 };
 
@@ -37,6 +41,12 @@ export default function storeReducer(store, action = {}) {
         hogar: action.payload.hogar,
         token: action.payload.token,
       };
+
+    case "logout":
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("hogar");
+      return initialStore();
 
     case "update_user":
       localStorage.setItem("user", JSON.stringify(action.payload));
@@ -123,6 +133,33 @@ export default function storeReducer(store, action = {}) {
       };
     }
 
+    case "set_gasto":
+      localStorage.setItem("gastos", JSON.stringify(action.payload));
+      return {
+        ...store,
+        gastos: action.payload,
+      };
+
+    case "delete_gasto":
+      const gastoEliminado = store.gastos.filter(
+        (g) => g.id !== action.payload
+      );
+      localStorage.setItem("gastos", JSON.stringify(gastoEliminado));
+      return {
+        ...store,
+        gastos: gastoEliminado,
+      };
+
+    case "update_gasto":
+      const gastoActualizados = store.gastos.map((g) =>
+        g.id === action.payload.id ? action.payload : g
+      );
+      localStorage.setItem("gastos", JSON.stringify(gastoActualizados));
+      return {
+        ...store,
+        gastos: gastoActualizados,
+      };
+
     case "SET_RECETA_SEARCH_RESULTS":
       return {
         ...store,
@@ -182,5 +219,6 @@ export default function storeReducer(store, action = {}) {
               : u
           ),
         },
+      };
   }
 }

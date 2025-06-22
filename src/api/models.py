@@ -45,7 +45,7 @@ class Pagos(db.Model):
     user = relationship("User", back_populates="pagos", passive_deletes=True)
     hogar = relationship("Hogar", back_populates="pagos")
     finanzas = relationship("Finanzas", back_populates="pagos")
-    user_pagos = relationship("User_pagos", back_populates="pagos")
+    user_pagos = relationship("User_pagos", back_populates="pago")
 
     def serialize(self):
         return {
@@ -56,7 +56,7 @@ class Pagos(db.Model):
             "finanzas_id": self.finanzas_id,
             "monto": self.monto,
             "descripcion": self.descripcion,
-            "compartido_con": self.compartido_con,
+            "compartido_con_nombres": [up.user.user_name for up in self.user_pagos],
             "categoria": self.categoria,
             "frecuencia": self.frecuencia,
             "fecha_limite": self.fecha_limite.isoformat() if self.fecha_limite else None,
@@ -70,24 +70,24 @@ class User_pagos(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     hogar_id: Mapped[int] = mapped_column(ForeignKey("hogar.id"), nullable=False)
-    pagos_id: Mapped[int] = mapped_column(ForeignKey("pagos.id"), nullable=False)
+    pago_id: Mapped[int] = mapped_column(ForeignKey("pagos.id"), nullable=False)
     estado: Mapped[bool] = mapped_column(default=False, nullable=False) 
 
     user = relationship("User", back_populates="user_pagos", passive_deletes=True)
     hogar = relationship("Hogar", back_populates="user_pagos")
-    pagos = relationship("Pagos", back_populates="user_pagos")
+    pago = relationship("Pagos", back_populates="user_pagos")
 
     def serialize(self):
         return {
             "id": self.id,
             "user_id": self.user_id,
             "hogar_id": self.hogar_id,
-            "pagos_id": self.pagos_id,
+            "pago_id": self.pago_id,
             "estado": self.estado,
             "user_name": self.user.user_name,
-            "monto": self.pagos.monto,
-            "finanzas_id": self.pagos.finanzas_id,
-            "fecha": self.pagos.finanzas.fecha.isoformat() if self.pagos.finanzas else None
+            "monto": self.pago.monto,
+            "finanzas_id": self.pago.finanzas_id,
+            "fecha": self.pago.finanzas.fecha.isoformat() if self.pago.finanzas else None
         }
 
 
