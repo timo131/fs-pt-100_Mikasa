@@ -1,7 +1,9 @@
 const API_KEY = "e0704d03";
 const BASE_URL = "https://www.omdbapi.com/";
 
-export const searchMovies = async (query) => {
+const omdbApi = {};
+
+omdbApi.searchMovies = async (query) => {
   try {
     const response = await fetch(
       `${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(query)}`
@@ -14,7 +16,7 @@ export const searchMovies = async (query) => {
   }
 };
 
-export const getMovieById = async (id) => {
+omdbApi.getMovieById = async (id) => {
   try {
     const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&i=${id}`);
     const data = await response.json();
@@ -24,3 +26,5 @@ export const getMovieById = async (id) => {
     return null;
   }
 };
+
+export default omdbApi;

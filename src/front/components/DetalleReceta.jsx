@@ -1,17 +1,16 @@
 
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import recetaServices from "../services/recetaServices";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import DOMPurify from "dompurify";
 
-export const DetalleReceta = () => {
-  const { id } = useParams();
+export const DetalleReceta = ({ id }) => {
   const { store, dispatch } = useGlobalReducer();
   const [receta, setReceta] = useState(null);
   const [loading, setLoading] = useState(!receta);
 
   useEffect(() => {
+    if (!id) return null;
     if (!receta) {
 
       setLoading(true);
@@ -31,26 +30,25 @@ export const DetalleReceta = () => {
   }
 
   return (
-    <div className="container mt-5">
-      <h1 className="flex-grow-1 text-center">{receta.title}</h1>
+          <>
       <div className="row">
         <div className="col">
-          <div className="d-flex justify-content-end align-items-center h-100">
+          <div className="d-flex justify-content-center h-100">
             {receta.image && (
               <img src={receta.image} alt={receta.title} className="recipe-img" />
             )}
           </div>
         </div>
         <div className="col">
-          <p>{receta.cuisines?.[0]}</p>
+          <p className="text-center">{receta.cuisines?.[0]}</p>
           {receta.servings != null && (
-            <p><span className="fa-solid charcoal fa-users me-2"></span> <strong>Porciones:</strong> {receta.servings}</p>
+            <p className="text-center"><span className="fa-solid charcoal fa-users me-2"></span> <strong>Porciones:</strong> {receta.servings}</p>
           )}
           {receta.readyInMinutes != null && (
-            <p><span className="fa-regular charcoal fa-clock me-2"></span> <strong>Listo en:</strong> {receta.readyInMinutes} min</p>
+            <p className="text-center"><span className="fa-regular charcoal fa-clock me-2"></span> <strong>Listo en:</strong> {receta.readyInMinutes} min</p>
           )}
           {receta.healthScore != null && (
-            <p><span className="fa-solid charcoal fa-apple-whole me-2"></span> <strong>Valor nutricional:</strong> {receta.healthScore} %</p>
+            <p className="text-center"><span className="fa-solid charcoal fa-apple-whole me-2"></span> <strong>Valor nutricional:</strong> {receta.healthScore} %</p>
           )}
           <p><strong>Ingredientes:</strong></p>
           <ul>
@@ -68,6 +66,6 @@ export const DetalleReceta = () => {
           __html: DOMPurify.sanitize(receta.instructions || "")
         }}
       />
-    </div>
+      </>
   );
 };

@@ -91,7 +91,6 @@ class User_pagos(db.Model):
         }
 
 
-
 class Tareas (db.Model):
     __tablename__ = "tareas"
     id: Mapped[int] = mapped_column(primary_key = True)
@@ -178,6 +177,7 @@ class User(db.Model):
     favorito_recetas: Mapped[dict] = mapped_column(JSON, nullable=True)
     deseado_recetas: Mapped[dict] = mapped_column(JSON, nullable=True)
     favorito_peliculas: Mapped[dict] = mapped_column(JSON, nullable=True)
+    deseado_peliculas: Mapped[dict] = mapped_column(JSON, nullable=True)
     hogar_id: Mapped[int] = mapped_column(ForeignKey("hogar.id", ondelete="SET NULL"), nullable=True)
     hogar = relationship("Hogar", back_populates="users", foreign_keys=[hogar_id], passive_deletes=True)
     finanzas = relationship("Finanzas", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
@@ -201,6 +201,7 @@ class User(db.Model):
             "favorito_recetas": self.favorito_recetas or [],
             "deseado_recetas": self.deseado_recetas or [],
             "favorito_peliculas": self.favorito_peliculas,
+            "deseado_peliculas": self.deseado_peliculas,
 
         }
 

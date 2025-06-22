@@ -4,54 +4,27 @@
 
 .movie-carousel {
   display: flex;
+  flex-wrap: nowrap; 
   overflow-x: auto;
   gap: 16px;
   padding: 1rem;
+  scroll-behavior: smooth;
 }
 
 .movie-carousel::-webkit-scrollbar {
-  height: 8px;
+  height: 16px;
 }
 
 .movie-carousel::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 4px;
-}
-
-.movie-card {
-  flex: 0 0 auto;
-  width: 200px;
-  background: #fff;
-  border: 1px solid #ddd;
+  background: #2c2c2c;
   border-radius: 8px;
-  padding: 10px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
+  cursor: pointer;
 }
 
-.movie-card img {
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
+.movie-carousel::-webkit-scrollbar-thumb:hover {
+  background: #E2B659;
 }
 
-.movie-card h6 {
-  font-size: 14px;
-  margin: 10px 0;
-  min-height: 40px;
-}
-
-.movie-buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-top: auto;
-  flex-wrap: nowrap;
-}
 .section-highlight {
   background-color: #e6f2ef;
   border: 2px solid #3b7d72;
@@ -59,4 +32,93 @@
   padding: 1rem;
   margin-bottom: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.movie-card {
+  height: 300px;
+  width: 220px;
+  flex: 0 0 auto;
+  min-width: 220px;
+  background-color: #FFF8E7;
+  border: 1px solid #2c2c2c;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.movie-card:hover {
+  background-color: #A8C97F;
+}
+
+.movie-card img {
+  width: 110px;
+  height: 160px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0.5rem;
+  max-height: 160px;
+  min-height: 110px;
+}
+
+.movie-container {
+  min-height: 350px;
+}
+
+.movie-img{
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0.5rem;
+  max-height: 300px;
+  min-height: 300px;
+  width: auto;
+  max-width: 100%;
+}
+
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 3rem;
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: transparent;
+  color: #2c2c2c; 
+  font-size: 2rem;  
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.2s ease;
+
+}
+
+.scroll-btn:hover {
+  color: #E2B659; 
+}
+
+.scroll-btn.left {
+  left: 0;
+}
+
+.scroll-btn.right {
+  right: 0;
+}
+
+/* Optional: hide arrows if not needed */
+@media (max-width: 768px) {
+  .scroll-btn {
+    display: none;
+  }
 }

@@ -42,7 +42,9 @@ export const FinanzasHogar = () => {
     )
     .sort((a, b) => {
       const fechaA = a.fecha_limite ? new Date(a.fecha_limite) : new Date(90000);
+
       const fechaB = b.fecha_limite ? new Date(b.fecha_limite) : new Date(90000);
+
       return fechaA - fechaB;
     });
 

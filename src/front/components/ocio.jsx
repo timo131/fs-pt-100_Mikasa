@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { searchMovies } from "../services/omdbApi";
+import omdbApi from "../services/omdbApi";
 import "../styles/Ocio.css";
 
 export const Ocio = () => {
@@ -35,7 +35,7 @@ export const Ocio = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!query) return;
-    const movies = await searchMovies(query);
+    const movies = await omdbApi.searchMovies(query);
     setResults(movies);
   };
 

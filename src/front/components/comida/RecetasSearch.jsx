@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import recetaServices from "../../services/recetaServices";
 import { RecetaCard } from "./RecetaCard"
 import "../../styles/Comida.css";
+import "../../index.css";
 
 export const RecetasSearch = () => {
 
@@ -30,7 +31,7 @@ export const RecetasSearch = () => {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
-                <button className="btn btn-outline-success" type="submit">
+                <button className="search-recetas-button" type="submit">
                     Buscar
                 </button>
             </form>
