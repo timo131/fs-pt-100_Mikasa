@@ -42,6 +42,9 @@ export const FinanzasHogar = () => {
     )
     .sort((a, b) => {
       const fechaA = a.fecha_limite ? new Date(a.fecha_limite) : new Date(90000);
+
+      const fechaB = b.fecha_limite ? new Date(b.fecha_limite) : new Date(90000);
+
       return fechaA - fechaB;
     });
 
@@ -58,7 +61,7 @@ export const FinanzasHogar = () => {
       <h3 className="text-center mb-4">Gastos del Hogar</h3>
 
       {gastosInvolucrados.length === 0 && (
-        <p className="text-center text-muted">No tienes gastos asignados.</p>
+        <p className="text-center ivory text-outline text-muted">No tienes gastos asignados.</p>
       )}
 
       <div className="finanzas-hogar-scroll-container">
