@@ -9,11 +9,11 @@ export const DetalleReceta = () => {
   const { id } = useParams();
   const { store, dispatch } = useGlobalReducer();
   const [receta, setReceta] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!receta);
 
   useEffect(() => {
-    // If it’s not in the cache yet, fetch it and dispatch into the store
     if (!receta) {
+
       setLoading(true);
       recetaServices
         .getRecetaById(id)
@@ -32,23 +32,42 @@ export const DetalleReceta = () => {
 
   return (
     <div className="container mt-5">
-      <h1>{receta.title}</h1>
-      <p>{receta.cuisines?.[0]}</p>
-      <p><strong>Porciones:</strong> {receta.servings}</p>
-      <p><strong>Listo en:</strong> {receta.readyInMinutes} min.</p>
-    <p><strong>Ingredientes:</strong></p>
-        <ul>
-          {receta.extendedIngredients.map((ingredient) => (
-            <li key={ingredient.id || ingredient.name || `ingredient-${index}`}>
-              {ingredient.original}
-            </li>
-          ))}
-        </ul>
-      <p><strong>Valor nutricional:</strong> {receta.healthScore} %</p>
-      <p><strong>Instrucciones:</strong> {receta.instructions}</p>
-          {receta.image && receta.image !== "" && (
-        <img src={receta.image} alt={receta.title} className="img-fluid mt-3" />
-      )}
+      <h1 className="flex-grow-1 text-center">{receta.title}</h1>
+      <div className="row">
+        <div className="col">
+          <div className="d-flex justify-content-end align-items-center h-100">
+            {receta.image && (
+              <img src={receta.image} alt={receta.title} className="recipe-img" />
+            )}
+          </div>
+        </div>
+        <div className="col">
+          <p>{receta.cuisines?.[0]}</p>
+          {receta.servings != null && (
+            <p><span className="fa-solid charcoal fa-users me-2"></span> <strong>Porciones:</strong> {receta.servings}</p>
+          )}
+          {receta.readyInMinutes != null && (
+            <p><span className="fa-regular charcoal fa-clock me-2"></span> <strong>Listo en:</strong> {receta.readyInMinutes} min</p>
+          )}
+          {receta.healthScore != null && (
+            <p><span className="fa-solid charcoal fa-apple-whole me-2"></span> <strong>Valor nutricional:</strong> {receta.healthScore} %</p>
+          )}
+          <p><strong>Ingredientes:</strong></p>
+          <ul>
+            {receta.extendedIngredients.map((ingredient, index) => (
+              <li key={`${ingredient.id ?? ingredient.name}-${index}`}>
+                {ingredient.original}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p><strong>Instrucciones:</strong></p>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(receta.instructions || "")
+        }}
+      />
     </div>
   );
 };

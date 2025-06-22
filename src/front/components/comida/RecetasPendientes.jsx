@@ -6,7 +6,7 @@ export const RecetasPendientes = () => {
 
     const { store, dispatch } = useGlobalReducer()
     const deseado = store.user?.deseado_recetas || {};
-    const ids = Object.keys(deseado);
+    const ids = Object.keys(deseado).filter((id) => deseado[id] > 0);
 
     return (
         <>

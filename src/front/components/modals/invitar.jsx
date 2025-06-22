@@ -24,7 +24,11 @@ export const Invitar = ({ show, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
+    if (formData.otros.length === 0) {
+      alert("Añade al menos un correo válido pulsando 'Enter' antes de enviar.");
+      return;
+    }
+
     try {
       const inviterName = store.user.user_name;
       const hogarName = store.hogar.hogar_name;
