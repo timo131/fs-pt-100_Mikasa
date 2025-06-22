@@ -2,6 +2,10 @@ import React, { useEffect } from "react";
 import finanzasService from "../../services/finanzasService";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import "../../styles/FinanzasHogar.css";
+import React, { useEffect } from "react";
+import finanzasService from "../../services/finanzasService";
+import useGlobalReducer from "../../hooks/useGlobalReducer";
+import "../../styles/FinanzasHogar.css";
 
 export const FinanzasHogar = () => {
   const { store, dispatch } = useGlobalReducer();
