@@ -1,13 +1,13 @@
 
-Revision ID: fca98fad2636
+Revision ID: 6dfab21a0535
 Revises: 
-Create Date: 2025-06-21 18:35:32.683662
+Create Date: 2025-06-21 17:59:21.375836
 
 from alembic import op
 import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
-revision = 'fca98fad2636'
+revision = '6dfab21a0535'
 down_revision = None
 branch_labels = None
 depends_on = None

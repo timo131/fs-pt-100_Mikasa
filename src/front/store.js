@@ -97,7 +97,6 @@ export default function storeReducer(store, action = {}) {
       };
     }
 
-    
     case "logout":
       localStorage.removeItem("token");
       localStorage.removeItem("user");
@@ -234,24 +233,21 @@ export default function storeReducer(store, action = {}) {
           ),
         },
       };
-<<<<<<< HEAD
-=======
 
-      case "SET_MOVIE_SEARCH_RESULTS":
-  return {
-    ...store,
-    moviesSearch: action.payload.map((m) => m.id),
-    moviesById: {
-      ...store.moviesById,
-      ...action.payload.reduce((acc, m) => {
-        acc[m.id] = m;
-        return acc;
-      }, {}),
-    },
-  };
+    case "SET_MOVIE_SEARCH_RESULTS":
+      return {
+        ...store,
+        moviesSearch: action.payload.map((m) => m.id),
+        moviesById: {
+          ...store.moviesById,
+          ...action.payload.reduce((acc, m) => {
+            acc[m.id] = m;
+            return acc;
+          }, {}),
+        },
+      };
 
-
-        case "ADD_MOVIE":
+    case "ADD_MOVIE":
       return {
         ...store,
         moviesById: {
@@ -276,7 +272,8 @@ export default function storeReducer(store, action = {}) {
       };
 
     case "ADD_MOVIE_DESEADA":
-      const currentRatingMovie = store.user?.deseado_peliculas?.[action.payload.id];
+      const currentRatingMovie =
+        store.user?.deseado_peliculas?.[action.payload.id];
       if (currentRatingMovie === action.payload.rating) return store;
       return {
         ...store,
@@ -305,6 +302,5 @@ export default function storeReducer(store, action = {}) {
 
     default:
       return store;
->>>>>>> 2886c89 (ocio harmonized with comida)
   }
 }
