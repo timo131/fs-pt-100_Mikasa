@@ -1,13 +1,14 @@
 
-Revision ID: 05d32328b2c6
+Revision ID: 6dfab21a0535
 Revises: 
-Create Date: 2025-06-20 12:21:19.126186
+Create Date: 2025-06-21 17:59:21.375836
 
 from alembic import op
 import sqlalchemy as sa
 
-revision = '05d32328b2c6'
 
+# revision identifiers, used by Alembic.
+revision = '6dfab21a0535'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -99,10 +100,10 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('hogar_id', sa.Integer(), nullable=False),
-    sa.Column('pagos_id', sa.Integer(), nullable=False),
+    sa.Column('pago_id', sa.Integer(), nullable=False),
     sa.Column('estado', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['pagos_id'], ['pagos.id'], ),
+    sa.ForeignKeyConstraint(['pago_id'], ['pagos.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )

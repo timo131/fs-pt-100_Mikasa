@@ -77,3 +77,16 @@
   overflow-y: auto;
   padding-right: 5px;
 }
+
+
+.tarjeta-debo, .tarjeta-deben {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.scroll-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+}

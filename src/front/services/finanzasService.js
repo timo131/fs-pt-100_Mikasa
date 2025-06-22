@@ -66,13 +66,19 @@ finanzasService.postGasto = async (token, gasto) => {
   return await res.json();
 };
 
-finanzasService.marcarComoPagado = async (token, pagoId) => {
-  const res = await fetch(`${backendUrl}/api/pagos/${pagoId}/pagar`, {
-    method: "POST",
+finanzasService.marcarComoPagado = async (token, userPagoId, estado) => {
+  const res = await fetch(`${backendUrl}/api/user_pagos/${userPagoId}`, {
+    method: "PUT",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+    body: JSON.stringify({ estado }),
   });
+
+  if (!res.ok) {
+    throw new Error("Error al marcar como pagado");
+  }
   return await res.json();
 };
 

@@ -48,7 +48,7 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
       frecuencia: form.frecuencia,
       fecha_limite: form.fechaLimite || null,
       };
-
+      console.log("Gasto enviado:", gasto)
       await finanzasService.postGasto(token, gasto);
       onGastoCreado();
       onClose();

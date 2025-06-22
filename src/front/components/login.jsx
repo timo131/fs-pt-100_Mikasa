@@ -21,7 +21,6 @@ export const Login = () => {
     e.preventDefault();
     try {
       const { token, user } = await userServices.login(formData);
-      console.log("Respuesta login:", { token, user })
       const hogar = await userServices.getHogar(user.hogar_id);
       dispatch({
         type: "login_success",
