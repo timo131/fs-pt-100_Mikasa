@@ -36,7 +36,7 @@ export const HogarDetails = () => {
 
   return (
     <div className="register-container">
-      <h2 className="ivory">{store.hogar.hogar_name}
+      <h2 className="ivory mb-3">{store.hogar.hogar_name}
         {store.user.admin === true && (
           <>
             <span onClick={openEditHogarModal} className="fa-solid fa-pencil user-icon ms-2"></span>

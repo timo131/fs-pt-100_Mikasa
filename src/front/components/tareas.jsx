@@ -8,7 +8,6 @@ export const Tareas = () => {
 	const navigate = useNavigate();
 
 	const [filtro, setFiltro] = useState("todas");
-
 	const handleRedirect = () => {
 		navigate("/card");
 	};
@@ -37,7 +36,7 @@ export const Tareas = () => {
 			</div>
 
 			<div className="tareas text-white px-3">
-				
+
 				<div className="d-flex justify-content-end mb-3">
 					<div>
 						<label className="me-2"><strong>Filtrar:</strong></label>
@@ -72,7 +71,12 @@ export const Tareas = () => {
 									>
 										<h5 className={t.hecha ? "text-decoration-line-through" : ""}>{t.nombre}</h5>
 										<div className="d-flex flex-wrap gap-2 mb-2">
-											<p className="mb-0"><strong>Asignada a:</strong> {t.asignadaA}</p>
+											<p className="mb-0">
+												<strong>Asignada a:</strong>{" "}
+												{t.asignadaA === "equipo"
+													? t.miembros?.join(", ") || "Sin miembros"
+													: "Usuario"}
+											</p>
 											<p className="mb-0"><strong>Frecuencia:</strong> {t.frecuencia}</p>
 											<p className="mb-0"><strong>Fecha:</strong> {t.fecha}</p>
 										</div>

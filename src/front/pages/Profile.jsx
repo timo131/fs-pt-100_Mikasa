@@ -12,10 +12,16 @@ export const Profile = () => {
         navigate("/");
     }
 
-    return(
+    return (
         <>
-        <HogarDetails/>
-        <UserDetails/>
+        <div className='row'>
+            <div className='col gap-4'>
+                <HogarDetails/>
+            </div>
+            <div className='col gap-4'>
+                <UserDetails/>
+            </div>
+        </div>
         <div className='d-flex justify-content-center align-items-center mb-5'>
             <button onClick={handleLogout} className="user-button-danger w-25">Cerrar sesión</button>
         </div>

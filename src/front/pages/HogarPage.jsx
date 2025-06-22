@@ -20,30 +20,30 @@ export const HogarPage = () => {
             <div className="container my-4">
                 <div className="row mb-4">
                     <div className="col-12">
-                        <h2 className="text-center">{store.hogar.hogar_name}</h2>
+                        <h2 className="text-center m-0 fw-bold charcoal">{store.hogar.hogar_name}</h2>
                     </div>
                 </div>
 
                 <div className="row g-3 mb-3">
                     <div className="col-12 col-lg-6">
-                        <div className="border bg-coral rounded p-3">
+                        <div className="hogar-container bg-coral rounded p-3">
                             <TareasHogar />
                         </div>
                     </div>
                     <div className="col-12 col-lg-6">
-                        <div className="border bg-ochre rounded p-3">
+                        <div className="hogar-container bg-ochre rounded p-3">
                             <FinanzasHogar />
                         </div>
                     </div>
                 </div>
                 <div className="row g-3">
                     <div className="col-12 col-lg-6">
-                        <div className="border bg-aqua rounded p-3">
+                        <div className="hogar-container bg-aqua rounded p-3">
                             <OcioHogar />
                         </div>
                     </div>
                     <div className="col-12 col-lg-6">
-                        <div className="border bg-sage rounded p-3">
+                        <div className="hogar-container bg-sage rounded p-3">
                             <ComidaHogar />
                         </div>
                     </div>
