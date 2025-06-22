@@ -1,48 +1,57 @@
 import React from "react";
 
-export const Rating = ({ id, onRate }) => {
+export const Rating = ({ id, onRate, show, onClose }) => {
+  if (!show) return null;
   return (
+    <>
     <div
-      className="modal fade"
-      id={`ratingModal-${id}`}
+      className="modal-backdrop fade show"
+      style={{ zIndex: 1040 }}
+    ></div>
+    <div
+      className="modal fade show d-block"
       tabIndex="-1"
-      aria-labelledby={`ratingModalLabel-${id}`}
-      aria-hidden="true"
+      role="dialog"
+      onClick={onClose}
     >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id={`ratingModalLabel-${id}`}>
-              ¿Qué te parece esta receta?
-            </h5>
+      <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-content bg-ivory border-charcoal">
+          <div className="modal-header border-0">
+            <h3 className="modal-title w-100 text-center fw-bold" id={`ratingModalLabel-${id}`}>
+              ¿Qué te parece?
+            </h3>
             <button
               type="button"
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={onClose}
             ></button>
           </div>
           <div className="modal-body text-center">
             {[-2, -1, 0, 1, 2].map((value) => (
-              <button
+              <span
                 key={value}
-                type="button"
-                className="btn btn-outline-dark m-1"
+                className="emoji-rating"
                 onClick={() => onRate(Number(value))}
                 data-bs-dismiss="modal"
+                role="button"
+                tabIndex="0"
               >
                 {{
-                  [-2]: "¡Asco!",
-                  [-1]: "No me apetece",
-                  [0]: "Ni fu ni fa",
-                  [1]: "Me mola",
-                  [2]: "Me apetece mogollón",
+                  [-2]: "😵",
+                  [-1]: "😒",
+                  [0]: "😐",
+                  [1]: "😊",
+                  [2]: "🤩",
                 }[value]}
-              </button>
+              </span>
             ))}
+
           </div>
         </div>
       </div>
     </div>
+    </>
   );
 };

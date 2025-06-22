@@ -5,6 +5,8 @@ export const initialStore = () => {
   if (user) {
     user.favorito_recetas = [];
     user.deseado_recetas = {};
+    user.favorito_peliculas = [];
+    user.deseado_peliculas = {};
     localStorage.setItem("user", JSON.stringify(user));
   }
 
@@ -24,6 +26,8 @@ export const initialStore = () => {
     token: localStorage.getItem("token") || null,
     recetasById: {},
     recetasSearch: [],
+    moviesById: {},
+    moviesSearch: [],
     tasks,
     gastos,
   };
@@ -92,6 +96,13 @@ export default function storeReducer(store, action = {}) {
         tasks: newTasks,
       };
     }
+
+    
+    case "logout":
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("hogar");
+      return initialStore();
 
     case "add_task": {
       const newTasks = [...(store.tasks || []), action.payload];
@@ -196,12 +207,6 @@ export default function storeReducer(store, action = {}) {
         user: updatedUser,
       };
 
-    case "logout":
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("hogar");
-      return initialStore();
-
     case "ADD_RECETA_DESEADA":
       const currentRating = store.user?.deseado_recetas?.[action.payload.id];
       if (currentRating === action.payload.rating) return store;
@@ -229,6 +234,77 @@ export default function storeReducer(store, action = {}) {
           ),
         },
       };
+<<<<<<< HEAD
+=======
+
+      case "SET_MOVIE_SEARCH_RESULTS":
+  return {
+    ...store,
+    moviesSearch: action.payload.map((m) => m.id),
+    moviesById: {
+      ...store.moviesById,
+      ...action.payload.reduce((acc, m) => {
+        acc[m.id] = m;
+        return acc;
+      }, {}),
+    },
+  };
+
+
+        case "ADD_MOVIE":
+      return {
+        ...store,
+        moviesById: {
+          ...store.moviesById,
+          [action.payload.id]: {
+            ...(store.moviesById?.[action.payload.id] || {}),
+            ...action.payload,
+          },
+        },
+      };
+
+    case "UPDATE_MOVIE_FAVORITA":
+      const updatedUserMovie = {
+        ...store.user,
+        favorito_peliculas: action.payload,
+      };
+      console.log("Reducer ran: UPDATE_MOVIE_FAVORITA", action.payload);
+      localStorage.setItem("user", JSON.stringify(updatedUserMovie));
+      return {
+        ...store,
+        user: updatedUserMovie,
+      };
+
+    case "ADD_MOVIE_DESEADA":
+      const currentRatingMovie = store.user?.deseado_peliculas?.[action.payload.id];
+      if (currentRatingMovie === action.payload.rating) return store;
+      return {
+        ...store,
+        user: {
+          ...store.user,
+          deseado_peliculas: {
+            ...(store.user?.deseado_peliculas || {}),
+            [action.payload.id]: action.payload.rating,
+          },
+        },
+        hogar: {
+          ...store.hogar,
+          users: store.hogar.users.map((u) =>
+            u.id === store.user.id
+              ? {
+                  ...u,
+                  deseado_peliculas: {
+                    ...(u.deseado_peliculas || {}),
+                    [action.payload.id]: action.payload.rating,
+                  },
+                }
+              : u
+          ),
+        },
+      };
+
+    default:
+      return store;
+>>>>>>> 2886c89 (ocio harmonized with comida)
   }
-}
 }

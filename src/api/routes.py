@@ -79,6 +79,10 @@ def update_user(user_id):
             user.favorito_recetas = data["favorito_recetas"]
         if "deseado_recetas" in data:
             user.deseado_recetas = data["deseado_recetas"]
+        if "favorito_peliculas" in data:
+            user.favorito_peliculas = data["favorito_peliculas"]
+        if "deseado_peliculas" in data:
+            user.deseado_peliculas = data["deseado_peliculas"]
         db.session.commit()
         return jsonify(user.serialize()), 200
     except Exception as e:

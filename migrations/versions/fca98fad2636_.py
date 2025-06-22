@@ -1,14 +1,12 @@
-
-Revision ID: 4a40be8d7e77
+Revision ID: fca98fad2636
 Revises: 
-Create Date: 2025-06-20 10:02:41.766787
+Create Date: 2025-06-21 18:35:32.683662
 
 from alembic import op
 import sqlalchemy as sa
 
-
 # revision identifiers, used by Alembic.
-revision = '4a40be8d7e77'
+revision = 'fca98fad2636'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,6 +29,7 @@ def upgrade():
     sa.Column('favorito_recetas', sa.JSON(), nullable=True),
     sa.Column('deseado_recetas', sa.JSON(), nullable=True),
     sa.Column('favorito_peliculas', sa.JSON(), nullable=True),
+    sa.Column('deseado_peliculas', sa.JSON(), nullable=True),
     sa.Column('hogar_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id'),
@@ -100,10 +99,10 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('hogar_id', sa.Integer(), nullable=False),
-    sa.Column('pagos_id', sa.Integer(), nullable=False),
+    sa.Column('pago_id', sa.Integer(), nullable=False),
     sa.Column('estado', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ),
-    sa.ForeignKeyConstraint(['pagos_id'], ['pagos.id'], ),
+    sa.ForeignKeyConstraint(['pago_id'], ['pagos.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )

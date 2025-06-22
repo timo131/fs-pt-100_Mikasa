@@ -1,14 +1,13 @@
 
-Revision ID: 6dfab21a0535
+Revision ID: fca98fad2636
 Revises: 
-Create Date: 2025-06-21 17:59:21.375836
+Create Date: 2025-06-21 18:35:32.683662
 
 from alembic import op
 import sqlalchemy as sa
 
-
 # revision identifiers, used by Alembic.
-revision = '6dfab21a0535'
+revision = 'fca98fad2636'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,6 +30,7 @@ def upgrade():
     sa.Column('favorito_recetas', sa.JSON(), nullable=True),
     sa.Column('deseado_recetas', sa.JSON(), nullable=True),
     sa.Column('favorito_peliculas', sa.JSON(), nullable=True),
+    sa.Column('deseado_peliculas', sa.JSON(), nullable=True),
     sa.Column('hogar_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['hogar_id'], ['hogar.id'], ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id'),
