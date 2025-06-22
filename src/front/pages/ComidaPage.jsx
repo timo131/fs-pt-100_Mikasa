@@ -20,19 +20,19 @@ export const ComidaPage = () => {
 
                 <div className="row g-3 mb-3">
                     <div className="col-12">
-                        <div className="border-charcoal bg-sage rounded p-3 comida-container">
+                        <div className="border-charcoal bg-sage rounded-3 p-3 comida-container">
                             <RecetasSearch />
                         </div>
                     </div>
                     <div className="col-12">
-                        <div className="border-charcoal bg-sage rounded p-3 comida-container">
+                        <div className="border-charcoal bg-sage rounded-3 p-3 comida-container">
                             <RecetasPendientes />
                         </div>
                     </div>
                 </div>
                 <div className="row g-3">
                     <div className="col-12">
-                        <div className="border-charcoal bg-sage rounded p-3 comida-container">
+                        <div className="border-charcoal bg-sage rounded-3 p-3 comida-container">
                             <RecetasFavoritas />
                         </div>
                     </div>

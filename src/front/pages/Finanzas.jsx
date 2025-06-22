@@ -239,7 +239,7 @@ const FinanzasPage = () => {
 
         <div className="balance-final mt-4 text-center">
           <h5>Balance final del mes</h5>
-          <div className={`badge fs-4 px-4 py-2 ${balance >= 0 ? 'bg-success' : 'bg-danger'}`}>
+          <div className={`badge charcoal fs-4 px-4 py-2 ${balance >= 0 ? 'bg-sage' : 'bg-coral'}`}>
             {balance >= 0 ? '+' : ''}${balance.toFixed(2)}
           </div>
         </div>
@@ -262,12 +262,14 @@ const FinanzasPage = () => {
               </div>
 
               <div className="col-md-6 lista-gastos-wrapper p-3">
+                <div className="d-flex justify-content-center">
                 <button
-                  className="btn btn-dark w-100 my-2"
+                  className="add-gasto-button w-75 my-2"
                   onClick={() => setShowModal(true)}
                 >
                   Otro Gasto más?
                 </button>
+                </div>
                 <div className="lista-gastos-scroll">
                   <ListaPagos
                     pagos={pagosOrdenados}

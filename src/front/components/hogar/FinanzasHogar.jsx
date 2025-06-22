@@ -57,7 +57,7 @@ export const FinanzasHogar = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container">
       <h3 className="text-center ivory text-outline">Gastos del Hogar</h3>
 
       {gastosInvolucrados.length === 0 && (

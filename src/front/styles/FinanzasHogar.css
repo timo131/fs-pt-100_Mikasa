@@ -17,7 +17,7 @@
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 0.75rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px #2c2c2c;
 }
 
 .finanzas-hogar-card .card-title {

@@ -9,6 +9,7 @@ export const TareasHogar = () => {
   );
 
   return (
+    
     <div className="tareas text-center text-white">
       <h3 className="text-center ivory text-outline">Tareas del Hogar</h3>
 
@@ -20,7 +21,7 @@ export const TareasHogar = () => {
             <div
               key={i}
               className={`card p-3 mb-3 text-start ${
-                task.hecha ? "card-hecha text-white" : "bg-light text-black"
+                task.hecha ? "card-hecha text-ivory" : "bg-ivory text-charcoal"
               }`}
             >
               <h5 className={task.hecha ? "text-decoration-line-through" : ""}>
@@ -35,7 +36,12 @@ export const TareasHogar = () => {
                 className={`btn btn-sm mt-2 ${
                   task.hecha ? "btn-hecha" : "btn-outline-success"
                 }`}
-                onClick={() => dispatch({ type: "toggle_task_done", payload: i })}
+                onClick={() => {
+                  const globalIndex = store.tasks.findIndex(t => t === task);
+                  if (globalIndex !== -1) {
+                    dispatch({ type: "toggle_task_done", payload: globalIndex });
+                  }
+                }}
               >
                 {task.hecha ? <i className="boton-hecho fa-solid fa-user-check"></i> : "Marcar como hecha"}
               </button>

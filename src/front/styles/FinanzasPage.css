@@ -12,7 +12,7 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #000;
+  color: #2c2c2c;
 }
 
 .tarjeta-gastos {
@@ -77,13 +77,34 @@
 
 
 .tarjeta-debo, .tarjeta-deben {
-  background-color: #ffffff;
+  background-color: #FFF8E7;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 6px #2c2c2c;
 }
 
 .scroll-list {
   max-height: 300px;
   overflow-y: auto;
   padding-right: 5px;
+}
+
+.add-gasto-button {
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFF8E7;
+  background-color: #2c2c2c;
+;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.add-gasto-button:hover {
+  background-color: #A8C97F;
+}
+
+.add-gasto-button:active {
+  background-color: #DA6868;
 }

@@ -1,20 +1,42 @@
 .tareas {
-    background-color: rgb(218, 104, 104);
+    background-color: #DA6868;
     min-height: 50vh;
-    padding: 20px;
 }
 .titulo {
-	background-color: #581010;
-	color: white;
+	background-color: #DA6868;
+	color: #FFF8E7;
 	width: 100%;
 	padding: 20px 0;
 	text-align: center;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 	letter-spacing: 1px;
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
 }
 .card.hecha {
-	background-color: #d1e7dd !important;
-	color: #14532d;
-	border: 1px solid #14532d;
+	background-color: #FFF8E7 !important;
+	color: #A8C97F;
+	border: 1px solid #A8C97F;
 }
 
+.add-task-button {
+  width: 220px;
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c2c2c;
+  background-color: #E2B659;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.add-task-button:hover {
+  background-color: #6FB8A8;
+  color: #2c2c2c;
+}
+
+.add-task-button:active {
+  background-color: #A8C97F;
+  color: #2c2c2c;
+}
