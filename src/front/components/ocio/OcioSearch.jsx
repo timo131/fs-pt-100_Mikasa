@@ -84,7 +84,7 @@ export const OcioSearch = () => {
                         </button>
                         <div className="movie-carousel" ref={carouselRef}>
                             {store.moviesSearch.map(id => (
-                                <div className="row">
+                                <div key={id} className="row">
                                     <div key={id} className="col-12 col-sm-6 col-md-4 col-lg-3">
                                         <MovieCard id={id} />
                                     </div>
