@@ -8,10 +8,7 @@ export const Tareas = () => {
 	const navigate = useNavigate();
 
 	const [filtro, setFiltro] = useState("todas");
-<<<<<<< HEAD
-=======
-gi
->>>>>>> 933a44b (tareaHogar)
+
 	const handleRedirect = () => {
 		navigate("/card");
 	};
