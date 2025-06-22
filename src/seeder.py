@@ -58,11 +58,11 @@ def seed():
 
         # User_pagos (cada usuario paga en su hogar)
         user_pagos = [
-            User_pagos(user_id=users[0].id, hogar_id=hogares[0].id, pagos_id=pagos[0].id, estado=True),
-            User_pagos(user_id=users[1].id, hogar_id=hogares[1].id, pagos_id=pagos[1].id, estado=False),
-            User_pagos(user_id=users[2].id, hogar_id=hogares[2].id, pagos_id=pagos[2].id, estado=True),
-            User_pagos(user_id=users[3].id, hogar_id=hogares[3].id, pagos_id=pagos[3].id, estado=False),
-            User_pagos(user_id=users[4].id, hogar_id=hogares[4].id, pagos_id=pagos[4].id, estado=True),
+            User_pagos(user_id=users[0].id, hogar_id=hogares[0].id, pago_id=pagos[0].id, estado=True),
+            User_pagos(user_id=users[1].id, hogar_id=hogares[1].id, pago_id=pagos[1].id, estado=False),
+            User_pagos(user_id=users[2].id, hogar_id=hogares[2].id, pago_id=pagos[2].id, estado=True),
+            User_pagos(user_id=users[3].id, hogar_id=hogares[3].id, pago_id=pagos[3].id, estado=False),
+            User_pagos(user_id=users[4].id, hogar_id=hogares[4].id, pago_id=pagos[4].id, estado=True),
         ]
         db.session.add_all(user_pagos)
         db.session.commit()
