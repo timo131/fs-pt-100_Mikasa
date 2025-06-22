@@ -57,8 +57,8 @@ export const FinanzasHogar = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h3 className="text-center mb-4">Gastos del Hogar</h3>
+    <div className="container">
+      <h3 className="text-center ivory text-outline">Gastos del Hogar</h3>
 
       {gastosInvolucrados.length === 0 && (
         <p className="text-center ivory text-outline text-muted">No tienes gastos asignados.</p>

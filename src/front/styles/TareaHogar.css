@@ -1,12 +1,12 @@
 .card-hecha {
-  background-color: #4579ae !important;
-  color: white !important;
-  border-color: #001f3f !important;
+  background-color: #2c2c2c !important;
+  color: #FFF8E7 !important;
+  border-color: #2c2c2c !important;
 }
 
 .btn-hecha {
-  background-color: white !important;
-  color: #4579ae !important;
-  border: 2px solid white !important;
+  background-color: #FFF8E7 !important;
+  color: #2c2c2c !important;
+  border: 2px solid #FFF8E7 !important;
   font-weight: bold;
 }

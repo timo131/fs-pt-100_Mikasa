@@ -181,12 +181,12 @@ const FinanzasPage = () => {
     (a, b) => new Date(a.fecha_limite || a.fecha) - new Date(b.fecha_limite || b.fecha)
   );
   return (
-    <div className="container-fluid finanzas-page">
-      <div className="tarjeta-cuentas p-4 my-3">
+    <div className="container-fluid finanzas-page w-75">
+      <div className="tarjeta-cuentas p-4 my-3 border-charcoal">
         <div className="d-flex justify-content-center align-items-center mb-4">
-          <button className="btn-navegacion me-3" onClick={() => cambiarMes(-1)}>&lt;</button>
-          <h2 className="titulo-mes mb-0">{meses[mesActual]} {añoActual}</h2>
-          <button className="btn-navegacion ms-3" onClick={() => cambiarMes(1)}>&gt;</button>
+          <button className="btn-navegacion me-3" onClick={() => cambiarMes(-1)}><span className="fa-solid fa-circle-chevron-left charcoal"></span></button>
+          <h3 className="text-center ivory text-outline m-0">{meses[mesActual]} {añoActual}</h3>
+          <button className="btn-navegacion ms-3" onClick={() => cambiarMes(1)}><span className="fa-solid fa-circle-chevron-right charcoal"></span></button>
         </div>
 
         <div className="row">
@@ -226,7 +226,7 @@ const FinanzasPage = () => {
                         <strong>{item.nombre}</strong><br />
                         <small className="text-muted">{item.descripcion}</small>
                       </div>
-                      <div className="badge bg-success fs-6">
+                      <div className="badge bg-sage text-ivory fs-6">
                         +${item.monto.toFixed(2)}
                       </div>
                     </div>
@@ -239,7 +239,7 @@ const FinanzasPage = () => {
 
         <div className="balance-final mt-4 text-center">
           <h5>Balance final del mes</h5>
-          <div className={`badge fs-4 px-4 py-2 ${balance >= 0 ? 'bg-success' : 'bg-danger'}`}>
+          <div className={`badge charcoal fs-4 px-4 py-2 ${balance >= 0 ? 'bg-sage' : 'bg-coral'}`}>
             {balance >= 0 ? '+' : ''}${balance.toFixed(2)}
           </div>
         </div>
@@ -247,32 +247,37 @@ const FinanzasPage = () => {
 
 
       {mostrarGraficoYPagos && (
-        <div className="seccion-superior mb-4">
-          <div className="tarjeta-gastos row p-3">
-            <h4 className="text-center mb-3">Mis Gastos</h4>
-            <div className="col-md-6 grafico-categorias d-flex justify-content-center align-items-center p-3">
-              <div className="grafico-wrapper">
-                <h4 className="text-center mb-3">En qué gasto tanto</h4>
-                <div className="grafico-container">
-                  <canvas id="graficoGastos"></canvas>
+        <div className="seccion-superior mb-4 border-charcoal rounded-4">
+          <div className="tarjeta-gastos p-4 w-100">
+            <h3 className="text-center ivory text-outline">Mis Gastos</h3>
+            <div className='row'>
+              <div className="col-md-6 grafico-categorias d-flex justify-content-center align-items-center p-3">
+                <div className="grafico-wrapper">
+                  <h4 className="text-center mb-3">En qué gasto tanto</h4>
+                  <div className="grafico-container">
+                    <canvas id="graficoGastos"></canvas>
+                  </div>
+
                 </div>
               </div>
-            </div>
 
-            <div className="col-md-6 lista-gastos-wrapper p-3">
-              <button
-                className="btn btn-dark w-100 my-2"
-                onClick={() => setShowModal(true)}
-              >
-                Otro Gasto más?
-              </button>
-              <div className="lista-gastos-scroll">
-                <ListaPagos
-                  pagos={pagosOrdenados}
-                  usuarioId={usuarioId}
-                  onMarcarPagado={onMarcarPagado}
-                  onEliminar={eliminarGasto}
-                />
+              <div className="col-md-6 lista-gastos-wrapper p-3">
+                <div className="d-flex justify-content-center">
+                <button
+                  className="add-gasto-button w-75 my-2"
+                  onClick={() => setShowModal(true)}
+                >
+                  Otro Gasto más?
+                </button>
+                </div>
+                <div className="lista-gastos-scroll">
+                  <ListaPagos
+                    pagos={pagosOrdenados}
+                    usuarioId={usuarioId}
+                    onMarcarPagado={onMarcarPagado}
+                    onEliminar={eliminarGasto}
+                  />
+                </div>
               </div>
             </div>
           </div>

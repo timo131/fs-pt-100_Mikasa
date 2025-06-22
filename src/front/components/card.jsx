@@ -1,15 +1,12 @@
 import useGlobalReducer from "../hooks/useGlobalReducer";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../styles/Tareas.css";
 
-export const Card = () => {
+export const Card = ({ task, index, onClose }) => {
+	const [nombre, setNombre] = useState(task?.nombre || "");
 	const { dispatch } = useGlobalReducer();
 	const navigate = useNavigate();
-	const location = useLocation();
-
-	const taskToEdit = location.state?.task;
-	const taskIndex = location.state?.index;
 
 	const [formData, setFormData] = useState({
 		nombre: "",
@@ -24,10 +21,10 @@ export const Card = () => {
 	const miembrosList = ["User1", "User2", "User3", "User4"];
 
 	useEffect(() => {
-		if (taskToEdit) {
-			setFormData(taskToEdit);
-		}
-	}, [taskToEdit]);
+	if (task) {
+		setFormData(task);
+	}
+	}, [task]);
 
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
@@ -57,22 +54,20 @@ export const Card = () => {
 			hecha: formData.hecha || false,
 		};
 
-		if (taskToEdit && typeof taskIndex === "number") {
+		if (task && typeof index === "number") {
 			dispatch({
 				type: "edit_task",
-				payload: { index: taskIndex, updatedTask: tarea },
+				payload: { index, updatedTask: tarea },
 			});
 		} else {
 			dispatch({ type: "add_task", payload: tarea });
 		}
 
-		navigate("/tareas");
+		onClose();
 	};
 
 	return (
-		<div className="tareas text-center text-white">
-			<h1>{taskToEdit ? "Editar tarea" : "Nueva tarea"}</h1>
-
+		<div className="tareas text-center text-ivory">
 			<form
 				onSubmit={handleSubmit}
 				className="bg-light p-4 rounded text-dark mx-auto"
@@ -203,7 +198,7 @@ export const Card = () => {
 
 				<div className="text-end">
 					<button type="submit" className="btn btn-primary me-2">Guardar</button>
-					<button type="reset" className="btn btn-secondary" onClick={() => navigate("/tareas")}>Cancelar</button>
+					<button type="reset" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
 				</div>
 			</form>
 		</div>
