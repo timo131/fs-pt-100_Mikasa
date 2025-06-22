@@ -10,7 +10,7 @@ export const TareasHogar = () => {
 
   return (
     <div className="tareas text-center text-white">
-      <h3 className="mb-4">Tareas del Hogar</h3>
+      <h3 className="text-center ivory text-outline">Tareas del Hogar</h3>
 
       {tareasCompartidas?.length === 0 ? (
         <p>No hay tareas compartidas.</p>

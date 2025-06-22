@@ -1,8 +1,6 @@
 .finanzas-page {
-  background-color: #f8f1e4;
   min-height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
-  color: #000;
+  color: #2c2c2c;
 }
 
 .titulo-mes {
@@ -18,9 +16,8 @@
 }
 
 .tarjeta-gastos {
-  background-color: #dcae58;
+  background-color: #E2B659;
   border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .grafico-wrapper {
@@ -57,14 +54,14 @@
 }
 
 .tarjeta-cuentas {
-  background-color: #dcae58;
+  background-color: #E2B659;
   border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border: 1px solid #2c2c2c;
 }
 
 
 .tarjeta-cuentas .badge {
-  background-color: #2069d4;
+  background-color: #6FB8A8;
   border-radius: 30px;
 }
 
