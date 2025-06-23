@@ -64,7 +64,7 @@ export const FinanzasHogar = () => {
         <p className="text-center charcoal">No tienes gastos asignados.</p>
       )}
 
-      <div className="finanzas-hogar-scroll-container">
+      <div className="container w-100 p-0 d-flex flex-wrap justify-content-center">
         {gastosInvolucrados.map((gasto) => {
           let usuarioActual = gasto.usuarios?.find(
             (u) => Number(u.user_id) === Number(usuarioId)
@@ -92,7 +92,10 @@ export const FinanzasHogar = () => {
               className={`card finanzas-hogar-card m-1 ${pagadoClass} ${urgente}`}
             >
               <div className="card-body">
-                <h5 className="fw-bold text-center">{gasto.descripcion}</h5>
+                <h5
+                  className={`fw-bold text-center ${pagado ? "text-decoration-line-through" : ""
+                    }`}
+                >{gasto.descripcion}</h5>
                 <p className="mb-1">
                   <strong>Creador:</strong> {gasto.user_name}
                 </p>
