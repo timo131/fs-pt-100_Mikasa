@@ -3,6 +3,7 @@ import finanzasService from '../services/finanzasService';
 import '../styles/FinanzasPage.css';
 import GastoModal from '../components/GastoModal';
 import ListaPagos from '../components/ListaPagos';
+import useGlobalReducer from '../hooks/useGlobalReducer'
 import { Chart, registerables } from 'chart.js'
 
 Chart.register(...registerables);
@@ -11,31 +12,41 @@ const meses = [
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ];
 const FinanzasPage = () => {
+  const { store, dispatch } = useGlobalReducer();
+
+
   const [token] = useState(localStorage.getItem('token'));
-  const [pagos, setPagos] = useState([]);
+  const pagos = store?.gastos || [];
   const [usuarios, setUsuarios] = useState([]);
   const [usuarioId, setUsuarioId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [mesActual, setMesActual] = useState(new Date().getMonth());
-  const [anoActual, setAnoActual] = useState(new Date().getFullYear());
+  const [añoActual, setAñoActual] = useState(new Date().getFullYear());
   const chartRef = useRef(null);
 
   useEffect(() => {
-    cargarDatos();
-  }, []);
-  useEffect(() => {
     renderGrafico(pagos);
-  }, [mesActual, anoActual, pagos])
+  }, [mesActual, añoActual, pagos])
+
+  useEffect(() => {
+    if (token && (!pagos.length || !usuarios.length)) {
+      cargarDatos();
+    }
+  }, [token]);
+
   const cargarDatos = async () => {
     try {
-      const pagosData = await finanzasService.getPagos(token);
-      const usuariosData = await finanzasService.getUsuarios(token);
-      const tokenPayload = JSON.parse(window.atob(token.split('.')[1]));
-      const userId = tokenPayload.user_id;
+      if (!token) return;
 
-      setPagos(pagosData);
-      setUsuarios(usuariosData);
+      const tokenPayload = JSON.parse(window.atob(token.split('.')[1]));
+      const userId = tokenPayload.sub;
       setUsuarioId(userId);
+
+      const pagosData = await finanzasService.getPagos(token);
+      dispatch({ type: "set_gasto", payload: pagosData });
+
+      const usuariosData = await finanzasService.getUsuarios(token);
+      setUsuarios(usuariosData);
     } catch (err) {
       console.error(err);
     }
@@ -44,15 +55,14 @@ const FinanzasPage = () => {
   const fetchPagos = async () => {
     try {
       const data = await finanzasService.getPagos(token);
-      setPagos(data);
+      dispatch({ type: "set_gasto", payload: data });
     } catch (error) {
       console.error("Error al obtener los pagos:", error);
     }
   };
-
-  const onMarcarPagado = async (pagoId) => {
+  const onMarcarPagado = async (userPagoId, nuevoEstado) => {
     try {
-      await finanzasService.marcarComoPagado(pagoId, token);
+      await finanzasService.marcarComoPagado(token, userPagoId, nuevoEstado);
       fetchPagos();
     } catch (error) {
       console.error("Error al marcar como pagado:", error);
@@ -65,23 +75,23 @@ const FinanzasPage = () => {
     } catch (err) {
       console.error("Error al eliminar el gasto:", err);
     }
-  }
+  };
 
   const renderGrafico = (pagos) => {
     const categorias = {};
-    const filtrados = pagos.filter(p => new Date(p.fecha).getMonth() === mesActual && new Date(p.fecha).getFullYear() === anoActual);
+    const filtrados = pagos.filter(p => new Date(p.fecha).getMonth() === mesActual && new Date(p.fecha).getFullYear() === añoActual);
     filtrados.forEach((p) => {
       categorias[p.categoria] = (categorias[p.categoria] || 0) + p.monto;
     });
 
-    const ctx = document.getElementById('graficoGastos');
-    if (!ctx) return;
+    const creacionDegrafico = document.getElementById('graficoGastos');
+    if (!creacionDegrafico) return;
 
     if (chartRef.current) {
       chartRef.current.destroy();
     }
 
-    chartRef.current = new Chart(ctx, {
+    chartRef.current = new Chart(creacionDegrafico, {
       type: 'pie',
       data: {
         labels: Object.keys(categorias),
@@ -118,25 +128,36 @@ const FinanzasPage = () => {
 
   const cambiarMes = (incremento) => {
     let nuevoMes = mesActual + incremento;
-    let nuevoAno = anoActual;
+    let nuevoAño = añoActual;
 
     if (nuevoMes < 0) {
       nuevoMes = 11;
-      nuevoAno -= 1;
+      nuevoAño -= 1;
     } else if (nuevoMes > 11) {
       nuevoMes = 0;
-      nuevoAno += 1;
+      nuevoAño += 1;
     }
 
     setMesActual(nuevoMes);
-    setAnoActual(nuevoAno);
+    setAñoActual(nuevoAño);
   };
 
-  const pagosDelMes = pagos.filter(
-    (p) => new Date(p.fecha).getMonth() === mesActual && new Date(p.fecha).getFullYear() === anoActual
-  );
+  const pagosDelMes = pagos.filter((pago) => {
+    const fechaPago = new Date(pago.fecha);
+    const esMismoMes = fechaPago.getMonth() === mesActual && fechaPago.getFullYear() === añoActual;
 
-  const mostrarGraficoYPagos = mesActual === new Date().getMonth() && anoActual === new Date().getFullYear();
+    if (pago.frecuencia === 'mensual') {
+      return (
+        fechaPago.getFullYear() < añoActual ||
+        (fechaPago.getFullYear() === añoActual && fechaPago.getMonth() <= mesActual)
+      );
+    } else {
+      return esMismoMes;
+    }
+
+  })
+
+  const mostrarGraficoYPagos = mesActual === new Date().getMonth() && añoActual === new Date().getFullYear();
 
   const loQueDebo = [];
   const loQueMeDeben = [];
@@ -145,89 +166,118 @@ const FinanzasPage = () => {
   pagosDelMes.forEach(pago => {
     pago.usuarios?.forEach(u => {
       const montoIndividual = pago.monto / pago.usuarios.length;
-      if (u.id === usuarioId) {
-        if (!u.pagado && pago.creador_id !== usuarioId) {
-          loQueDebo.push({ nombre: pago.creador, monto: montoIndividual });
-          balance -= montoIndividual;
-        }
-      } else if (pago.creador_id === usuarioId && !u.pagado) {
-        loQueMeDeben.push({ nombre: u.nombre, monto: montoIndividual });
+      const usuarioIdNum = Number(usuarioId)
+      if (pago.user_id === usuarioIdNum && u.user_id !== usuarioIdNum && !u.pagado) {
+        loQueMeDeben.push({ nombre: u.user_name, monto: montoIndividual, descripcion: pago.descripcion });
         balance += montoIndividual;
+      }
+      if (u.user_id === usuarioIdNum && pago.user_id !== usuarioIdNum && !u.pagado) {
+        loQueDebo.push({ nombre: pago.user_name, monto: montoIndividual, descripcion: pago.descripcion });
+        balance -= montoIndividual;
       }
     });
   });
+  const pagosOrdenados = [...pagosDelMes].sort(
+    (a, b) => new Date(a.fecha_limite || a.fecha) - new Date(b.fecha_limite || b.fecha)
+  );
   return (
-    <div className="container-fluid finanzas-page">
-      <div className="row seccion-cuentas my-3">
-        <div className="col-12 tarjeta-cuentas p-4">
-          <div className="col-12 d-flex justify-content-center align-items-center titulo-mes">
-            <button className="btn-navegacion" onClick={() => cambiarMes(-1)}>&lt;</button>
-            <h2 className="mx-3">{meses[mesActual]}</h2>
-            <button className="btn-navegacion" onClick={() => cambiarMes(1)}>&gt;</button>
+    <div className="container-fluid finanzas-page w-75">
+      <div className="tarjeta-cuentas p-4 my-3 border-charcoal">
+        <div className="d-flex justify-content-center align-items-center mb-4">
+          <button className="btn-navegacion me-3" onClick={() => cambiarMes(-1)}><span className="fa-solid fa-circle-chevron-left charcoal"></span></button>
+          <h3 className="text-center ivory text-outline m-0">{meses[mesActual]} {añoActual}</h3>
+          <button className="btn-navegacion ms-3" onClick={() => cambiarMes(1)}><span className="fa-solid fa-circle-chevron-right charcoal"></span></button>
+        </div>
+
+        <div className="row">
+          <div className="col-md-6">
+            <h5>A quien le debo</h5>
+            {loQueDebo.length === 0 ? (
+              <p className="text-muted">No debes nada.</p>
+            ) : (
+              <div className="list-group scroll-list">
+                {loQueDebo.map((item, idx) => (
+                  <div key={idx} className="card mb-2 tarjeta-debo">
+                    <div className="card-body d-flex justify-content-between align-items-center">
+                      <div>
+                        <strong>{item.nombre}</strong><br />
+                        <small className="text-muted">{item.descripcion}</small>
+                      </div>
+                      <div className="badge bg-danger fs-6">
+                        -${item.monto.toFixed(2)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-          <h4 className="text-center my-4">Cuentas</h4>
-          <div className="row">
-            <div className="col-md-6">
-              <h5>Lo que debo</h5>
-              {loQueDebo.length === 0 ? (
-                <p className="text-muted">No debes nada.</p>
-              ) : (
-                <ul>
-                  {loQueDebo.map((item, idx) => (
-                    <li key={idx}>{item.nombre}: <strong>${item.monto.toFixed(2)}</strong></li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <div className="col-md-6">
-              <h5>Lo que me deben</h5>
-              {loQueMeDeben.length === 0 ? (
-                <p className="text-muted">Nadie te debe.</p>
-              ) : (
-                <ul>
-                  {loQueMeDeben.map((item, idx) => (
-                    <li key={idx}>{item.nombre}: <strong>${item.monto.toFixed(2)}</strong></li>
-                  ))}
-                </ul>
-              )}
-            </div>
+
+          <div className="col-md-6">
+            <h5>Quien me debe</h5>
+            {loQueMeDeben.length === 0 ? (
+              <p className="text-muted">Nadie te debe.</p>
+            ) : (
+              <div className="list-group scroll-list">
+                {loQueMeDeben.map((item, idx) => (
+                  <div key={idx} className="card mb-2 tarjeta-deben">
+                    <div className="card-body d-flex justify-content-between align-items-center">
+                      <div>
+                        <strong>{item.nombre}</strong><br />
+                        <small className="text-muted">{item.descripcion}</small>
+                      </div>
+                      <div className="badge bg-sage text-ivory fs-6">
+                        +${item.monto.toFixed(2)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-          <div className="balance-final text-center mt-4">
-            <h5>Balance final del mes</h5>
-            <div className={`badge fs-4 px-4 py-2 ${balance >= 0 ? 'bg-success' : 'bg-danger'}`}>
-              {balance >= 0 ? '+' : ''}${balance.toFixed(2)}
-            </div>
+        </div>
+
+        <div className="balance-final mt-4 text-center">
+          <h5>Balance final del mes</h5>
+          <div className={`badge charcoal fs-4 px-4 py-2 ${balance >= 0 ? 'bg-sage' : 'bg-coral'}`}>
+            {balance >= 0 ? '+' : ''}${balance.toFixed(2)}
           </div>
         </div>
       </div>
 
+
       {mostrarGraficoYPagos && (
-        <div className="seccion-superior mb-4">
-          <div className="tarjeta-gastos row p-3">
-            <h4 className="text-center mb-3">Mis Gastos</h4>
-            <div className="col-md-6 grafico-categorias d-flex justify-content-center align-items-center p-3">
-              <div className="grafico-wrapper">
-                <h4 className="text-center mb-3">En qué gasto tanto</h4>
-                <div className="grafico-container">
-                  <canvas id="graficoGastos"></canvas>
+        <div className="seccion-superior mb-4 border-charcoal rounded-4">
+          <div className="tarjeta-gastos p-4 w-100">
+            <h3 className="text-center ivory text-outline">Mis Gastos</h3>
+            <div className='row'>
+              <div className="col-md-6 grafico-categorias d-flex justify-content-center align-items-center p-3">
+                <div className="grafico-wrapper">
+                  <h4 className="text-center mb-3">En qué gasto tanto</h4>
+                  <div className="grafico-container">
+                    <canvas id="graficoGastos"></canvas>
+                  </div>
+
                 </div>
               </div>
-            </div>
 
-            <div className="col-md-6 lista-gastos-wrapper p-3">
-              <button
-                className="btn btn-dark w-100 my-2"
-                onClick={() => setShowModal(true)}
-              >
-                Otro Gasto más?
-              </button>
-              <div className="lista-gastos-scroll">
-                <ListaPagos
-                  pagos={pagosDelMes}
-                  usuarioId={usuarioId}
-                  onMarcarPagado={onMarcarPagado}
-                  onEliminar={eliminarGasto}
-                />
+              <div className="col-md-6 lista-gastos-wrapper p-3">
+                <div className="d-flex justify-content-center">
+                <button
+                  className="add-gasto-button w-75 my-2"
+                  onClick={() => setShowModal(true)}
+                >
+                  Otro Gasto más?
+                </button>
+                </div>
+                <div className="lista-gastos-scroll">
+                  <ListaPagos
+                    pagos={pagosOrdenados}
+                    usuarioId={usuarioId}
+                    onMarcarPagado={onMarcarPagado}
+                    onEliminar={eliminarGasto}
+                  />
+                </div>
               </div>
             </div>
           </div>

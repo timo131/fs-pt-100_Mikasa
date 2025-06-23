@@ -1,43 +1,42 @@
-import { useEffect, useState } from "react";
-import "../../styles/Ocio.css";
+import useGlobalReducer from "../../hooks/useGlobalReducer"
+import { MovieCard } from "../ocio/MovieCard"
 
 export const OcioHogar = () => {
-  const [likes, setLikes] = useState([]);
-  const [ratings, setRatings] = useState({});
 
-  useEffect(() => {
-    const storedLikes = localStorage.getItem("likes");
-    if (storedLikes) setLikes(JSON.parse(storedLikes));
+    const { store, dispatch } = useGlobalReducer()
+    const ratingSums = {};
 
-    const storedRatings = localStorage.getItem("ratings");
-    if (storedRatings) setRatings(JSON.parse(storedRatings));
-  }, []);
+    store.hogar?.users?.forEach(user => {
+        const ratings = user.deseado_peliculas || {};
+        Object.entries(ratings).forEach(([movieId, rating]) => {
+            ratingSums[movieId] = (ratingSums[movieId] || 0) + rating;
+        });
+    });
 
-  return (
-    <div className="container-ocio">
-       <h3  className="text-center ivory text-outline">Peliculas y Series</h3>
+    const sortedMovieIds = Object.entries(ratingSums)
+        .filter(([, sum]) => sum > 0)
+        .sort(([, aRating], [, bRating]) => bRating - aRating)
+        .map(([id]) => id);
 
-      {likes.length === 0 ? (
-        <p className="text-center">No hay películas guardadas aún.</p>
-      ) : (
-        <div className="movie-carousel mt-4">
-          {likes.map((movie) => (
-            <div key={movie.imdbID} className="movie-card">
-              {movie.Poster && movie.Poster !== "N/A" && (
-                <img src={movie.Poster} alt={movie.Title} />
-              )}
-              <h6>
-                {movie.Title} ({movie.Year})
-              </h6>
-              <p className="mt-2">
-                {ratings[movie.imdbID]
-                  ? `¿Quieres ver la pelicula?  ${ratings[movie.imdbID]}`
-                  : "Sin valorar"}
-              </p>
-            </div>
-          ))}
-        </div>
+    return (
+        <>
+            <h3 className="text-center ivory text-outline">Películas y series</h3><p className="text-center charcoal">ordenadas por preferencia del hogar</p>
+            {sortedMovieIds.length > 0 ? (
+                <div className="search-results mt-4">
+                    <div className="row g-3 justify-content-center">
+                        {sortedMovieIds.map((id) => (
+                            <div
+                                key={id}
+                                className="col-12 col-md-6 col-lg-6 h-100 d-flex justify-content-center"
+                            >
+                                <MovieCard id={id} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ) : (
+        <p className="text-center mt-4">Nadie ha marcado películas o series todavía.</p>
       )}
-    </div>
-  );
-};
+        </>
+    )
+}

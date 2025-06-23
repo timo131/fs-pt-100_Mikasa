@@ -48,7 +48,7 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
       frecuencia: form.frecuencia,
       fecha_limite: form.fechaLimite || null,
       };
-
+      console.log("Gasto enviado:", gasto)
       await finanzasService.postGasto(token, gasto);
       onGastoCreado();
       onClose();
@@ -64,7 +64,7 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
       role="dialog"
       style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
     >
-      <div className="modal-dialog modal-dialog-slideout modal-sm" role="document">
+      <div className="modal-dialog modal-dialog-centered modal-dialog-slideout modal-sm" role="document">
         <div className="modal-content p-4 gasto-modal">
           <h5 className="text-center fw-bold mb-3">Gasto</h5>
           <div className="mb-2 d-flex align-items-center">

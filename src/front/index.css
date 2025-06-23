@@ -103,3 +103,61 @@
     flex-direction: column;
     justify-content: flex-start;
 }
+
+.search-recetas-button {
+  width: 120px;
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c2c2c;
+  background-color: #6FB8A8;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.search-recetas-button:hover {
+  background-color: #E2B659;
+  color: #2c2c2c;
+}
+
+.search-recetas-button:active {
+  background-color: #FFF8E7;
+  color: #2c2c2c;
+}
+
+.search-movies-button {
+  width: 120px;
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c2c2c;
+  background-color: #A8C97F;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.search-movies-button:hover {
+  background-color: #E2B659;
+  color: #2c2c2c;
+}
+
+.search-movies-button:active {
+  background-color: #FFF8E7;
+  color: #2c2c2c;
+}
+
+.emoji-rating {
+  font-size: 3rem; 
+  margin: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.emoji-rating:hover {
+  transform: scale(1.2);
+}
