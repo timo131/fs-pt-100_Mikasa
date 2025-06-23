@@ -1,6 +1,7 @@
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import placeholder from "../assets/img/avatar-placeholder.jpg";
 import { Link } from "react-router-dom";
+import navimg from "../assets/img/mikasa_ivory_sm.png";
 
 export const Navbar = () => {
 	const { store } = useGlobalReducer();
@@ -15,7 +16,7 @@ export const Navbar = () => {
 				<div className="d-flex w-100 align-items-center justify-content-between">
 					<Link to={store.token ? "/hogar" : "/login"} className="navbar-brand d-flex align-items-center">
 						<img
-							src="/src/front/assets/img/mikasa_ivory_sm.png"
+							src={navimg}
 							className="logo"
 							alt="Mikasa logo"
 						/>
