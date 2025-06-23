@@ -14,27 +14,27 @@ export const TareasHogar = () => {
       <h3 className="text-center ivory text-outline">Tareas del Hogar</h3>
 
       {tareasCompartidas?.length === 0 ? (
-        <p>No hay tareas compartidas.</p>
+        <p className="charcoal">No hay tareas compartidas.</p>
       ) : (
         <div className="container">
           {tareasCompartidas.map((task, i) => (
             <div
               key={i}
-              className={`card p-3 mb-3 text-start ${
+              className={`card border-charcoal p-3 mb-3 text-start ${
                 task.hecha ? "card-hecha text-ivory" : "bg-ivory text-charcoal"
               }`}
             >
-              <h5 className={task.hecha ? "text-decoration-line-through" : ""}>
+              <h5 className={`text-center fw-bold {task.hecha ? "text-decoration-line-through" : ""}`}>
                 {task.nombre}
               </h5>
-              <p><strong>Miembros:</strong> {task.miembros?.join(", ") || "Sin miembros"}</p>
-              <p><strong>Frecuencia:</strong> {task.frecuencia}</p>
-              <p><strong>Descripción:</strong> {task.descripcion}</p>
-              <p><strong>Fecha:</strong> {task.fecha}</p>
+              <p className="m-0"><strong>Miembros:</strong> {task.miembros?.join(", ") || "Sin miembros"}</p>
+              <p className="m-0"><strong>Frecuencia:</strong> {task.frecuencia}</p>
+              <p className="m-0"><strong>Descripción:</strong> {task.descripcion}</p>
+              <p className="m-0"><strong>Fecha:</strong> {task.fecha}</p>
 
               <button
-                className={`btn btn-sm mt-2 ${
-                  task.hecha ? "btn-hecha" : "btn-outline-success"
+                className={`mt-2 w-50 mx-auto ${
+                  task.hecha ? "btn-hecha" : "marcar-button"
                 }`}
                 onClick={() => {
                   const globalIndex = store.tasks.findIndex(t => t === task);

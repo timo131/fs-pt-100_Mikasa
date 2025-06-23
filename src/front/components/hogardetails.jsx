@@ -10,7 +10,7 @@ import { EditMember } from "./modals/editmember";
 export const HogarDetails = () => {
   const navigate = useNavigate()
   const { store } = useGlobalReducer();
-  const users = store.hogar.users
+  const users = store.hogar?.users || [];
 
   const [showInvitarModal, setInvitarModal] = useState(false);
   const openInvitarModal = () => setInvitarModal(true);
@@ -30,6 +30,10 @@ export const HogarDetails = () => {
     setShowEditMemberModal(false);
     setSelectedMemberId(null);
   };
+
+  if (!store.hogar || !store.user) {
+    return <div className="text-center text-light">Cargando datos del hogar...</div>;
+  }
 
   return (
     <div className="register-container">

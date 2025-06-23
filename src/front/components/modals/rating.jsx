@@ -17,7 +17,7 @@ export const Rating = ({ id, onRate, show, onClose }) => {
       <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
         <div className="modal-content bg-ivory border-charcoal">
           <div className="modal-header border-0">
-            <h3 className="modal-title w-100 text-center fw-bold" id={`ratingModalLabel-${id}`}>
+            <h3 className="charcoal w-100 text-center fw-bold" id={`ratingModalLabel-${id}`}>
               ¿Qué te parece?
             </h3>
             <button

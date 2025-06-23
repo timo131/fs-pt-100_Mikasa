@@ -74,7 +74,7 @@ export const Navbar = () => {
 								/>
 							</Link>
 						) : (
-							<Link to="/login" className="text-white text-decoration-none fw-bold">
+							<Link to="/login" className="ivory text-decoration-none fw-bold">
 								Login
 							</Link>
 						)}

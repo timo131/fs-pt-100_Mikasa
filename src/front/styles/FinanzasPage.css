@@ -79,7 +79,7 @@
 .tarjeta-debo, .tarjeta-deben {
   background-color: #FFF8E7;
   border-radius: 10px;
-  box-shadow: 0 2px 6px #2c2c2c;
+  border: solid 1px #2c2c2c;
 }
 
 .scroll-list {

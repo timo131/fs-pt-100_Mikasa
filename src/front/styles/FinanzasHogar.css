@@ -1,7 +1,7 @@
 .finanzas-hogar-scroll-container {
   width: 100%;
   max-width: 480px;
-  max-height: 400px;
+  /* max-height: 400px; */
   overflow-y: auto;
   margin: 0 auto;
   display: flex;
@@ -14,20 +14,19 @@
   width: 95%; 
   max-height: 300px;
   padding: 0.25rem;
-  background: #fff;
-  border: 1px solid #ddd;
+  background: #FFF8E7;
+  border: 1px solid #2c2c2c;
   border-radius: 0.75rem;
-  box-shadow: 0 2px 4px #2c2c2c;
 }
 
 .finanzas-hogar-card .card-title {
   font-size: 1rem;
-  color: #212529;
+  color: #2c2c2c;
 }
 
 .finanzas-hogar-card p {
   font-size: 0.85rem;
-  color: #343a40;
+  color: #2c2c2c;
 }
 
 .finanzas-hogar-card .btn {
@@ -40,23 +39,63 @@
 }
 
 .finanzas-hogar-card-pagado {
-  background-color: #d4edda;
-  border-color: #c3e6cb;
-  color: #155724;
+  background-color: #2c2c2c;
+  border-color: #2c2c2c;
+  color: #FFF8E7;
 }
 
 .finanzas-hogar-card-pagado .card-title,
 .finanzas-hogar-card-pagado p {
-  color: #155724;
+  color: #FFF8E7;
 }
 
 .finanzas-hogar-card-urgente {
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-  color: #721c24;
+  background-color: #DA6868;
+  border-color: #2c2c2c;
+  color: #2c2c2c;
 }
 
 .finanzas-hogar-card-urgente .card-title,
 .finanzas-hogar-card-urgente p {
-  color: #721c24;
+  color: #2c2c2c;
+}
+
+.btn-hecha {
+  padding: 7px 0;
+  background-color: #6FB8A8 !important;
+  color: #2c2c2c !important;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.btn-hecha:hover {
+  background-color: #A8C97F;
+}
+
+.btn-hecha:active {
+  background-color: #E2B659;
+}
+
+.marcar-button {
+  padding: 7px 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: #2c2c2c;
+  background-color: #6FB8A8;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.marcar-button:hover {
+  background-color: #A8C97F;
+  color: #2c2c2c;
+}
+
+.marcar-button:active {
+  background-color: #E2B659;
+  color: #2c2c2c;
 }

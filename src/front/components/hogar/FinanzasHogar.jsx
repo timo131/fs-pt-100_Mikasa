@@ -61,7 +61,7 @@ export const FinanzasHogar = () => {
       <h3 className="text-center ivory text-outline">Gastos del Hogar</h3>
 
       {gastosInvolucrados.length === 0 && (
-        <p className="text-center ivory text-black">No tienes gastos asignados.</p>
+        <p className="text-center charcoal">No tienes gastos asignados.</p>
       )}
 
       <div className="finanzas-hogar-scroll-container">
@@ -92,7 +92,7 @@ export const FinanzasHogar = () => {
               className={`card finanzas-hogar-card m-1 ${pagadoClass} ${urgente}`}
             >
               <div className="card-body">
-                <h6 className="card-title fw-bold">{gasto.descripcion}</h6>
+                <h5 className="fw-bold text-center">{gasto.descripcion}</h5>
                 <p className="mb-1">
                   <strong>Creador:</strong> {gasto.user_name}
                 </p>
@@ -122,8 +122,8 @@ export const FinanzasHogar = () => {
                 <div className="d-flex justify-content-end align-items-center">
                   {userPagoId !== null && (
                     <button
-                      className={`btn btn-sm ${
-                        pagado ? "btn-success" : "btn-outline-secondary"
+                      className={`w-50 mx-auto ${
+                        pagado ? "marcar-button" : "btn-hecha"
                       }`}
                       onClick={() => onMarcarPagado(userPagoId, !pagado)}
                     >
