@@ -15,12 +15,10 @@ from api.mail.mailer import send_email
 
 api = Blueprint('api', __name__)
 
-# Allow CORS requests to this API
 CORS(api)
 
-
 @api.route("/users", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_all_users():
     stm = select(User)
     users = db.session.execute(stm).scalars().all()
@@ -28,7 +26,7 @@ def get_all_users():
 
 
 @api.route("/users/<int:user_id>", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_user(user_id):
     stm = select(User).where(User.id == user_id)
     user = db.session.execute(stm).scalar_one_or_none()
@@ -59,7 +57,7 @@ def create_user():
 
 
 @api.route("/users/<int:user_id>", methods=["PUT"])
-# @jwt_required()
+@jwt_required()
 def update_user(user_id):
     data = request.get_json()
     stm = select(User).where(User.id == user_id)
@@ -107,7 +105,7 @@ def delete_user(user_id):
 
 
 @api.route("/hogares", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_all_hogares():
     stm = select(Hogar)
     hogares = db.session.execute(stm).scalars().all()
@@ -153,7 +151,7 @@ def update_hogar(hogar_id):
     try:
         user_id = get_jwt_identity()
         hogar.hogar_name = data.get("hogar_name", hogar.hogar_name)
-        hogar.user_id = user_id  # Actualizamos con el user_id del token
+        hogar.user_id = user_id
         db.session.commit()
         return jsonify(hogar.serialize()), 200
     except Exception as e:
