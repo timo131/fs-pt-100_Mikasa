@@ -63,7 +63,7 @@ export const HogarDetails = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map(user => (
+              {users?.map(user => (
                 <tr key={user.id}>
                   <td>
                     <img
