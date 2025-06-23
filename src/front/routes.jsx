@@ -21,6 +21,7 @@ import Finanzas from "./pages/Finanzas"
 import { Detalle } from "./components/Detalle";
 import { DetalleReceta } from "./components/DetalleReceta";
 import { Profile } from "./pages/Profile";
+import { ResetPassword } from "./pages/resetPassword"
 
 
 export const router = createBrowserRouter(
@@ -49,7 +50,12 @@ export const router = createBrowserRouter(
         <Route path="/detalle/:id" element={<Detalle />} />
         <Route path="/comida/:id" element={<DetalleReceta />} />
         <Route path="/login" element={<Login />} />
-        <Route path ="/register" element ={<Register />} /> 
+
+        <Route path ="/register" element ={<Register />} />
+        <Route path ="/private" element ={<Private />} />
+        <Route path="/reset" element={<ResetPassword />} />  
+
+
         
       </Route>
     ),

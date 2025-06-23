@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from api.mail.mailer import send_email
+import random
 
 
 api = Blueprint('api', __name__)
@@ -771,18 +772,18 @@ def login():
         stm = select(User).where(User.email == data['email'])
         user = db.session.execute(stm).scalars().first()
 
-        stm2 = select(Hogar).where(Hogar.id == user.hogar_id)
-        hogar = db.session.execute(stm2).scalars().first()
-
         if not user:
             return jsonify({"error": "Email not found"}), 404
 
         if not check_password_hash(user.password, data['password']):
             return jsonify({"success": False, "msg": "email/password wrong"})
 
+        stm2 = select(Hogar).where(Hogar.id == user.hogar_id)
+        hogar = db.session.execute(stm2).scalars().first()
+
         token = create_access_token(identity=str(user.id))
 
-        return jsonify({"msg": "login ok", "token": token, "user": user.serialize(), "hogar": hogar.serialize()}), 200
+        return jsonify({"msg": "login ok", "token": token, "user": user.serialize(), "hogar": hogar.serialize() if hogar else None}), 200
 
     except Exception as e:
         print("Login error:", e)
@@ -811,11 +812,12 @@ def get_user_inf():
 def check_mail():
     try:
         data = request.json
-        user = User.query.filter_by(email=data['email']).first()
+        stm = select(User).where(User.email == data['email'])
+        user = db.session.execute(stm).scalars().first()
         if not user:
             return jsonify({'success': False, 'msg': 'email not found'}), 404
 
-        token = create_access_token(identity=user.id)
+        token = create_access_token(identity=str(user.id))
         result = send_email(data['email'], token, tipo="reset")
 
         return jsonify({'success': True, 'token': token, 'email': data['email']}), 200
@@ -828,13 +830,33 @@ def send_invitation():
     try:
         data = request.get_json()
         email = data.get("email")
-        username = data.get("username")
-        print(data, email, username)
-        if not email or not username:
-            return jsonify({"success": False, "msg": "Faltan el correo o el nombre de usuario"}), 400
+        inviter_name = data.get("inviterName")
+        hogar_id = data.get("hogar_id")
+        if not email or not hogar_id or not inviter_name:
+            return jsonify({"success": False, "msg": "Faltan datos obligatorios"}), 400
+        
+        stm = select(User).where(User.email == data['email'])
+        user = db.session.execute(stm).scalars().first()
 
-        token = create_access_token(identity=email)
-        result = send_email(email, token, tipo="invite", username=username)
+        if not user:
+            base_username = email.split("@")[0]
+            existing = User.query.filter_by(user_name=base_username).first()
+            if existing:
+                base_username = f"{base_username}{random.randint(1000, 9999)}"
+
+
+            user = User(
+                email=email,
+                user_name=base_username,
+                password=generate_password_hash("1234"),
+                admin=False,
+                hogar_id=hogar_id
+            )
+            db.session.add(user)
+            db.session.commit()
+
+        token = create_access_token(identity=str(user.id))
+        result = send_email(email, token, tipo="invite", username=inviter_name)
 
         if result["success"]:
             return jsonify({"success": True, "msg": "Invitación enviada con éxito"}), 200
@@ -849,25 +871,23 @@ def send_invitation():
 def handle_mail(address):
     return send_email(address)
 
-
 @api.route('/password_update', methods=['PUT'])
 @jwt_required()
 def password_update():
     try:
         data = request.json
+        #extraemos el id del token que creamos en la linea 98
         id = get_jwt_identity()
-
+        #buscamos usuario por id
         user = User.query.get(id)
-        if not user:
-            return jsonify({'success': False, 'msg': 'Usuario no encontrado'}), 404
-
+        #actualizamos password del usuario
         user.password = generate_password_hash(data['password'])
+        #alacenamos los cambios
         db.session.commit()
-
-        return jsonify({'success': True, 'msg': 'Contraseña actualizada exitosamente'}), 200
+        return jsonify({'success': True, 'msg': 'Contraseña actualizada exitosamente, intente iniciar sesion'}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'success': False, 'msg': f"Error al actualizar contraseña: {str(e)}"}), 500
+
 
 
 @api.route("/seed", methods=["POST"])
@@ -961,3 +981,4 @@ def seed_info():
         print("Datos de prueba insertados correctamente.")
 
         return jsonify({"success":True})
+
