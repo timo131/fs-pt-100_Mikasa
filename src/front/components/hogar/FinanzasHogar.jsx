@@ -61,7 +61,7 @@ export const FinanzasHogar = () => {
       <h3 className="text-center ivory text-outline">Gastos del Hogar</h3>
 
       {gastosInvolucrados.length === 0 && (
-        <p className="text-center ivory text-outline text-muted">No tienes gastos asignados.</p>
+        <p className="text-center ivory text-black">No tienes gastos asignados.</p>
       )}
 
       <div className="finanzas-hogar-scroll-container">

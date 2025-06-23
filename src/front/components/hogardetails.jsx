@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import userServices from "../services/userServices";
+import { useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import "../styles/User.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,12 +6,10 @@ import placeholder from "../assets/img/avatar-placeholder.jpg";
 import { Invitar } from "./modals/invitar";
 import { EditHogar } from "./modals/edithogar";
 import { EditMember } from "./modals/editmember";
-const CLOUD_NAME = "daavddex7";
-const UPLOAD_PRESET = "avatar_unsigned";
 
 export const HogarDetails = () => {
   const navigate = useNavigate()
-  const { store, dispatch } = useGlobalReducer();
+  const { store } = useGlobalReducer();
   const users = store.hogar.users
 
   const [showInvitarModal, setInvitarModal] = useState(false);
