@@ -5,7 +5,8 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 finanzasService.getFinanzas = async (token) => {
   const res = await fetch(`${backendUrl}/api/finanzas`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     },
   });
 
@@ -21,7 +22,8 @@ finanzasService.getFinanzas = async (token) => {
 finanzasService.getPagos = async (token) => {
   const res = await fetch(`${backendUrl}/api/pagos`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     },
   });
 
@@ -52,7 +54,7 @@ finanzasService.postGasto = async (token, gasto) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify(payload),
   });
@@ -71,7 +73,7 @@ finanzasService.marcarComoPagado = async (token, userPagoId, estado) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ estado }),
   });
@@ -85,7 +87,8 @@ finanzasService.marcarComoPagado = async (token, userPagoId, estado) => {
 finanzasService.getUsuarios = async (token) => {
   const res = await fetch(`${backendUrl}/api/users`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     },
   });
 
@@ -101,7 +104,8 @@ finanzasService.eliminarGasto = async (id, token) => {
   const response = await fetch(`${backendUrl}/api/pagos/${id}`, {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     }
   });
 

@@ -1,13 +1,11 @@
-import useGlobalReducer from "../hooks/useGlobalReducer";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 import "../styles/Tareas.css";
-
 export const Card = ({ task, index, onClose }) => {
 	const [nombre, setNombre] = useState(task?.nombre || "");
-	const { store, dispatch } = useGlobalReducer();
+	const { store, dispatch } = useGlobalReducer(); //
 	const navigate = useNavigate();
-
 	const [formData, setFormData] = useState({
 		nombre: "",
 		asignadaA: "",
@@ -17,20 +15,14 @@ export const Card = ({ task, index, onClose }) => {
 		hecha: false,
 		miembros: [],
 	});
-
-	const miembrosList = store.hogar.users
-	.map(u => u.user_name);
-
+	const miembrosList = ["juan", "ana", "maria", "lucia", "pedro", "thomas"];
 	useEffect(() => {
-
-	if (task) {
-		setFormData(task);
-	}
+		if (task) {
+			setFormData(task);
+		}
 	}, [task]);
-
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
-
 		if (name === "miembros") {
 			if (checked) {
 				setFormData({
@@ -47,16 +39,13 @@ export const Card = ({ task, index, onClose }) => {
 			setFormData({ ...formData, [name]: value });
 		}
 	};
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
 		const tarea = {
 			...formData,
 			hecha: formData.hecha || false,
+			hogarId: store.hogar.id, //
 		};
-
-
 		if (task && typeof index === "number") {
 			dispatch({
 				type: "edit_task",
@@ -65,11 +54,8 @@ export const Card = ({ task, index, onClose }) => {
 		} else {
 			dispatch({ type: "add_task", payload: tarea });
 		}
-
-
 		onClose();
 	};
-
 	return (
 		<div className="tareas text-center text-ivory">
 			<form
@@ -88,7 +74,6 @@ export const Card = ({ task, index, onClose }) => {
 						onChange={handleChange}
 					/>
 				</div>
-
 				<div className="mb-3 text-start">
 					<strong>Asignada a:</strong>
 					<div className="d-flex gap-3 align-items-center flex-wrap">
@@ -145,7 +130,6 @@ export const Card = ({ task, index, onClose }) => {
 						</div>
 					</div>
 				</div>
-
 				<div className="mb-3 text-start">
 					<label htmlFor="descripcion" className="form-label">Descripción:</label>
 					<textarea
@@ -157,7 +141,6 @@ export const Card = ({ task, index, onClose }) => {
 						onChange={handleChange}
 					></textarea>
 				</div>
-
 				<div className="mb-3 text-start">
 					<strong>Frecuencia:</strong>
 					<div className="d-flex gap-4 flex-wrap">
@@ -187,7 +170,6 @@ export const Card = ({ task, index, onClose }) => {
 						</div>
 					</div>
 				</div>
-
 				<div className="mb-3 text-start">
 					<label htmlFor="fecha" className="form-label">Fecha límite:</label>
 					<input
@@ -199,12 +181,9 @@ export const Card = ({ task, index, onClose }) => {
 						onChange={handleChange}
 					/>
 				</div>
-
 				<div className="text-end">
 					<button type="submit" className="btn btn-primary me-2">Guardar</button>
-
 					<button type="reset" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
-
 				</div>
 			</form>
 		</div>
