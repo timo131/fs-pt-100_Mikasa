@@ -52,7 +52,6 @@ const GastoModal = ({ show, onClose, token, onGastoCreado }) => {
     }
   };
   const usersMismoHogar = store.hogar.users
-	.filter(u => u.user_name !== store.user.user_name);
 
   return (
     <div

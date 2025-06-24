@@ -19,7 +19,6 @@ export const Card = ({ task, index, onClose }) => {
 	});
 
 	const miembrosList = store.hogar.users
-	.filter(u => u.user_name !== store.user.user_name)
 	.map(u => u.user_name);
 
 	useEffect(() => {
