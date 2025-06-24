@@ -1,5 +1,6 @@
-import useGlobalReducer from "../../hooks/useGlobalReducer"
-import { MovieCard } from "../ocio/MovieCard"
+import useGlobalReducer from "../../hooks/useGlobalReducer";
+import { MovieCard } from "../ocio/MovieCard";
+import { Link } from "react-router-dom";
 
 export const OcioHogar = () => {
 
@@ -20,7 +21,10 @@ export const OcioHogar = () => {
 
     return (
         <>
-            <h3 className="text-center ivory text-outline">Películas y series</h3><p className="text-center charcoal">ordenadas por preferencia del hogar</p>
+            <Link to="/ocio">
+            <h3 className="text-center ivory text-outline">Películas y series</h3>
+            </Link>
+            <p className="text-center charcoal">ordenadas por preferencia del hogar</p>
             {sortedMovieIds.length > 0 ? (
                 <div className="search-results mt-4">
                     <div className="row g-3 justify-content-center">

@@ -24,8 +24,8 @@ const FinanzasPage = () => {
   const [añoActual, setAñoActual] = useState(new Date().getFullYear());
   const chartRef = useRef(null);
 
-  useEffect(() => {
-    renderGrafico(pagos);
+useEffect(() => {
+    renderGrafico(pagosDelMes);
   }, [mesActual, añoActual, pagos])
 
   useEffect(() => {
@@ -142,10 +142,10 @@ const FinanzasPage = () => {
     setAñoActual(nuevoAño);
   };
 
-  const pagosDelMes = pagos.filter((pago) => {
+const pagosDelMes = pagos
+  .filter((pago) => {
     const fechaPago = new Date(pago.fecha);
     const esMismoMes = fechaPago.getMonth() === mesActual && fechaPago.getFullYear() === añoActual;
-
     if (pago.frecuencia === 'mensual') {
       return (
         fechaPago.getFullYear() < añoActual ||
@@ -154,7 +154,6 @@ const FinanzasPage = () => {
     } else {
       return esMismoMes;
     }
-
   })
 
   const mostrarGraficoYPagos = mesActual === new Date().getMonth() && añoActual === new Date().getFullYear();
@@ -289,7 +288,6 @@ const FinanzasPage = () => {
         onClose={() => setShowModal(false)}
         token={token}
         onGastoCreado={handleGastoCreado}
-        users={usuarios}
       />
     </div>
   );

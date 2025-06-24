@@ -1,5 +1,6 @@
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import "../../styles/TareaHogar.css";
+import { Link } from "react-router-dom";
 
 export const TareasHogar = () => {
   const { store, dispatch } = useGlobalReducer();
@@ -11,7 +12,10 @@ export const TareasHogar = () => {
   return (
 
     <div className="tareas text-center text-white">
+      
+      <Link to="/tareas">
       <h3 className="text-center ivory text-outline">Tareas del Hogar</h3>
+      </Link>
 
       {tareasCompartidas?.length === 0 ? (
         <p className="charcoal">No hay tareas compartidas.</p>

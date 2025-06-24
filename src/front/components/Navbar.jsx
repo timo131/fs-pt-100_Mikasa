@@ -50,16 +50,16 @@ export const Navbar = () => {
 					</div>
 
 					<div className="navbar-nav navbar-dark d-flex flex-column flex-md-row ms-md-auto px-md-5 gap-3 gap-md-4 w-100 align-items-end align-items-md-center justify-content-md-end justify-content-lg-center">
-						<Link className="nav-link coral" to={store.token ? "/tareas" : "/login"}>
+						<Link className="nav-link fw-bold coral" to={store.token ? "/tareas" : "/login"}>
 							Tareas
 						</Link>
-						<Link className="nav-link ochre" to={store.token ? "/finanzas" : "/login"}>
+						<Link className="nav-link fw-bold ochre" to={store.token ? "/finanzas" : "/login"}>
 							Finanzas
 						</Link>
-						<Link className="nav-link aqua" to={store.token ? "/ocio" : "/login"}>
+						<Link className="nav-link fw-bold aqua" to={store.token ? "/ocio" : "/login"}>
 							Ocio
 						</Link>
-						<Link className="nav-link sage" to={store.token ? "/comida" : "/login"}>
+						<Link className="nav-link fw-bold sage" to={store.token ? "/comida" : "/login"}>
 							Comida
 						</Link>
 					</div>

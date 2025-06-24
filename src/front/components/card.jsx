@@ -3,10 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../styles/Tareas.css";
 
-
 export const Card = ({ task, index, onClose }) => {
 	const [nombre, setNombre] = useState(task?.nombre || "");
-	const { dispatch } = useGlobalReducer();
+	const { store, dispatch } = useGlobalReducer();
 	const navigate = useNavigate();
 
 	const [formData, setFormData] = useState({
@@ -19,7 +18,9 @@ export const Card = ({ task, index, onClose }) => {
 		miembros: [],
 	});
 
-	const miembrosList = ["User1", "User2", "User3", "User4"];
+	const miembrosList = store.hogar.users
+	.filter(u => u.user_name !== store.user.user_name)
+	.map(u => u.user_name);
 
 	useEffect(() => {
 

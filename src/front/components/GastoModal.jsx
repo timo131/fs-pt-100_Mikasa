@@ -1,9 +1,10 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import finanzasService from "../services/finanzasService";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 import "../styles/gastoModal.css"
 
-
-const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
+const GastoModal = ({ show, onClose, token, onGastoCreado }) => {
+  const { store } = useGlobalReducer();
   const initialForm = {
     nombre: "",
     cantidad: "",
@@ -13,40 +14,34 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
     frecuencia: "única",
     fechaLimite: "",
   };
-
   const [form, setForm] = useState(initialForm);
-
   useEffect(() => {
     if (show) {
       setForm(initialForm);
     }
   }, [show])
-
-
   const handleChange = (e) => {
-  const { name, value, type, checked } = e.target;
-
-  if (type === "checkbox" && name === "compartidoCon") {
-    const userId = Number(value);
-    const updated = checked
-      ? [...form.compartidoCon, userId]
-      : form.compartidoCon.filter((u) => u !== userId);
-    setForm({ ...form, compartidoCon: updated });
-  } else {
-    setForm({ ...form, [name]: value });
-  }
-};
-
+    const { name, value, type, checked } = e.target;
+    if (type === "checkbox" && name === "compartidoCon") {
+      const userId = Number(value);
+      const updated = checked
+        ? [...form.compartidoCon, userId]
+        : form.compartidoCon.filter((u) => u !== userId);
+      setForm({ ...form, compartidoCon: updated });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+  };
   const handleSubmit = async () => {
     try {
       const gasto = {
-      descripcion: form.nombre, 
-      monto: parseFloat(form.cantidad),
-      tipo: form.tipo,
-      compartido_con: form.compartidoCon, 
-      categoria: form.categoria,
-      frecuencia: form.frecuencia,
-      fecha_limite: form.fechaLimite || null,
+        descripcion: form.nombre,
+        monto: parseFloat(form.cantidad),
+        tipo: form.tipo,
+        compartido_con: form.compartidoCon,
+        categoria: form.categoria,
+        frecuencia: form.frecuencia,
+        fecha_limite: form.fechaLimite || null,
       };
       console.log("Gasto enviado:", gasto)
       await finanzasService.postGasto(token, gasto);
@@ -56,6 +51,8 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
       console.error("Error al crear gasto:", error);
     }
   };
+  const usersMismoHogar = store.hogar.users
+	.filter(u => u.user_name !== store.user.user_name);
 
   return (
     <div
@@ -114,19 +111,23 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
             </div>
             {form.tipo === "compartido" && (
               <div className="d-flex flex-wrap gap-2 mt-1">
-                {users?.map((user) => (
-                  <div key={user.id} className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      name="compartidoCon"
-                      value={user.id}
-                      onChange={handleChange}
-                      checked={form.compartidoCon.includes(user.id)}
-                    />
-                    <label className="form-check-label">{user.user_name}</label>
-                  </div>
-                ))}
+                {usersMismoHogar?.length > 0 ? (
+                  usersMismoHogar.map((user) => (
+                    <div key={user.id} className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="compartidoCon"
+                        value={user.id}
+                        onChange={handleChange}
+                        checked={form.compartidoCon.includes(user.id)}
+                      />
+                      <label className="form-check-label">{user.user_name}</label>
+                    </div>
+                  ))
+                ) : (
+                  <small className="text-muted">No hay miembros en tu hogar</small>
+                )}
               </div>
             )}
           </div>
@@ -143,7 +144,6 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
             <option value="entretenimiento">Entretenimiento</option>
             <option value="transporte">Transporte</option>
           </select>
-
           <div className="mb-2">
             <div className="form-check form-check-inline">
               <input
@@ -168,7 +168,6 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
               <label className="form-check-label">mensual</label>
             </div>
           </div>
-
           <div className="mb-2">
             <label className="form-label">Fecha límite:</label>
             <input
@@ -180,7 +179,6 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
               required
             />
           </div>
-
           <div className="d-flex justify-content-between mt-3">
             <button className="btn btn-danger" onClick={onClose}>
               Borrar
@@ -194,5 +192,4 @@ const GastoModal = ({ show, onClose, token, onGastoCreado, users }) => {
     </div>
   );
 };
-
 export default GastoModal;

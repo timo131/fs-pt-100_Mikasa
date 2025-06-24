@@ -1,5 +1,6 @@
-import useGlobalReducer from "../../hooks/useGlobalReducer"
-import { RecetaCard } from "../comida/RecetaCard"
+import useGlobalReducer from "../../hooks/useGlobalReducer";
+import { RecetaCard } from "../comida/RecetaCard";
+import { Link } from "react-router-dom";
 
 export const ComidaHogar = () => {
 
@@ -20,7 +21,10 @@ export const ComidaHogar = () => {
 
     return (
         <>
-            <h3 className="text-center ivory text-outline">Recetas</h3><p className="text-center charcoal">ordenadas por preferencia del hogar</p>
+            <Link to="/comida">
+            <h3 className="text-center ivory text-outline">Recetas</h3>
+            </Link>
+            <p className="text-center charcoal">ordenadas por preferencia del hogar</p>
             {sortedRecetaIds.length > 0 ? (
                 <div className="search-results mt-4">
                     <div className="row g-3 justify-content-center">

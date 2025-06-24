@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import finanzasService from "../../services/finanzasService";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import "../../styles/FinanzasHogar.css";
+import { Link } from "react-router-dom";
 
 export const FinanzasHogar = () => {
   const { store, dispatch } = useGlobalReducer();
@@ -58,7 +59,9 @@ export const FinanzasHogar = () => {
 
   return (
     <div className="container">
+      <Link to="/finanzas">
       <h3 className="text-center ivory text-outline">Gastos del Hogar</h3>
+      </Link>
 
       {gastosInvolucrados.length === 0 && (
         <p className="text-center charcoal">No tienes gastos asignados.</p>
