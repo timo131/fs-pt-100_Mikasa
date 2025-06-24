@@ -124,11 +124,9 @@ export const MovieCard = ({ id }) => {
                 </div>
                 <div className="card-footer d-flex justify-content-around align-items-center mt-2">
                     <button className="btn btn-sm" onClick={() => setShowRating(true)} title="Me gusta">
-                        <span className={`fa-${isLiked ? "solid" : "regular"} fa-thumbs-up fa-2x
-              ${currentRating <= 0
-                                ? "ochre"
-                                : "aqua"
-                            }`}></span>
+                        <span className={`fa-${isLiked ? "solid" : "regular"} fa-thumbs-up fa-2x ${
+                        !isLiked ? "charcoal" : currentRating <= 0 ? "ochre" : "aqua"
+                        }`}></span>
                     </button>
                     <button className="btn btn-sm" onClick={toggleFavorite} title="Favorito">
                         <span className={`fa fa-${isFavorite ? "solid" : "regular"} fa-heart fa-2x coral`}></span>

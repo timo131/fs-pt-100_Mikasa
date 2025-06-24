@@ -127,10 +127,8 @@ export const RecetaCard = ({ id }) => {
         </div>
         <div className="card-footer d-flex justify-content-around align-items-center mt-2">
           <button className="btn btn-sm" onClick={() => setShowRating(true)} title="Me gusta">
-            <span className={`fa-${isLiked ? "solid" : "regular"} fa-thumbs-up fa-2x
-              ${currentRating <= 0
-                ? "ochre"
-                : "sage"
+              <span className={`fa-${isLiked ? "solid" : "regular"} fa-thumbs-up fa-2x ${
+                !isLiked ? "charcoal" : currentRating <= 0 ? "ochre" : "sage"
               }`}></span>
           </button>
           <button className="btn btn-sm" onClick={toggleFavorite} title="Favorito">
