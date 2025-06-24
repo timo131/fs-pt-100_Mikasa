@@ -57,9 +57,9 @@ export const HogarDetails = () => {
             <thead>
               <tr>
                 <th scope="col"></th>
-                <th scope="col"><span className="charcoal">Username</span></th>
+                <th scope="col"><span className="charcoal">Usuario</span></th>
                 <th scope="col"><span className="charcoal">Email</span></th>
-                <th scope="col"><span className="charcoal">Role</span></th>
+                <th scope="col"><span className="charcoal">Rol</span></th>
                 {store.user.admin === true && <th scope="col"></th>}
               </tr>
             </thead>
@@ -78,8 +78,8 @@ export const HogarDetails = () => {
                   <td>{user.email}</td>
                   <td>
                     {user.admin
-                      ? <span className="badge rounded-pill bg-success">admin</span>
-                      : <span className="badge rounded-pill bg-secondary">miembro</span>
+                      ? <span className="badge rounded-pill bg-sage pb-1 charcoal border-charcoal">admin</span>
+                      : <span className="badge rounded-pill bg-ochre pb-1 charcoal border-charcoal">miembro</span>
                     }
                   </td>
                   {store.user.admin && (
