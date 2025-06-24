@@ -125,7 +125,7 @@ export const MovieCard = ({ id }) => {
                 <div className="card-footer d-flex justify-content-around align-items-center mt-2">
                     <button className="btn btn-sm" onClick={() => setShowRating(true)} title="Me gusta">
                         <span className={`fa-${isLiked ? "solid" : "regular"} fa-thumbs-up fa-2x ${
-                        !isLiked ? "charcoal" : currentRating <= 0 ? "ochre" : "sage"
+                        !isLiked ? "charcoal" : currentRating <= 0 ? "ochre" : "aqua"
                         }`}></span>
                     </button>
                     <button className="btn btn-sm" onClick={toggleFavorite} title="Favorito">
@@ -144,7 +144,7 @@ export const MovieCard = ({ id }) => {
                     <div className="modal-dialog modal-lg modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-content bg-aqua border-charcoal p-3">
                             <div className="modal-header border-0">
-                                <h2 className="modal-title flex-grow-1 text-center">{movie.title}</h2>
+                                <h2 className="modal-title flex-grow-1 text-outline text-center">{movie.title}</h2>
                                 <button
                                     type="button"
                                     className="btn-close"
@@ -159,18 +159,20 @@ export const MovieCard = ({ id }) => {
                                 )}
                             </div>
                             <div className="modal-footer border-0 d-flex justify-content-center align-items-center mt-2">
+                                <div className="w-25 bg-ivory rounded-5 border-charcoal d-flex justify-content-evenly">
                                 <button
                                     className="btn btn-sm"
                                     onClick={() => setShowRating(true)}
                                     title="Me gusta"
                                 >
                                     <span className={`fa-${isLiked ? "solid" : "regular"} fa-thumbs-up fa-2x ${
-                                    !isLiked ? "charcoal" : currentRating <= 0 ? "ochre" : "sage"
+                                    !isLiked ? "charcoal" : currentRating <= 0 ? "ochre" : "aqua"
                                     }`}></span>
                                 </button>
                                 <button className="btn btn-sm" onClick={toggleFavorite} title="Favorito">
                                     <span className={`fa fa-${isFavorite ? "solid" : "regular"} fa-heart fa-2x coral`}></span>
                                 </button>
+                                </div>
                             </div>
                         </div>
                     </div>
