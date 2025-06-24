@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import finanzasService from "../services/finanzasService";
-import useGlobalReducer from "../hooks/useGlobalReducer";
 import "../styles/gastoModal.css"
-
-const GastoModal = ({ show, onClose, token, onGastoCreado }) => {
-  const { store } = useGlobalReducer();
+const GastoModal = ({ show, onClose, token, onGastoCreado, users, hogarIdActual }) => {
   const initialForm = {
     nombre: "",
     cantidad: "",
@@ -51,8 +48,7 @@ const GastoModal = ({ show, onClose, token, onGastoCreado }) => {
       console.error("Error al crear gasto:", error);
     }
   };
-  const usersMismoHogar = store.hogar.users
-
+  const usersMismoHogar = users?.filter((user) => user.hogar_id === hogarIdActual);
   return (
     <div
       className={`modal right fade ${show ? "show d-block" : ""}`}

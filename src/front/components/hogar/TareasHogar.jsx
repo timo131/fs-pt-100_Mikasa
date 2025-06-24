@@ -5,9 +5,11 @@ import { Link } from "react-router-dom";
 export const TareasHogar = () => {
   const { store, dispatch } = useGlobalReducer();
 
-  const tareasCompartidas = store.tasks?.filter(task =>
-    task.asignadaA === "equipo"
-  );
+  const tareasCompartidas = store.tasks?.filter(
+      (task) =>
+        task.asignadaA === "equipo" &&
+        task.hogarId === store.hogar?.id 
+    );
 
   return (
 

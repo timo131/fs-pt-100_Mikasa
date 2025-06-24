@@ -155,6 +155,11 @@ const pagosDelMes = pagos
       return esMismoMes;
     }
   })
+  .filter((pago) => {
+      const esCreador = Number(pago.user_id) === Number(usuarioId);
+      const involucrado = pago.usuarios?.some(u => Number(u.user_id) === Number(usuarioId));
+      return esCreador || involucrado;
+    });
 
   const mostrarGraficoYPagos = mesActual === new Date().getMonth() && añoActual === new Date().getFullYear();
 
@@ -288,8 +293,10 @@ const pagosDelMes = pagos
         onClose={() => setShowModal(false)}
         token={token}
         onGastoCreado={handleGastoCreado}
+        hogarIdActual={store.user?.hogar_id}
       />
     </div>
+
   );
 };
 
